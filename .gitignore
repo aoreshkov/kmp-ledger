@@ -1,0 +1,7 @@
+.idea
+.kotlin
+.gradle
+.artifacts
+build/
+/local.properties
+/gradle/gradle-daemon-jvm.properties

@@ -1,0 +1,328 @@
+# KMPLedger
+
+![Kotlin](https://img.shields.io/badge/Kotlin-2.3%2B-7F52FF?logo=kotlin&logoColor=white)
+![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-4285F4?logo=jetpackcompose&logoColor=white)
+![Room 3](https://img.shields.io/badge/Database-Room%203-3DDC84?logo=android&logoColor=white)
+![Navigation 3](https://img.shields.io/badge/Navigation-3-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+**Supported Platforms:**
+
+![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Desktop](https://img.shields.io/badge/Platform-Desktop-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+
+---
+
+**KMPLedger** is a Kotlin Multiplatform reference project for Android and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
+
+> **Note:** Because this project tracks alpha/beta library versions (Room 3, Navigation 3, Compose Multiplatform RC), the API surface of some dependencies may change. Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+
+---
+
+## Screenshots
+
+|                      Posting List                       |                      Posting Detail                       |                      Edit Posting                       |
+|:-------------------------------------------------------:|:---------------------------------------------------------:|:-------------------------------------------------------:|
+| <img src=".github/assets/postingList.webp" width="250"> | <img src=".github/assets/postingDetail.webp" width="250"> | <img src=".github/assets/postingEdit.webp" width="250"> |
+
+---
+
+## Tech Stack
+
+| Library | Version | Role |
+|---|---|---|
+| Kotlin | 2.3.21 | Language and compiler |
+| Kotlin Gradle Plugin | 2.4.0-Beta2 | Build tooling |
+| Compose Multiplatform | 1.11.0-rc01 | Shared UI (Android + Desktop) |
+| Room 3 | 3.0.0-alpha04 | Local database with KMP support |
+| Navigation 3 | 1.1.1 | Type-safe declarative navigation |
+| Koin | 4.2.1 | Dependency injection with annotation processing |
+| Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
+| Lifecycle / ViewModel | 2.10.0 | State management and lifecycle-aware components |
+| Android SDK | compile/target 37, min 24 | Android target |
+
+---
+
+## Architecture
+
+KMPLedger follows a strict unidirectional layered architecture. Each layer depends only on the layer directly below it, and all domain types flow upward through mappers — never raw database entities.
+
+```
+┌─────────────────────────────────────┐
+│           androidApp / desktopApp   │  Platform entry points
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│              core:ui                │  App composable, theme, NavDisplay setup
+│           core:navigation           │  Navigator, StartDestination
+│           core:bootstrap            │  Root Koin module wiring
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│       feature:posting:impl          │  Screens, ViewModels, DI
+│       feature:posting:api           │  Navigation keys (NavKey contracts)
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│           core:domain               │  Use cases (SavePosting, GetPosting, …)
+│           core:common               │  DataResult, shared utilities
+│           core:compose              │  Shared Compose components
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│            core:data                │  PostingRepository, mappers
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│           core:database             │  Room 3 database, DAOs, entities, TypeConverters
+└─────────────────────────────────────┘
+
+Supporting modules (no layer dependency):
+  core:model   — pure Kotlin domain models (Posting, NewPosting)
+  core:test    — shared test utilities (FakePostingRepository)
+  build-logic  — Gradle convention plugins
+```
+
+### Module responsibilities
+
+| Module | Responsibility |
+|---|---|
+| `core:model` | Pure Kotlin data classes with no framework dependency. The single source of truth for domain types. |
+| `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. |
+| `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers. |
+| `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`). Each wraps a repository call with a single responsibility. |
+| `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension. |
+| `core:compose` | Shared Compose components used across feature modules (e.g. `LabeledField`). |
+| `core:navigation` | `Navigator` (backstack wrapper) and `StartDestination` value class. Framework-agnostic. |
+| `core:ui` | Root `App` composable, Material 3 theme, `NavDisplay` wiring. |
+| `core:bootstrap` | Root Koin module that wires all sub-modules together and provides `StartDestination` and `SavedStateConfiguration`. |
+| `core:test` | `FakePostingRepository` and `PlatformComposeUiTest` expect/actual. Consumed by all test source sets. |
+| `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`) and their serializers module. Consumed by both the feature impl and the bootstrap/navigation modules. |
+| `feature:posting:impl` | `PostingListScreen`, `PostingDetailsScreen`, `PostingEditScreen`, their ViewModels, and the Koin navigation module (`postingNavigationModule`). |
+
+---
+
+## Design Patterns
+
+### 1. Convention plugins (`build-logic`)
+
+Rather than duplicating Gradle configuration across modules, all shared setup lives in three composable convention plugins:
+
+```
+kmpledger.kotlin.multiplatform          → KMP + Android library targets, JVM 17, kotlin-test
+  └─ kmpledger.kotlin.multiplatform.koin     → + Koin core, annotations, and compiler plugin
+       └─ kmpledger.kotlin.multiplatform.koin.compose  → + Compose, resources, ui-test, core:test
+```
+
+Each module picks the plugin that matches its needs. A UI feature module uses one line:
+
+```kotlin
+// feature/posting/impl/build.gradle.kts
+plugins {
+    id("kmpledger.kotlin.multiplatform.koin.compose")
+}
+```
+
+A pure domain module uses the lighter variant:
+
+```kotlin
+// core/domain/build.gradle.kts
+plugins {
+    id("kmpledger.kotlin.multiplatform.koin")
+}
+```
+
+### 2. Feature API / Implementation split
+
+Each feature is split into two modules:
+
+- **`feature:posting:api`** — contains only the `NavKey` sealed types that other modules reference for navigation. Has no dependency on Compose or domain logic.
+- **`feature:posting:impl`** — contains the screens, ViewModels, and DI. Depends on `api` but is never depended on by any other feature or core module.
+
+This means modules that need to navigate *to* a feature only depend on `api`, keeping compile-time coupling minimal.
+
+### 3. `DataResult` + `asResult()` for UI state
+
+`DataResult<T>` is a sealed interface that wraps any Flow into three standard states:
+
+```kotlin
+sealed interface DataResult<out T> {
+    data class Success<T>(val data: T) : DataResult<T>
+    data class Error(val exception: Throwable) : DataResult<Nothing>
+    data object Loading : DataResult<Nothing>
+}
+
+fun <T> Flow<T>.asResult(): Flow<DataResult<T>> = map { DataResult.Success(it) }
+    .onStart { emit(DataResult.Loading) }
+    .catch { emit(DataResult.Error(it)) }
+```
+
+ViewModels call `.asResult()` on any domain Flow and `when`-switch the result directly into a sealed UI state, keeping the mapping explicit and exhaustive:
+
+```kotlin
+getPostingsUseCase()
+    .asResult()
+    .map { result ->
+        when (result) {
+            is DataResult.Loading -> PostingListUiState.Loading
+            is DataResult.Success -> if (result.data.isEmpty()) PostingListUiState.Empty
+                                     else PostingListUiState.Success(result.data)
+            is DataResult.Error   -> PostingListUiState.Error
+        }
+    }
+```
+
+### 4. `expect`/`actual` for platform database initialisation
+
+Room 3 requires a platform-specific builder. KMPLedger uses an `expect class` to enforce that every platform provides its own builder, while common code only sees the abstract `RoomDatabase.Builder<KMPLedgerDatabase>`:
+
+```kotlin
+// commonMain — contract
+@Module
+expect class PlatformDatabaseModule
+
+// androidMain — Android implementation using Context
+@Module actual class PlatformDatabaseModule {
+    @Single
+    fun provideRoomBuilder(context: Context): RoomDatabase.Builder<KMPLedgerDatabase> =
+        Room.databaseBuilder(context, name = context.getDatabasePath("kmpledger.db").absolutePath)
+}
+
+// jvmMain — Desktop implementation with OS-aware file path
+@Module actual class PlatformDatabaseModule {
+    @Single
+    fun provideRoomBuilder(): RoomDatabase.Builder<KMPLedgerDatabase> =
+        Room.databaseBuilder(name = jvmDatabaseFile().absolutePath)
+}
+```
+
+The JVM implementation resolves the correct data directory for macOS (`~/Library/Application Support`), Windows (`%APPDATA%`), and Linux (`$XDG_DATA_HOME` or `~/.local/share`).
+
+### 5. Koin annotation-driven DI
+
+All modules and bindings are declared with Koin annotations rather than DSL, enabling compile-time validation of the dependency graph:
+
+```kotlin
+@Module(includes = [DataModule::class])
+@ComponentScan("app.oreshkov.kmpledger.core.domain")
+class DomainModule
+
+@Factory
+class GetPostingUseCase(private val repository: PostingRepository) { ... }
+
+@KoinViewModel
+class PostingDetailsViewModel(
+    private val getPostingUseCase: GetPostingUseCase,
+    private val deletePostingUseCase: DeletePostingUseCase,
+    @InjectedParam private val postingId: Long   // injected at call site via parametersOf()
+) : ViewModel()
+```
+
+### 6. Navigation 3 with `koinEntryProvider`
+
+Screens are registered as Koin navigation entries, keeping navigation and DI fully integrated without manual ViewModel factories:
+
+```kotlin
+val postingNavigationModule = module {
+    navigation<PostingList>(metadata = ListDetailSceneStrategy.listPane()) {
+        val navigator = koinInject<Navigator>()
+        PostingListScreen(
+            onNavigateToEdit = { id -> navigator.goTo(PostingEdit(id)) },
+            onNavigateToDetails = { id -> navigator.goTo(PostingDetail(id)) },
+            viewModel = koinViewModel()
+        )
+    }
+    navigation<PostingDetail>(metadata = ListDetailSceneStrategy.detailPane()) { route ->
+        PostingDetailsScreen(
+            viewModel = koinViewModel(parameters = { parametersOf(route.id) })
+        )
+    }
+}
+```
+
+---
+
+## Testing Strategy
+
+All tests use pure Kotlin — no mocking framework.
+
+**Fakes over mocks:** `FakePostingRepository` is a full in-memory implementation of `PostingRepository` backed by a `MutableStateFlow`. It exposes `insertedPostings`, `deletedPostings`, and `updatedPostings` lists for assertions, and `failNextWrite` / `shouldThrowOnGetById` flags to simulate error conditions without any mock library.
+
+**ViewModel tests** use `UnconfinedTestDispatcher` set as the main dispatcher in `@BeforeTest`, ensuring coroutines and `StateFlow` updates run eagerly and can be asserted synchronously.
+
+**Layer coverage:**
+
+| Layer | Test approach |
+|---|---|
+| `core:database` | DAO tests against a real in-memory Room 3 database |
+| `core:data` | `OfflineFirstPostingRepositoryTest` with `FakePostingDao` |
+| `core:domain` | Use case tests with `FakePostingRepository` |
+| `core:common` | `DataResultTest` for the `asResult()` extension |
+| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level) |
+| `core:ui` | App-level Compose UI test |
+| DI modules | Compile-time validation (Koin Compiler Plugin) + App-level integration tests |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Android Studio Meerkat or newer
+- JDK 17+
+
+### Run on Android
+
+```bash
+./gradlew :androidApp:installDebug
+```
+
+### Run on Desktop
+
+```bash
+./gradlew :desktopApp:run
+```
+
+### Run all tests
+
+```bash
+./gradlew allTests
+```
+
+---
+
+## Project Structure
+
+```
+kmp-ledger/
+├── build-logic/                  # Convention plugins
+│   └── src/main/kotlin/
+│       ├── kmpledger.kotlin.multiplatform.gradle.kts
+│       ├── kmpledger.kotlin.multiplatform.koin.gradle.kts
+│       └── kmpledger.kotlin.multiplatform.koin.compose.gradle.kts
+├── gradle/
+│   └── libs.versions.toml        # Centralised version catalog
+├── androidApp/                   # Android entry point
+├── desktopApp/                   # Desktop (JVM) entry point
+├── core/
+│   ├── bootstrap/                # Root DI wiring
+│   ├── common/                   # DataResult, asResult()
+│   ├── compose/                  # Shared Compose components
+│   ├── data/                     # Repository implementations and mappers
+│   ├── database/                 # Room 3 database, DAOs, TypeConverters
+│   ├── domain/                   # Use cases
+│   ├── model/                    # Pure domain models
+│   ├── navigation/               # Navigator, StartDestination
+│   ├── test/                     # Shared test utilities
+│   └── ui/                       # App composable, theme
+└── feature/
+    └── posting/
+        ├── api/                  # NavKey contracts
+        └── impl/                 # Screens, ViewModels, DI
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

@@ -1,0 +1,103 @@
+[versions]
+# Build tools
+android-gradle-plugin = "9.2.1"
+android-sdk-compile = "37"
+android-sdk-min = "24"
+android-sdk-target = "37"
+kotlin = "2.3.21"
+ksp = "2.3.7"
+
+kotlin-gradle-plugin = "2.4.0-Beta2"
+
+# Jetpack
+androidx-activity = "1.13.0"
+androidx-lifecycle = "2.10.0"
+androidx-navigation = "1.1.1"
+androidx-adaptive = "1.3.0-alpha07"
+androidx-room = "3.0.0-alpha04"
+androidx-sqlite = "2.7.0-alpha04"
+
+# Compose
+compose-multiplatform = "1.11.0-rc01"
+compose-material-icons = "1.7.3"
+androidx-material3 = "1.9.0"
+
+# Third-party
+koin = "4.2.1"
+koin-compiler = "0.6.2"
+kotlinx-coroutines = "1.11.0"
+
+# Test
+androidx-test-core = "1.7.0"
+androidx-test-ext-junit = "1.3.0"
+androidx-test-espresso-core = "3.7.0"
+junit = "4.13.2"
+robolectric = "4.16.1"
+
+[libraries]
+# Build
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+
+# AndroidX
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-navigation" }
+androidx-lifecycle-viewmodel-navigation3 = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
+
+# Compose Multiplatform
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "compose-material-icons" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "androidx-material3" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
+compose-material3-adaptive-nav3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "androidx-adaptive" }
+compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
+compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+
+# Koin
+koin-compose-navigation = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-compiler-plugin = { module = "io.insert-koin:koin-compiler-plugin", version.ref = "koin-compiler" }
+koin-gradle-plugin = { module = "io.insert-koin.compiler.plugin:io.insert-koin.compiler.plugin.gradle.plugin", version.ref = "koin-compiler" }
+
+# Room & SQLite
+room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "androidx-room" }
+room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "androidx-room" }
+room3-sqlite-wrapper = { module = "androidx.room3:room3-sqlite-wrapper", version.ref = "androidx-sqlite" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
+sqlite-bundled-jvm = { module = "androidx.sqlite:sqlite-bundled-jvm", version.ref = "androidx-sqlite" }
+
+# Kotlinx
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+# Test
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test-junit4", version.ref = "compose-multiplatform" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test-core" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso-core" }
+junit = { module = "junit:junit", version.ref = "junit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+android-library-multiplatform = { id = "com.android.kotlin.multiplatform.library", version.ref = "android-gradle-plugin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room3 = { id = "androidx.room3", version.ref = "androidx-room" }
+koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-compiler" }

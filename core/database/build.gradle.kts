@@ -1,0 +1,48 @@
+plugins {
+    id("kmpledger.kotlin.multiplatform.koin")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room3)
+}
+
+kotlin {
+    android {
+        namespace = "app.oreshkov.kmpledger.core.database"
+        androidResources {
+            enable = true
+        }
+        withHostTest {}
+        withDeviceTest {}
+    }
+
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.koin.android)
+            implementation(libs.room3.sqlite.wrapper)
+        }
+        commonMain.dependencies {
+            implementation(libs.room3.runtime)
+            implementation(libs.sqlite.bundled)
+        }
+        jvmMain.dependencies {
+            implementation(libs.sqlite.bundled.jvm)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+        val androidHostTest by getting {
+            dependencies {
+                implementation(libs.sqlite.bundled.jvm )
+            }
+        }
+    }
+}
+
+room3 {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    add("kspAndroid", libs.room3.compiler)
+    add("kspJvm", libs.room3.compiler)
+}

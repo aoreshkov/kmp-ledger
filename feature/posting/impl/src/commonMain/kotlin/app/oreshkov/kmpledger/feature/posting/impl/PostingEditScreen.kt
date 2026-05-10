@@ -1,0 +1,220 @@
+package app.oreshkov.kmpledger.feature.posting.impl
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.oreshkov.kmpledger.core.compose.resources.Res as CoreRes
+import app.oreshkov.kmpledger.core.compose.resources.back_content_description
+import kmpledger.feature.posting.impl.generated.resources.Res
+import kmpledger.feature.posting.impl.generated.resources.posting_details_retry
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_load_failed
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_not_found
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_go_back
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_currency_required
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_narrative_required
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_amount_invalid
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_timestamp_invalid
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_error_save_failed
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_field_currency
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_field_narrative
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_field_amount
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_field_timestamp
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_save
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_title_add
+import kmpledger.feature.posting.impl.generated.resources.posting_edit_title_edit
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+fun PostingEditScreen(
+    onNavigateBack: () -> Unit,
+    viewModel: PostingEditViewModel
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val errorMessage = stringResource(Res.string.posting_edit_error_save_failed)
+
+    val saveError = (uiState as? PostingEditUiState.Editing)?.saveError == true
+    LaunchedEffect(saveError) {
+        if (saveError) snackbarHostState.showSnackbar(errorMessage)
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.navigationEvent.collect { onNavigateBack() }
+    }
+
+    PostingEditContent(
+        uiState = uiState,
+        snackbarHostState = snackbarHostState,
+        onNavigateBack = onNavigateBack,
+        onAmountChange = viewModel::onAmountChange,
+        onCurrencyChange = viewModel::onCurrencyChange,
+        onNarrativeChange = viewModel::onNarrativeChange,
+        onTimestampChange = viewModel::onTimestampChange,
+        onSaveClick = viewModel::savePosting,
+        onRetry = viewModel::retry,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun PostingEditContent(
+    uiState: PostingEditUiState,
+    snackbarHostState: SnackbarHostState,
+    onNavigateBack: () -> Unit,
+    onAmountChange: (String) -> Unit,
+    onCurrencyChange: (String) -> Unit,
+    onNarrativeChange: (String) -> Unit,
+    onTimestampChange: (String) -> Unit,
+    onSaveClick: () -> Unit,
+    onRetry: () -> Unit,
+) {
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                title = {
+                    val isEditMode = (uiState as? PostingEditUiState.Editing)?.isEditMode == true
+                    Text(
+                        if (isEditMode) stringResource(Res.string.posting_edit_title_edit)
+                        else stringResource(Res.string.posting_edit_title_add)
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(CoreRes.string.back_content_description))
+                    }
+                },
+                actions = {
+                    if (uiState is PostingEditUiState.Editing) {
+                        TextButton(
+                            onClick = onSaveClick,
+                            enabled = uiState.isValid
+                        ) {
+                            Text(stringResource(Res.string.posting_edit_save))
+                        }
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        when (uiState) {
+            is PostingEditUiState.Loading -> Box(
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+
+            is PostingEditUiState.Error -> Box(
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(stringResource(Res.string.posting_edit_error_load_failed))
+                    Button(onClick = onRetry) {
+                        Text(stringResource(Res.string.posting_details_retry))
+                    }
+                }
+            }
+
+            is PostingEditUiState.NotFound -> Box(
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(stringResource(Res.string.posting_edit_error_not_found))
+                    Button(onClick = onNavigateBack) {
+                        Text(stringResource(Res.string.posting_edit_go_back))
+                    }
+                }
+            }
+
+            is PostingEditUiState.Editing -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                OutlinedTextField(
+                    value = uiState.amount,
+                    onValueChange = onAmountChange,
+                    label = { Text(stringResource(Res.string.posting_edit_field_amount)) },
+                    isError = uiState.amountError,
+                    supportingText = if (uiState.amountError) {
+                        { Text(stringResource(Res.string.posting_edit_error_amount_invalid)) }
+                    } else null,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = uiState.currency,
+                    onValueChange = onCurrencyChange,
+                    label = { Text(stringResource(Res.string.posting_edit_field_currency)) },
+                    isError = uiState.currencyError,
+                    supportingText = if (uiState.currencyError) {
+                        { Text(stringResource(Res.string.posting_edit_error_currency_required)) }
+                    } else null,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = uiState.narrative,
+                    onValueChange = onNarrativeChange,
+                    label = { Text(stringResource(Res.string.posting_edit_field_narrative)) },
+                    isError = uiState.narrativeError,
+                    supportingText = if (uiState.narrativeError) {
+                        { Text(stringResource(Res.string.posting_edit_error_narrative_required)) }
+                    } else null,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = uiState.timestamp,
+                    onValueChange = onTimestampChange,
+                    label = { Text(stringResource(Res.string.posting_edit_field_timestamp)) },
+                    isError = uiState.timestampError,
+                    supportingText = if (uiState.timestampError) {
+                        { Text(stringResource(Res.string.posting_edit_error_timestamp_invalid)) }
+                    } else null,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+}

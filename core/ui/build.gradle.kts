@@ -1,0 +1,33 @@
+plugins {
+    id("kmpledger.kotlin.multiplatform.koin.compose")
+    id("org.jetbrains.kotlin.plugin.serialization")
+}
+
+kotlin {
+    android {
+        namespace = "app.oreshkov.kmpledger.core.ui"
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.ui.tooling.preview)
+
+            implementation(libs.androidx.navigation3.ui)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.compose.material.icons.core)
+            implementation(libs.compose.material3.adaptive.nav3)
+
+            implementation(libs.koin.compose.navigation)
+
+            api(project(":core:navigation"))
+        }
+    }
+}
+
+dependencies {
+    androidRuntimeClasspath(libs.compose.ui.tooling)
+}

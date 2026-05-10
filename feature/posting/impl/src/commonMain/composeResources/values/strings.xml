@@ -1,0 +1,42 @@
+<resources>
+    <!-- Posting List -->
+    <string name="posting_list_title">My Postings</string>
+    <string name="posting_list_empty">No postings added yet.</string>
+    <string name="posting_list_error">Failed to load postings.</string>
+    <string name="posting_list_add_content_description">Add Posting</string>
+    <string name="posting_list_retry">Retry</string>
+
+    <!-- Posting Details -->
+    <string name="posting_details_title">Posting Details</string>
+    <string name="posting_details_delete_content_description">Delete Posting</string>
+    <string name="posting_details_edit_content_description">Edit Posting</string>
+    <string name="posting_details_failed_to_load">Failed to load posting details.</string>
+    <string name="posting_details_not_found">Posting has been already deleted.</string>
+    <string name="posting_details_retry">Retry</string>
+    <string name="posting_details_delete_dialog_title">Delete posting?</string>
+    <string name="posting_details_delete_dialog_body">This action cannot be undone.</string>
+    <string name="posting_details_delete_confirm">Delete</string>
+    <string name="posting_details_delete_cancel">Cancel</string>
+    <string name="posting_details_field_amount">Amount</string>
+    <string name="posting_details_field_currency">Currency</string>
+    <string name="posting_details_field_narrative">Narrative</string>
+    <string name="posting_details_field_timestamp">Timestamp</string>
+    <string name="posting_details_go_back">Go back</string>
+
+    <!-- Posting Edit -->
+    <string name="posting_edit_title_add">Add Posting</string>
+    <string name="posting_edit_title_edit">Edit Posting</string>
+    <string name="posting_edit_save">Save</string>
+    <string name="posting_edit_field_amount">Amount</string>
+    <string name="posting_edit_field_currency">Currency</string>
+    <string name="posting_edit_field_narrative">Narrative</string>
+    <string name="posting_edit_field_timestamp">Timestamp</string>
+    <string name="posting_edit_error_amount_invalid">Invalid amount</string>
+    <string name="posting_edit_error_timestamp_invalid">Invalid timestamp</string>
+    <string name="posting_edit_error_currency_required">Currency is required</string>
+    <string name="posting_edit_error_narrative_required">Narrative is required</string>
+    <string name="posting_edit_error_load_failed">Failed to load posting details.</string>
+    <string name="posting_edit_error_not_found">Posting not found.</string>
+    <string name="posting_edit_go_back">Go back</string>
+    <string name="posting_edit_error_save_failed">Failed to save. Please try again.</string>
+</resources>
