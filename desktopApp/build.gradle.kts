@@ -25,11 +25,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "app.oreshkov.kmpledger.MainKt"
+        mainClass = "app.oreshkov.ledger.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "kmpledger"
+            packageName = "ledger"
             packageVersion = "1.0.0"
 
             linux {
@@ -40,7 +40,7 @@ compose.desktop {
             }
             macOS {
                 iconFile.set(project.file("appIcons/MacosIcon.icns"))
-                bundleID = "app.oreshkov.kmpledger.desktopApp"
+                bundleID = "app.oreshkov.ledger.desktopApp"
             }
         }
     }

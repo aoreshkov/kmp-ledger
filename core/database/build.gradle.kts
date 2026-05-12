@@ -1,12 +1,12 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin")
+    id("ledger.kotlin.multiplatform.koin")
     alias(libs.plugins.ksp)
     alias(libs.plugins.room3)
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.database"
+        namespace = "app.oreshkov.ledger.core.database"
         androidResources {
             enable = true
         }

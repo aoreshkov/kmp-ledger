@@ -28,11 +28,11 @@ dependencies {
 }
 
 android {
-    namespace = "app.oreshkov.kmpledger"
+    namespace = "app.oreshkov.ledger"
     compileSdk = libs.versions.android.sdk.compile.get().toInt()
 
     defaultConfig {
-        applicationId = "app.oreshkov.kmpledger"
+        applicationId = "app.oreshkov.ledger"
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.target.get().toInt()
         versionCode = 1

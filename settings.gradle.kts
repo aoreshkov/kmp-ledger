@@ -1,4 +1,4 @@
-rootProject.name = "KMPLedger"
+rootProject.name = "Ledger"
 
 pluginManagement {
     includeBuild("build-logic")

@@ -1,11 +1,11 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin.compose")
+    id("ledger.kotlin.multiplatform.koin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.ui"
+        namespace = "app.oreshkov.ledger.core.ui"
     }
 
     sourceSets {

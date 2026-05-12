@@ -1,11 +1,11 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform")
+    id("ledger.kotlin.multiplatform")
     alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.feature.posting.api"
+        namespace = "app.oreshkov.ledger.feature.posting.api"
     }
 
     sourceSets {

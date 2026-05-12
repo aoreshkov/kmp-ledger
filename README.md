@@ -1,4 +1,4 @@
-# KMPLedger
+# ledger
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.3%2B-7F52FF?logo=kotlin&logoColor=white)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-4285F4?logo=jetpackcompose&logoColor=white)
@@ -13,7 +13,7 @@
 
 ---
 
-**KMPLedger** is a Kotlin Multiplatform reference project for Android and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
+**ledger** is a Kotlin Multiplatform reference project for Android and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
 > **Note:** Because this project tracks alpha/beta library versions (Room 3, Navigation 3, Compose Multiplatform RC), the API surface of some dependencies may change. Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
@@ -45,7 +45,7 @@
 
 ## Architecture
 
-KMPLedger follows a strict unidirectional layered architecture. Each layer depends only on the layer directly below it, and all domain types flow upward through mappers — never raw database entities.
+ledger follows a strict unidirectional layered architecture. Each layer depends only on the layer directly below it, and all domain types flow upward through mappers — never raw database entities.
 
 ```
 ┌─────────────────────────────────────┐
@@ -109,9 +109,9 @@ Supporting modules (no layer dependency):
 Rather than duplicating Gradle configuration across modules, all shared setup lives in three composable convention plugins:
 
 ```
-kmpledger.kotlin.multiplatform          → KMP + Android library targets, JVM 17, kotlin-test
-  └─ kmpledger.kotlin.multiplatform.koin     → + Koin core, annotations, and compiler plugin
-       └─ kmpledger.kotlin.multiplatform.koin.compose  → + Compose, resources, ui-test, core:test
+ledger.kotlin.multiplatform          → KMP + Android library targets, JVM 17, kotlin-test
+  └─ ledger.kotlin.multiplatform.koin     → + Koin core, annotations, and compiler plugin
+       └─ ledger.kotlin.multiplatform.koin.compose  → + Compose, resources, ui-test, core:test
 ```
 
 Each module picks the plugin that matches its needs. A UI feature module uses one line:
@@ -119,7 +119,7 @@ Each module picks the plugin that matches its needs. A UI feature module uses on
 ```kotlin
 // feature/posting/impl/build.gradle.kts
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin.compose")
+    id("ledger.kotlin.multiplatform.koin.compose")
 }
 ```
 
@@ -128,7 +128,7 @@ A pure domain module uses the lighter variant:
 ```kotlin
 // core/domain/build.gradle.kts
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin")
+    id("ledger.kotlin.multiplatform.koin")
 }
 ```
 
@@ -174,7 +174,7 @@ getPostingsUseCase()
 
 ### 4. `expect`/`actual` for platform database initialisation
 
-Room 3 requires a platform-specific builder. KMPLedger uses an `expect class` to enforce that every platform provides its own builder, while common code only sees the abstract `RoomDatabase.Builder<KMPLedgerDatabase>`:
+Room 3 requires a platform-specific builder. ledger uses an `expect class` to enforce that every platform provides its own builder, while common code only sees the abstract `RoomDatabase.Builder<LedgerDatabase>`:
 
 ```kotlin
 // commonMain — contract
@@ -184,14 +184,14 @@ expect class PlatformDatabaseModule
 // androidMain — Android implementation using Context
 @Module actual class PlatformDatabaseModule {
     @Single
-    fun provideRoomBuilder(context: Context): RoomDatabase.Builder<KMPLedgerDatabase> =
-        Room.databaseBuilder(context, name = context.getDatabasePath("kmpledger.db").absolutePath)
+    fun provideRoomBuilder(context: Context): RoomDatabase.Builder<LedgerDatabase> =
+        Room.databaseBuilder(context, name = context.getDatabasePath("ledger.db").absolutePath)
 }
 
 // jvmMain — Desktop implementation with OS-aware file path
 @Module actual class PlatformDatabaseModule {
     @Single
-    fun provideRoomBuilder(): RoomDatabase.Builder<KMPLedgerDatabase> =
+    fun provideRoomBuilder(): RoomDatabase.Builder<LedgerDatabase> =
         Room.databaseBuilder(name = jvmDatabaseFile().absolutePath)
 }
 ```
@@ -204,7 +204,7 @@ All modules and bindings are declared with Koin annotations rather than DSL, ena
 
 ```kotlin
 @Module(includes = [DataModule::class])
-@ComponentScan("app.oreshkov.kmpledger.core.domain")
+@ComponentScan("app.oreshkov.ledger.core.domain")
 class DomainModule
 
 @Factory
@@ -297,9 +297,9 @@ All tests use pure Kotlin — no mocking framework.
 kmp-ledger/
 ├── build-logic/                  # Convention plugins
 │   └── src/main/kotlin/
-│       ├── kmpledger.kotlin.multiplatform.gradle.kts
-│       ├── kmpledger.kotlin.multiplatform.koin.gradle.kts
-│       └── kmpledger.kotlin.multiplatform.koin.compose.gradle.kts
+│       ├── ledger.kotlin.multiplatform.gradle.kts
+│       ├── ledger.kotlin.multiplatform.koin.gradle.kts
+│       └── ledger.kotlin.multiplatform.koin.compose.gradle.kts
 ├── gradle/
 │   └── libs.versions.toml        # Centralised version catalog
 ├── androidApp/                   # Android entry point

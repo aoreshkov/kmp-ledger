@@ -1,12 +1,12 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform")
+    id("ledger.kotlin.multiplatform")
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.jetbrains.compose)
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.test"
+        namespace = "app.oreshkov.ledger.core.test"
         androidResources {
             enable = true
         }

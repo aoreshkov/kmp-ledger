@@ -1,10 +1,10 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin")
+    id("ledger.kotlin.multiplatform.koin")
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.bootstrap"
+        namespace = "app.oreshkov.ledger.core.bootstrap"
         withHostTest {}
     }
 

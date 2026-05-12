@@ -1,10 +1,10 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin.compose")
+    id("ledger.kotlin.multiplatform.koin.compose")
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.feature.posting.impl"
+        namespace = "app.oreshkov.ledger.feature.posting.impl"
     }
 
     sourceSets {

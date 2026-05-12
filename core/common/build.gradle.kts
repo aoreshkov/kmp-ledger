@@ -1,10 +1,10 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform")
+    id("ledger.kotlin.multiplatform")
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.common"
+        namespace = "app.oreshkov.ledger.core.common"
         withHostTest {}
     }
 

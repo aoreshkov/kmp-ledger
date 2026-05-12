@@ -1,10 +1,10 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform.koin.compose")
+    id("ledger.kotlin.multiplatform.koin.compose")
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.navigation"
+        namespace = "app.oreshkov.ledger.core.navigation"
     }
 
     sourceSets {

@@ -1,12 +1,12 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform")
+    id("ledger.kotlin.multiplatform")
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose.compiler)
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.compose"
+        namespace = "app.oreshkov.ledger.core.compose"
         androidResources {
             enable = true
         }
@@ -32,6 +32,6 @@ kotlin {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "app.oreshkov.kmpledger.core.compose.resources"
+    packageOfResClass = "app.oreshkov.ledger.core.compose.resources"
     generateResClass = auto
 }

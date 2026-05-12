@@ -1,9 +1,9 @@
 plugins {
-    id("kmpledger.kotlin.multiplatform")
+    id("ledger.kotlin.multiplatform")
 }
 
 kotlin {
     android {
-        namespace = "app.oreshkov.kmpledger.core.model"
+        namespace = "app.oreshkov.ledger.core.model"
     }
 }
