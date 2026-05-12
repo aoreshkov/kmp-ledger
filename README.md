@@ -1,4 +1,4 @@
-# ledger
+# Ledger
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.3%2B-7F52FF?logo=kotlin&logoColor=white)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-4285F4?logo=jetpackcompose&logoColor=white)
@@ -13,7 +13,7 @@
 
 ---
 
-**ledger** is a Kotlin Multiplatform reference project for Android and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
+**Ledger** is a Kotlin Multiplatform reference project for Android and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
 > **Note:** Because this project tracks alpha/beta library versions (Room 3, Navigation 3, Compose Multiplatform RC), the API surface of some dependencies may change. Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
@@ -45,7 +45,7 @@
 
 ## Architecture
 
-ledger follows a strict unidirectional layered architecture. Each layer depends only on the layer directly below it, and all domain types flow upward through mappers — never raw database entities.
+Ledger follows a strict unidirectional layered architecture. Each layer depends only on the layer directly below it, and all domain types flow upward through mappers — never raw database entities.
 
 ```
 ┌─────────────────────────────────────┐
@@ -174,7 +174,7 @@ getPostingsUseCase()
 
 ### 4. `expect`/`actual` for platform database initialisation
 
-Room 3 requires a platform-specific builder. ledger uses an `expect class` to enforce that every platform provides its own builder, while common code only sees the abstract `RoomDatabase.Builder<LedgerDatabase>`:
+Room 3 requires a platform-specific builder. Ledger uses an `expect class` to enforce that every platform provides its own builder, while common code only sees the abstract `RoomDatabase.Builder<LedgerDatabase>`:
 
 ```kotlin
 // commonMain — contract
