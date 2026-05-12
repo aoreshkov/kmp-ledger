@@ -6,15 +6,13 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-import kotlin.time.Instant
-
 class DeletePostingUseCaseTest {
     private val repo = FakePostingRepository()
     private val useCase = DeletePostingUseCase(repo)
 
     @Test
     fun `invoke calls deletePosting with correct posting`() = runTest {
-        val posting = Posting(1L, 100L, Instant.fromEpochMilliseconds(1000), "USD", "Fuel")
+        val posting = Posting(1L, "Fuel")
         useCase(posting)
 
         assertEquals(1, repo.deletedPostings.size)

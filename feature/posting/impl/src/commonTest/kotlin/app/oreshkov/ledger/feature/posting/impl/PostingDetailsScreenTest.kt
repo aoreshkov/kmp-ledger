@@ -11,8 +11,6 @@ import app.oreshkov.ledger.core.test.PlatformComposeUiTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-import kotlin.time.Instant
-
 @OptIn(ExperimentalTestApi::class)
 class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
@@ -54,9 +52,6 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
     fun successState_showsPostingDetails() = runComposeUiTest {
         val posting = Posting(
             id = 1,
-            amount = 100L,
-            timestamp = Instant.fromEpochMilliseconds(1000),
-            currency = "EUR",
             narrative = "Monthly rent"
         )
         setContent {
@@ -68,15 +63,12 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("100").assertIsDisplayed()
-        onNodeWithText("EUR").assertIsDisplayed()
         onNodeWithText("Monthly rent").assertIsDisplayed()
-        onNodeWithText(Instant.fromEpochMilliseconds(1000).toString()).assertIsDisplayed()
     }
 
     @Test
     fun successState_clickingDelete_showsConfirmationDialog() = runComposeUiTest {
-        val posting = Posting(1, 100L, Instant.fromEpochMilliseconds(0), "USD", "Narrative")
+        val posting = Posting(1, "Narrative")
         var deleteConfirmed = false
         setContent {
             PostingDetailsContent(

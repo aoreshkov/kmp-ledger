@@ -44,10 +44,7 @@ import ledger.feature.posting.impl.generated.resources.posting_details_delete_di
 import ledger.feature.posting.impl.generated.resources.posting_details_delete_dialog_title
 import ledger.feature.posting.impl.generated.resources.posting_details_edit_content_description
 import ledger.feature.posting.impl.generated.resources.posting_details_failed_to_load
-import ledger.feature.posting.impl.generated.resources.posting_details_field_currency
 import ledger.feature.posting.impl.generated.resources.posting_details_field_narrative
-import ledger.feature.posting.impl.generated.resources.posting_details_field_amount
-import ledger.feature.posting.impl.generated.resources.posting_details_field_timestamp
 import ledger.feature.posting.impl.generated.resources.posting_details_go_back
 import ledger.feature.posting.impl.generated.resources.posting_details_not_found
 import ledger.feature.posting.impl.generated.resources.posting_details_retry
@@ -178,10 +175,7 @@ internal fun PostingDetailsContent(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        LabeledField(stringResource(Res.string.posting_details_field_amount), posting.amount.toString(), MaterialTheme.typography.titleLarge)
-                        LabeledField(stringResource(Res.string.posting_details_field_currency), posting.currency)
-                        LabeledField(stringResource(Res.string.posting_details_field_narrative), posting.narrative)
-                        LabeledField(stringResource(Res.string.posting_details_field_timestamp), posting.timestamp.toString())
+                        LabeledField(stringResource(Res.string.posting_details_field_narrative), posting.narrative, MaterialTheme.typography.titleLarge)
                     }
                 }
             }

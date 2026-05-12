@@ -27,8 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,15 +37,9 @@ import ledger.feature.posting.impl.generated.resources.posting_details_retry
 import ledger.feature.posting.impl.generated.resources.posting_edit_error_load_failed
 import ledger.feature.posting.impl.generated.resources.posting_edit_error_not_found
 import ledger.feature.posting.impl.generated.resources.posting_edit_go_back
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_currency_required
 import ledger.feature.posting.impl.generated.resources.posting_edit_error_narrative_required
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_amount_invalid
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_timestamp_invalid
 import ledger.feature.posting.impl.generated.resources.posting_edit_error_save_failed
-import ledger.feature.posting.impl.generated.resources.posting_edit_field_currency
 import ledger.feature.posting.impl.generated.resources.posting_edit_field_narrative
-import ledger.feature.posting.impl.generated.resources.posting_edit_field_amount
-import ledger.feature.posting.impl.generated.resources.posting_edit_field_timestamp
 import ledger.feature.posting.impl.generated.resources.posting_edit_save
 import ledger.feature.posting.impl.generated.resources.posting_edit_title_add
 import ledger.feature.posting.impl.generated.resources.posting_edit_title_edit
@@ -75,10 +67,7 @@ fun PostingEditScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
-        onAmountChange = viewModel::onAmountChange,
-        onCurrencyChange = viewModel::onCurrencyChange,
         onNarrativeChange = viewModel::onNarrativeChange,
-        onTimestampChange = viewModel::onTimestampChange,
         onSaveClick = viewModel::savePosting,
         onRetry = viewModel::retry,
     )
@@ -90,10 +79,7 @@ internal fun PostingEditContent(
     uiState: PostingEditUiState,
     snackbarHostState: SnackbarHostState,
     onNavigateBack: () -> Unit,
-    onAmountChange: (String) -> Unit,
-    onCurrencyChange: (String) -> Unit,
     onNarrativeChange: (String) -> Unit,
-    onTimestampChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     onRetry: () -> Unit,
 ) {
@@ -174,43 +160,12 @@ internal fun PostingEditContent(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 OutlinedTextField(
-                    value = uiState.amount,
-                    onValueChange = onAmountChange,
-                    label = { Text(stringResource(Res.string.posting_edit_field_amount)) },
-                    isError = uiState.amountError,
-                    supportingText = if (uiState.amountError) {
-                        { Text(stringResource(Res.string.posting_edit_error_amount_invalid)) }
-                    } else null,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = uiState.currency,
-                    onValueChange = onCurrencyChange,
-                    label = { Text(stringResource(Res.string.posting_edit_field_currency)) },
-                    isError = uiState.currencyError,
-                    supportingText = if (uiState.currencyError) {
-                        { Text(stringResource(Res.string.posting_edit_error_currency_required)) }
-                    } else null,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
                     value = uiState.narrative,
                     onValueChange = onNarrativeChange,
                     label = { Text(stringResource(Res.string.posting_edit_field_narrative)) },
                     isError = uiState.narrativeError,
                     supportingText = if (uiState.narrativeError) {
                         { Text(stringResource(Res.string.posting_edit_error_narrative_required)) }
-                    } else null,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = uiState.timestamp,
-                    onValueChange = onTimestampChange,
-                    label = { Text(stringResource(Res.string.posting_edit_field_timestamp)) },
-                    isError = uiState.timestampError,
-                    supportingText = if (uiState.timestampError) {
-                        { Text(stringResource(Res.string.posting_edit_error_timestamp_invalid)) }
                     } else null,
                     modifier = Modifier.fillMaxWidth()
                 )

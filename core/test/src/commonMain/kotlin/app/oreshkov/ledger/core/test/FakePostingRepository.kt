@@ -26,7 +26,7 @@ class FakePostingRepository : PostingRepository {
     override suspend fun insertPosting(posting: NewPosting) {
         if (failNextWrite) { failNextWrite = false; error("DB error") }
         insertedPostings += posting
-        _postings.update { it + Posting(nextId++, posting.amount, posting.timestamp, posting.currency, posting.narrative) }
+        _postings.update { it + Posting(nextId++, posting.narrative) }
     }
 
     override suspend fun deletePosting(posting: Posting) {

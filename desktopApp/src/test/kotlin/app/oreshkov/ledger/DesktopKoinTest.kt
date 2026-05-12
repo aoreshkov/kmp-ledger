@@ -1,6 +1,5 @@
 package app.oreshkov.ledger
 
-import LedgerApp
 import app.oreshkov.ledger.core.navigation.Navigator
 import app.oreshkov.ledger.core.data.repository.PostingRepository
 import app.oreshkov.ledger.core.database.LedgerDatabase

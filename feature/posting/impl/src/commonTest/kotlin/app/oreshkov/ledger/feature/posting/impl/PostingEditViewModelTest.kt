@@ -21,8 +21,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-import kotlin.time.Instant
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostingEditViewModelTest {
 
@@ -30,7 +28,7 @@ class PostingEditViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val savePostingUseCase = SavePostingUseCase(repo)
-    private val existing = Posting(1, 100L, Instant.fromEpochMilliseconds(1000), "USD", "Monthly rent")
+    private val existing = Posting(1, "Monthly rent")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }
@@ -38,19 +36,9 @@ class PostingEditViewModelTest {
     // --- create mode ---
 
     @Test
-    fun init_inCreateMode_prefillsTimestamp() = runTest {
-        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        val state = assertIs<PostingEditUiState.Editing>(vm.uiState.value)
-        assertTrue(state.timestamp.isNotBlank())
-        // Verify it's a valid Instant
-        Instant.parse(state.timestamp)
-    }
-
-    @Test
     fun savePosting_insertsNewPostingAndNavigates() = runTest {
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        vm.onAmountChange("100"); vm.onTimestampChange("1970-01-01T00:00:01Z")
-        vm.onCurrencyChange("USD"); vm.onNarrativeChange("Civic")
+        vm.onNarrativeChange("Monthly rent")
 
         var navigated = false
         val job = launch { vm.navigationEvent.collect { navigated = true } }
@@ -59,8 +47,7 @@ class PostingEditViewModelTest {
         runCurrent()
         assertTrue(navigated)
         assertEquals(1, repo.insertedPostings.size)
-        assertEquals(100L, repo.insertedPostings.first().amount)
-        assertEquals("USD", repo.insertedPostings.first().currency)
+        assertEquals("Monthly rent", repo.insertedPostings.first().narrative)
         job.cancel()
     }
 
@@ -71,8 +58,7 @@ class PostingEditViewModelTest {
         runCurrent()
         assertTrue(repo.insertedPostings.isEmpty())
         val editing = assertIs<PostingEditUiState.Editing>(vm.uiState.value)
-        assertTrue(editing.amountError)
-        assertTrue(editing.currencyError)
+        assertTrue(editing.narrativeError)
     }
 
     // --- edit mode ---
@@ -83,8 +69,7 @@ class PostingEditViewModelTest {
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
         val editing = vm.uiState.first { it is PostingEditUiState.Editing } as PostingEditUiState.Editing
 
-        assertEquals(existing.amount.toString(), editing.amount)
-        assertEquals(existing.currency, editing.currency)
+        assertEquals(existing.narrative, editing.narrative)
         assertTrue(editing.isEditMode)
     }
 
@@ -93,7 +78,7 @@ class PostingEditViewModelTest {
         repo.seed(existing)
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
         vm.uiState.first { it is PostingEditUiState.Editing }
-        vm.onAmountChange("200")
+        vm.onNarrativeChange("Updated rent")
 
         var navigated = false
         val job = launch { vm.navigationEvent.collect { navigated = true } }
@@ -101,7 +86,7 @@ class PostingEditViewModelTest {
         vm.savePosting()
         runCurrent()
         assertTrue(navigated)
-        assertEquals(200L, repo.updatedPostings.last().amount)
+        assertEquals("Updated rent", repo.updatedPostings.last().narrative)
         job.cancel()
     }
 
@@ -126,8 +111,7 @@ class PostingEditViewModelTest {
     fun savePosting_setsEditingWithSaveErrorWhenInsertFails() = runTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        vm.onAmountChange("100"); vm.onTimestampChange("1970-01-01T00:00:01Z")
-        vm.onCurrencyChange("USD"); vm.onNarrativeChange("Monthly rent")
+        vm.onNarrativeChange("Monthly rent")
 
         vm.savePosting()
         runCurrent()
@@ -143,7 +127,7 @@ class PostingEditViewModelTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
         vm.uiState.first { it is PostingEditUiState.Editing }
-        vm.onAmountChange("200")
+        vm.onNarrativeChange("Updated rent")
 
         vm.savePosting()
         runCurrent()
@@ -157,8 +141,7 @@ class PostingEditViewModelTest {
     fun savePosting_clearsSaveErrorOnRetry() = runTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        vm.onAmountChange("100"); vm.onTimestampChange("1970-01-01T00:00:01Z")
-        vm.onCurrencyChange("USD"); vm.onNarrativeChange("Monthly rent")
+        vm.onNarrativeChange("Monthly rent")
 
         vm.savePosting()
         runCurrent()

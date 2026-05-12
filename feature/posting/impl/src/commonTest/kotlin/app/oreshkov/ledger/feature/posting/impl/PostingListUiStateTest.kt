@@ -5,15 +5,13 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-import kotlin.time.Instant
-
 class PostingListUiStateTest {
 
     @Test
     fun successState_containsExpectedPostings() {
         val postings = listOf(
-            Posting(1, 100L, Instant.fromEpochMilliseconds(1000), "EUR", "Monthly rent"),
-            Posting(2, 200L, Instant.fromEpochMilliseconds(2000), "USD", "Grocery")
+            Posting(1, "Monthly rent"),
+            Posting(2, "Grocery")
         )
         val state = PostingListUiState.Success(postings)
         assertEquals(postings, state.postings)

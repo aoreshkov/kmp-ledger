@@ -13,8 +13,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-import kotlin.time.Instant
-
 class OfflineFirstPostingRepositoryTest {
 
     private val fakeDao = FakePostingDao()
@@ -22,31 +20,29 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun getAllPostings_mapsEntitiesToModels() = runTest {
-        val entity = PostingEntity(1, 100L, Instant.fromEpochMilliseconds(1000L), "USD", "Fuel")
+        val entity = PostingEntity(1, "Fuel")
         fakeDao.insert(entity)
 
         val postings = repository.getAllPostings().first()
         assertEquals(1, postings.size)
-        assertEquals(100L, postings[0].amount)
-        assertEquals("USD", postings[0].currency)
+        assertEquals("Fuel", postings[0].narrative)
     }
 
     @Test
     fun insertPosting_mapsNewPostingToEntity() = runTest {
-        val newPosting = NewPosting(100L, Instant.fromEpochMilliseconds(1000), "USD", "Fuel")
+        val newPosting = NewPosting("Fuel")
         repository.insertPosting(newPosting)
 
         val entities = fakeDao.entities.value
         assertEquals(1, entities.size)
-        assertEquals(100L, entities[0].amount)
-        assertEquals("USD", entities[0].currency)
+        assertEquals("Fuel", entities[0].narrative)
     }
 
     @Test
     fun deletePosting_callsDaoDelete() = runTest {
-        val entity = PostingEntity(1, 100L, Instant.fromEpochMilliseconds(1000L), "USD", "Fuel")
+        val entity = PostingEntity(1, "Fuel")
         fakeDao.insert(entity)
-        val posting = Posting(1, 100L, Instant.fromEpochMilliseconds(1000L), "USD", "Fuel")
+        val posting = Posting(1, "Fuel")
 
         repository.deletePosting(posting)
 

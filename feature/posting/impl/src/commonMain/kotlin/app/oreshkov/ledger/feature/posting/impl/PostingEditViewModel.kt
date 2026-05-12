@@ -17,34 +17,18 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
 
-import kotlin.time.Clock
-import kotlin.time.Instant
-
 sealed interface PostingEditUiState {
     data object Loading : PostingEditUiState
     data object Error : PostingEditUiState
     data object NotFound : PostingEditUiState
     data class Editing(
         val isEditMode: Boolean = false,
-        val amount: String = "",
-        val timestamp: String = "",
-        val currency: String = "",
         val narrative: String = "",
-        val amountTouched: Boolean = false,
-        val timestampTouched: Boolean = false,
-        val currencyTouched: Boolean = false,
         val narrativeTouched: Boolean = false,
         val saveError: Boolean = false,
     ) : PostingEditUiState {
-
-        private val parsedTimestamp: Result<Instant> = runCatching { Instant.parse(timestamp) }
-        val amountError: Boolean get() = amountTouched && amount.toLongOrNull() == null
-        val timestampError: Boolean get() = timestampTouched && parsedTimestamp.isFailure
-        val currencyError: Boolean get() = currencyTouched && currency.isBlank()
         val narrativeError: Boolean get() = narrativeTouched && narrative.isBlank()
-        val isValid: Boolean get() =
-            amount.toLongOrNull() != null && parsedTimestamp.isSuccess &&
-                    currency.isNotBlank() && narrative.isNotBlank()
+        val isValid: Boolean get() = narrative.isNotBlank()
     }
 }
 
@@ -57,7 +41,7 @@ class PostingEditViewModel(
 
     private val _uiState = MutableStateFlow<PostingEditUiState>(
         if (postingId != null) PostingEditUiState.Loading 
-        else PostingEditUiState.Editing(timestamp = Clock.System.now().toString())
+        else PostingEditUiState.Editing()
     )
     val uiState: StateFlow<PostingEditUiState> = _uiState.asStateFlow()
 
@@ -86,9 +70,6 @@ class PostingEditViewModel(
                     if (posting != null) {
                         PostingEditUiState.Editing(
                             isEditMode = true,
-                            amount = posting.amount.toString(),
-                            timestamp = posting.timestamp.toString(),
-                            currency = posting.currency,
                             narrative = posting.narrative,
                         )
                     } else {
@@ -96,38 +77,27 @@ class PostingEditViewModel(
                     }
                 }
                 is DataResult.Error -> PostingEditUiState.Error
-                is DataResult.Loading -> PostingEditUiState.Loading // Should not happen due to first filter
+                is DataResult.Loading -> PostingEditUiState.Loading
             }
         }
     }
 
-    fun onAmountChange(newValue: String) = updateEditing { it.copy(amount = newValue, amountTouched = true) }
-    fun onTimestampChange(newValue: String) = updateEditing { it.copy(timestamp = newValue, timestampTouched = true) }
-    fun onCurrencyChange(newValue: String) = updateEditing { it.copy(currency = newValue, currencyTouched = true) }
     fun onNarrativeChange(newValue: String) = updateEditing { it.copy(narrative = newValue, narrativeTouched = true) }
 
     fun savePosting() {
         updateEditing {
             it.copy(
-                amountTouched = true,
-                timestampTouched = true,
-                currencyTouched = true,
                 narrativeTouched = true,
                 saveError = false,
             )
         }
         val editing = _uiState.value as? PostingEditUiState.Editing ?: return
         if (!editing.isValid) return
-        val amount = editing.amount.toLongOrNull() ?: return
-        val timestamp = runCatching { Instant.parse(editing.timestamp) }.getOrNull() ?: return
 
         viewModelScope.launch {
             try {
                 savePostingUseCase(
                     id = postingId,
-                    amount = amount,
-                    timestamp = timestamp,
-                    currency = editing.currency,
                     narrative = editing.narrative
                 )
                 _navigationEvent.send(Unit)

@@ -5,13 +5,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-import kotlin.time.Instant
-
 class PostingDetailsUiStateTest {
 
     @Test
     fun successState_containsExpectedPosting() {
-        val posting = Posting(1, 100L, Instant.fromEpochMilliseconds(0), "USD", "Fuel")
+        val posting = Posting(1, "Fuel")
         val state = PostingDetailsUiState.Success(posting)
         assertEquals(posting, state.posting)
     }

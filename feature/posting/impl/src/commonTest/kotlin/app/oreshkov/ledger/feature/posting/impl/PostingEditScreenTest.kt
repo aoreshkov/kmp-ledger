@@ -19,13 +19,7 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
     @Test
     fun validationErrors_areShown_whenFieldsAreBlankAndTouched() = runComposeUiTest {
         val uiState = PostingEditUiState.Editing(
-            amountTouched = true,
-            timestampTouched = true,
-            currencyTouched = true,
             narrativeTouched = true,
-            amount = "",
-            timestamp = "",
-            currency = "",
             narrative = ""
         )
 
@@ -34,18 +28,12 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
                 uiState = uiState,
                 snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
-                onAmountChange = {},
-                onCurrencyChange = {},
                 onNarrativeChange = {},
-                onTimestampChange = {},
                 onSaveClick = {},
                 onRetry = {}
             )
         }
 
-        onNodeWithText("Invalid amount").performScrollTo().assertIsDisplayed()
-        onNodeWithText("Invalid timestamp").performScrollTo().assertIsDisplayed()
-        onNodeWithText("Currency is required").performScrollTo().assertIsDisplayed()
         onNodeWithText("Narrative is required").performScrollTo().assertIsDisplayed()
     }
 
@@ -56,10 +44,7 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
                 uiState = PostingEditUiState.Error,
                 snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
-                onAmountChange = {},
-                onCurrencyChange = {},
                 onNarrativeChange = {},
-                onTimestampChange = {},
                 onSaveClick = {},
                 onRetry = {}
             )
@@ -74,10 +59,7 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
                 uiState = PostingEditUiState.Editing(isEditMode = false),
                 snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
-                onAmountChange = {},
-                onCurrencyChange = {},
                 onNarrativeChange = {},
-                onTimestampChange = {},
                 onSaveClick = {},
                 onRetry = {}
             )
@@ -89,58 +71,43 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
     fun editMode_showsEditTitleAndPopulatesFields() = runComposeUiTest {
         val uiState = PostingEditUiState.Editing(
             isEditMode = true,
-            amount = "100",
-            currency = "EUR",
-            narrative = "Monthly rent",
-            timestamp = "1970-01-01T00:00:01Z"
+            narrative = "Monthly rent"
         )
         setContent {
             PostingEditContent(
                 uiState = uiState,
                 snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
-                onAmountChange = {},
-                onCurrencyChange = {},
                 onNarrativeChange = {},
-                onTimestampChange = {},
                 onSaveClick = {},
                 onRetry = {}
             )
         }
         onNodeWithText("Edit Posting").assertIsDisplayed()
-        onNodeWithText("100").assertIsDisplayed()
-        onNodeWithText("EUR").assertIsDisplayed()
         onNodeWithText("Monthly rent").assertIsDisplayed()
-        onNodeWithText("1970-01-01T00:00:01Z").assertIsDisplayed()
     }
 
     @Test
     fun typingInFields_triggersCallbacks() = runComposeUiTest {
-        var newAmount = ""
+        var newNarrative = ""
         setContent {
             PostingEditContent(
                 uiState = PostingEditUiState.Editing(),
                 snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
-                onAmountChange = { newAmount = it },
-                onCurrencyChange = {},
-                onNarrativeChange = {},
-                onTimestampChange = {},
+                onNarrativeChange = { newNarrative = it },
                 onSaveClick = {},
                 onRetry = {}
             )
         }
-        onNodeWithText("Amount").performTextInput("100")
-        assertEquals("100", newAmount)
+        onNodeWithText("Narrative").performTextInput("Monthly rent")
+        assertEquals("Monthly rent", newNarrative)
     }
 
     @Test
     fun clickingSave_triggersOnSaveClick() = runComposeUiTest {
         var saveClicked = false
         val uiState = PostingEditUiState.Editing(
-            amount = "100",
-            timestamp = "1970-01-01T00:00:01Z",
-            currency = "Tesla",
             narrative = "Fuel"
         )
         setContent {
@@ -148,10 +115,7 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
                 uiState = uiState,
                 snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
-                onAmountChange = {},
-                onCurrencyChange = {},
                 onNarrativeChange = {},
-                onTimestampChange = {},
                 onSaveClick = { saveClicked = true },
                 onRetry = {}
             )

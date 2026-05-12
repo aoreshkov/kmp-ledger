@@ -15,8 +15,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertIs
 
-import kotlin.time.Instant
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostingListViewModelTest {
 
@@ -36,7 +34,7 @@ class PostingListViewModelTest {
 
     @Test
     fun uiState_isSuccessWhenRepositoryHasPostings() = runTest {
-        repo.seed(Posting(1, 100L, Instant.fromEpochMilliseconds(0), "USD", "Monthly rent"))
+        repo.seed(Posting(1, "Monthly rent"))
         val vm = PostingListViewModel(getPostingsUseCase)
         val state = vm.uiState.first { it !is PostingListUiState.Loading }
         assertIs<PostingListUiState.Success>(state)
@@ -47,7 +45,7 @@ class PostingListViewModelTest {
         val vm = PostingListViewModel(getPostingsUseCase)
         vm.uiState.first { it !is PostingListUiState.Loading }
 
-        repo.insertPosting(app.oreshkov.ledger.core.model.data.NewPosting(100L, Instant.fromEpochMilliseconds(0), "USD", "Monthly rent"))
+        repo.insertPosting(app.oreshkov.ledger.core.model.data.NewPosting("Monthly rent"))
         val state = vm.uiState.first { it is PostingListUiState.Success }
         assertIs<PostingListUiState.Success>(state)
     }
@@ -67,7 +65,7 @@ class PostingListViewModelTest {
         vm.uiState.first { it is PostingListUiState.Error }
 
         repo.shouldThrowOnGetAll = false
-        repo.seed(Posting(1, 100L, Instant.fromEpochMilliseconds(0), "USD", "Monthly rent"))
+        repo.seed(Posting(1, "Monthly rent"))
         vm.retry()
 
         val state = vm.uiState.first { it is PostingListUiState.Success }

@@ -114,9 +114,7 @@ private fun PostingListItem(posting: Posting, onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "${posting.amount} ${posting.currency}", style = MaterialTheme.typography.titleMedium)
-            Text(text = posting.narrative, style = MaterialTheme.typography.bodyMedium)
-            Text(text = posting.timestamp.toString(), style = MaterialTheme.typography.labelMedium)
+            Text(text = posting.narrative, style = MaterialTheme.typography.titleMedium)
         }
     }
 }

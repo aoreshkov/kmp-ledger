@@ -7,40 +7,19 @@ import kotlin.test.assertTrue
 class PostingEditUiStateTest {
 
     @Test
-    fun isValid_isTrueWhenAllFieldsAreFilled() {
+    fun isValid_isTrueWhenNarrativeIsFilled() {
         val state = PostingEditUiState.Editing(
-            amount = "100",
-            timestamp = "1970-01-01T00:00:01Z",
-            currency = "USD",
             narrative = "Monthly rent"
         )
         assertTrue(state.isValid)
     }
 
     @Test
-    fun isValid_isFalseWhenAnyFieldIsBlank() {
+    fun isValid_isFalseWhenNarrativeIsBlank() {
         val state = PostingEditUiState.Editing(
-            amount = "100",
-            timestamp = "",
-            currency = "USD",
-            narrative = "Monthly rent"
+            narrative = ""
         )
         assertFalse(state.isValid)
-    }
-
-    @Test
-    fun amountError_isTrueOnlyWhenTouchedAndInvalid() {
-        assertFalse(PostingEditUiState.Editing().amountError)
-        assertFalse(PostingEditUiState.Editing(amount = "100", amountTouched = true).amountError)
-        assertTrue(PostingEditUiState.Editing(amountTouched = true).amountError)
-        assertTrue(PostingEditUiState.Editing(amount = "abc", amountTouched = true).amountError)
-    }
-
-    @Test
-    fun currencyError_isTrueOnlyWhenTouchedAndBlank() {
-        assertFalse(PostingEditUiState.Editing().currencyError)
-        assertFalse(PostingEditUiState.Editing(currency = "USD", currencyTouched = true).currencyError)
-        assertTrue(PostingEditUiState.Editing(currencyTouched = true).currencyError)
     }
 
     @Test
@@ -48,13 +27,5 @@ class PostingEditUiStateTest {
         assertFalse(PostingEditUiState.Editing().narrativeError)
         assertFalse(PostingEditUiState.Editing(narrative = "X", narrativeTouched = true).narrativeError)
         assertTrue(PostingEditUiState.Editing(narrativeTouched = true).narrativeError)
-    }
-
-    @Test
-    fun timestampError_isTrueOnlyWhenTouchedAndInvalid() {
-        assertFalse(PostingEditUiState.Editing().timestampError)
-        assertFalse(PostingEditUiState.Editing(timestamp = "1970-01-01T00:00:01Z", timestampTouched = true).timestampError)
-        assertTrue(PostingEditUiState.Editing(timestampTouched = true).timestampError)
-        assertTrue(PostingEditUiState.Editing(timestamp = "invalid", timestampTouched = true).timestampError)
     }
 }

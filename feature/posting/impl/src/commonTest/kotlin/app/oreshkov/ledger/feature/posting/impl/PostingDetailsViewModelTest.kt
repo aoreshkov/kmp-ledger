@@ -19,8 +19,6 @@ import kotlin.test.Test
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-import kotlin.time.Instant
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostingDetailsViewModelTest {
 
@@ -28,7 +26,7 @@ class PostingDetailsViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val deletePostingUseCase = DeletePostingUseCase(repo)
-    private val posting  = Posting(1, 100L, Instant.fromEpochMilliseconds(0), "USD", "Monthly rent")
+    private val posting  = Posting(1, "Monthly rent")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }

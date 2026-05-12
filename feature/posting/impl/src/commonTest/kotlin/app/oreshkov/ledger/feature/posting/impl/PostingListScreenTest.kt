@@ -12,8 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-import kotlin.time.Instant
-
 @OptIn(ExperimentalTestApi::class)
 class PostingListScreenTest : PlatformComposeUiTest() {
 
@@ -49,8 +47,8 @@ class PostingListScreenTest : PlatformComposeUiTest() {
     @Test
     fun successState_showsPostingsList() = runComposeUiTest {
         val postings = listOf(
-            Posting(1, 100L, Instant.fromEpochMilliseconds(1000), "USD", "Monthly rent"),
-            Posting(2, 200L, Instant.fromEpochMilliseconds(2000), "EUR", "Grocery")
+            Posting(1, "Monthly rent"),
+            Posting(2, "Grocery")
         )
         setContent {
             PostingListContent(
@@ -60,10 +58,6 @@ class PostingListScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("100 USD").assertIsDisplayed()
-        onNodeWithText("200 EUR").assertIsDisplayed()
-        onNodeWithText(Instant.fromEpochMilliseconds(1000).toString()).assertIsDisplayed()
-        onNodeWithText(Instant.fromEpochMilliseconds(2000).toString()).assertIsDisplayed()
         onNodeWithText("Monthly rent").assertIsDisplayed()
         onNodeWithText("Grocery").assertIsDisplayed()
     }
@@ -85,7 +79,7 @@ class PostingListScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun clickingPosting_triggersOnPostingClick() = runComposeUiTest {
-        val posting = Posting(1, 100L, Instant.fromEpochMilliseconds(0), "EUR", "Monthly rent")
+        val posting = Posting(1, "Monthly rent")
         var clickedPostingId: Long? = null
         setContent {
             PostingListContent(
@@ -95,7 +89,7 @@ class PostingListScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("100 EUR").performClick()
+        onNodeWithText("Monthly rent").performClick()
         assertEquals(1L, clickedPostingId)
     }
 }

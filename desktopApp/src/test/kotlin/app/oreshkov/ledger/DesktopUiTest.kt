@@ -1,6 +1,5 @@
 package app.oreshkov.ledger
 
-import LedgerApp
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runDesktopComposeUiTest

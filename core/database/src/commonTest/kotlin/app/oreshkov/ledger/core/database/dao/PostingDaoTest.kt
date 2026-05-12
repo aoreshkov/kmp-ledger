@@ -3,7 +3,6 @@ package app.oreshkov.ledger.core.database.dao
 import app.oreshkov.ledger.core.database.LedgerDatabase
 import app.oreshkov.ledger.core.database.createTestDatabase
 import app.oreshkov.ledger.core.database.model.PostingEntity
-import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
@@ -30,7 +29,7 @@ class PostingDaoTest {
 
     @Test
     fun insertAndGetPosting() = runTest {
-        val posting = PostingEntity(id = 1, amount = 100L, timestamp = Instant.fromEpochMilliseconds(1000L), currency = "USD", narrative = "Monthly rent")
+        val posting = PostingEntity(id = 1, narrative = "Monthly rent")
         dao.insert(posting)
 
         val loaded = dao.getPostingById(1).first()
@@ -39,8 +38,8 @@ class PostingDaoTest {
 
     @Test
     fun getAllPostings() = runTest {
-        val posting1 = PostingEntity(id = 1, amount = 100L, timestamp = Instant.fromEpochMilliseconds(1000L), currency = "USD", narrative = "Monthly rent")
-        val posting2 = PostingEntity(id = 2, amount = 200L, timestamp = Instant.fromEpochMilliseconds(2000L), currency = "EUR", narrative = "Grocery")
+        val posting1 = PostingEntity(id = 1, narrative = "Monthly rent")
+        val posting2 = PostingEntity(id = 2, narrative = "Grocery")
         dao.insert(posting1)
         dao.insert(posting2)
 
@@ -51,19 +50,19 @@ class PostingDaoTest {
 
     @Test
     fun updatePosting() = runTest {
-        val posting = PostingEntity(id = 1, amount = 100L, timestamp = Instant.fromEpochMilliseconds(1000L), currency = "USD", narrative = "Fuel")
+        val posting = PostingEntity(id = 1, narrative = "Fuel")
         dao.insert(posting)
 
-        val updatedPosting = posting.copy(amount = 200L)
+        val updatedPosting = posting.copy(narrative = "Fuel updated")
         dao.update(updatedPosting)
 
         val loaded = dao.getPostingById(1).first()
-        assertEquals(200L, loaded?.amount)
+        assertEquals("Fuel updated", loaded?.narrative)
     }
 
     @Test
     fun deletePosting() = runTest {
-        val posting = PostingEntity(id = 1, amount = 100L, timestamp = Instant.fromEpochMilliseconds(1000L), currency = "USD", narrative = "Fuel")
+        val posting = PostingEntity(id = 1, narrative = "Fuel")
         dao.insert(posting)
         dao.delete(posting)
 

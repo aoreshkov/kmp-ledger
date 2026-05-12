@@ -8,15 +8,13 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-import kotlin.time.Instant
-
 class GetPostingUseCaseTest {
     private val repo = FakePostingRepository()
     private val useCase = GetPostingUseCase(repo)
 
     @Test
     fun `invoke returns posting flow from repository when posting exists`() = runTest {
-        val posting = Posting(1L, 100L, Instant.fromEpochMilliseconds(1000), "USD", "Fuel")
+        val posting = Posting(1L, "Fuel")
         repo.seed(posting)
 
         val result = useCase(1L).first()
