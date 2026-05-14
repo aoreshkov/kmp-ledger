@@ -33,12 +33,12 @@
 |---|---|---|
 | Kotlin | 2.3.21 | Language and compiler |
 | Kotlin Gradle Plugin | 2.4.0-Beta2 | Build tooling |
-| Compose Multiplatform | 1.11.0-rc01 | Shared UI (Android + Desktop) |
+| Compose Multiplatform | 1.11.0 | Shared UI (Android + Desktop) |
 | Room 3 | 3.0.0-alpha04 | Local database with KMP support |
 | Navigation 3 | 1.1.1 | Type-safe declarative navigation |
 | Koin | 4.2.1 | Dependency injection with annotation processing |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
-| Lifecycle / ViewModel | 2.10.0 | State management and lifecycle-aware components |
+| Lifecycle / ViewModel | 2.11.0-beta01 | State management and lifecycle-aware components |
 | Android SDK | compile/target 37, min 24 | Android target |
 
 ---
