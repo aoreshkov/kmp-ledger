@@ -28,7 +28,7 @@ class PostingEditViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val savePostingUseCase = SavePostingUseCase(repo)
-    private val existing = Posting(1, "Monthly rent")
+    private val existing = Posting(1, "Groceries")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }
@@ -38,7 +38,7 @@ class PostingEditViewModelTest {
     @Test
     fun savePosting_insertsNewPostingAndNavigates() = runTest {
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        vm.onNarrativeChange("Monthly rent")
+        vm.onNarrativeChange("Groceries")
 
         var navigated = false
         val job = launch { vm.navigationEvent.collect { navigated = true } }
@@ -47,7 +47,7 @@ class PostingEditViewModelTest {
         runCurrent()
         assertTrue(navigated)
         assertEquals(1, repo.insertedPostings.size)
-        assertEquals("Monthly rent", repo.insertedPostings.first().narrative)
+        assertEquals("Groceries", repo.insertedPostings.first().narrative)
         job.cancel()
     }
 
@@ -78,7 +78,7 @@ class PostingEditViewModelTest {
         repo.seed(existing)
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
         vm.uiState.first { it is PostingEditUiState.Editing }
-        vm.onNarrativeChange("Updated rent")
+        vm.onNarrativeChange("Groceries updated")
 
         var navigated = false
         val job = launch { vm.navigationEvent.collect { navigated = true } }
@@ -86,7 +86,7 @@ class PostingEditViewModelTest {
         vm.savePosting()
         runCurrent()
         assertTrue(navigated)
-        assertEquals("Updated rent", repo.updatedPostings.last().narrative)
+        assertEquals("Groceries updated", repo.updatedPostings.last().narrative)
         job.cancel()
     }
 
@@ -111,7 +111,7 @@ class PostingEditViewModelTest {
     fun savePosting_setsEditingWithSaveErrorWhenInsertFails() = runTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        vm.onNarrativeChange("Monthly rent")
+        vm.onNarrativeChange("Groceries")
 
         vm.savePosting()
         runCurrent()
@@ -127,7 +127,7 @@ class PostingEditViewModelTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
         vm.uiState.first { it is PostingEditUiState.Editing }
-        vm.onNarrativeChange("Updated rent")
+        vm.onNarrativeChange("Groceries updated")
 
         vm.savePosting()
         runCurrent()
@@ -141,7 +141,7 @@ class PostingEditViewModelTest {
     fun savePosting_clearsSaveErrorOnRetry() = runTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = null)
-        vm.onNarrativeChange("Monthly rent")
+        vm.onNarrativeChange("Groceries")
 
         vm.savePosting()
         runCurrent()

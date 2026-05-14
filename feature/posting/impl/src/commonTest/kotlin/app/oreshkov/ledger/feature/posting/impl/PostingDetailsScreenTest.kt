@@ -52,7 +52,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
     fun successState_showsPostingDetails() = runComposeUiTest {
         val posting = Posting(
             id = 1,
-            narrative = "Monthly rent"
+            narrative = "Groceries"
         )
         setContent {
             PostingDetailsContent(
@@ -63,12 +63,12 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("Monthly rent").assertIsDisplayed()
+        onNodeWithText("Groceries").assertIsDisplayed()
     }
 
     @Test
     fun successState_clickingDelete_showsConfirmationDialog() = runComposeUiTest {
-        val posting = Posting(1, "Narrative")
+        val posting = Posting(1, "Groceries")
         var deleteConfirmed = false
         setContent {
             PostingDetailsContent(

@@ -20,29 +20,29 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun getAllPostings_mapsEntitiesToModels() = runTest {
-        val entity = PostingEntity(1, "Fuel")
+        val entity = PostingEntity(1, "Groceries")
         fakeDao.insert(entity)
 
         val postings = repository.getAllPostings().first()
         assertEquals(1, postings.size)
-        assertEquals("Fuel", postings[0].narrative)
+        assertEquals("Groceries", postings[0].narrative)
     }
 
     @Test
     fun insertPosting_mapsNewPostingToEntity() = runTest {
-        val newPosting = NewPosting("Fuel")
+        val newPosting = NewPosting("Groceries")
         repository.insertPosting(newPosting)
 
         val entities = fakeDao.entities.value
         assertEquals(1, entities.size)
-        assertEquals("Fuel", entities[0].narrative)
+        assertEquals("Groceries", entities[0].narrative)
     }
 
     @Test
     fun deletePosting_callsDaoDelete() = runTest {
-        val entity = PostingEntity(1, "Fuel")
+        val entity = PostingEntity(1, "Groceries")
         fakeDao.insert(entity)
-        val posting = Posting(1, "Fuel")
+        val posting = Posting(1, "Groceries")
 
         repository.deletePosting(posting)
 

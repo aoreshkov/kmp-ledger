@@ -71,7 +71,7 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
     fun editMode_showsEditTitleAndPopulatesFields() = runComposeUiTest {
         val uiState = PostingEditUiState.Editing(
             isEditMode = true,
-            narrative = "Monthly rent"
+            narrative = "Groceries"
         )
         setContent {
             PostingEditContent(
@@ -84,7 +84,7 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
             )
         }
         onNodeWithText("Edit Posting").assertIsDisplayed()
-        onNodeWithText("Monthly rent").assertIsDisplayed()
+        onNodeWithText("Groceries").assertIsDisplayed()
     }
 
     @Test
@@ -100,15 +100,15 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("Narrative").performTextInput("Monthly rent")
-        assertEquals("Monthly rent", newNarrative)
+        onNodeWithText("Narrative").performTextInput("Groceries")
+        assertEquals("Groceries", newNarrative)
     }
 
     @Test
     fun clickingSave_triggersOnSaveClick() = runComposeUiTest {
         var saveClicked = false
         val uiState = PostingEditUiState.Editing(
-            narrative = "Fuel"
+            narrative = "Groceries"
         )
         setContent {
             PostingEditContent(

@@ -14,24 +14,24 @@ class SavePostingUseCaseTest {
     fun `invoke with null id calls insertPosting`() = runTest {
         useCase(
             id = null,
-            narrative = "Fuel"
+            narrative = "Groceries"
         )
 
         assertEquals(1, repo.insertedPostings.size)
         assertTrue(repo.updatedPostings.isEmpty())
-        assertEquals("Fuel", repo.insertedPostings.first().narrative)
+        assertEquals("Groceries", repo.insertedPostings.first().narrative)
     }
 
     @Test
     fun `invoke with id calls updatePosting`() = runTest {
         useCase(
             id = 1L,
-            narrative = "Fuel"
+            narrative = "Groceries"
         )
 
         assertEquals(1, repo.updatedPostings.size)
         assertTrue(repo.insertedPostings.isEmpty())
         assertEquals(1L, repo.updatedPostings.first().id)
-        assertEquals("Fuel", repo.updatedPostings.first().narrative)
+        assertEquals("Groceries", repo.updatedPostings.first().narrative)
     }
 }

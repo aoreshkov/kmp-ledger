@@ -9,7 +9,7 @@ class PostingDetailsUiStateTest {
 
     @Test
     fun successState_containsExpectedPosting() {
-        val posting = Posting(1, "Fuel")
+        val posting = Posting(1, "Groceries")
         val state = PostingDetailsUiState.Success(posting)
         assertEquals(posting, state.posting)
     }

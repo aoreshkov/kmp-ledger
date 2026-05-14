@@ -10,8 +10,8 @@ class PostingListUiStateTest {
     @Test
     fun successState_containsExpectedPostings() {
         val postings = listOf(
-            Posting(1, "Monthly rent"),
-            Posting(2, "Grocery")
+            Posting(1, "Groceries"),
+            Posting(2, "Other Groceries")
         )
         val state = PostingListUiState.Success(postings)
         assertEquals(postings, state.postings)

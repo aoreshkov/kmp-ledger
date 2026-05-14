@@ -9,7 +9,7 @@ class PostingEditUiStateTest {
     @Test
     fun isValid_isTrueWhenNarrativeIsFilled() {
         val state = PostingEditUiState.Editing(
-            narrative = "Monthly rent"
+            narrative = "Groceries"
         )
         assertTrue(state.isValid)
     }

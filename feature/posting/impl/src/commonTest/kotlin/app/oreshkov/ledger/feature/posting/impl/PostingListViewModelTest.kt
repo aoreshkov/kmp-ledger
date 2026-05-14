@@ -34,7 +34,7 @@ class PostingListViewModelTest {
 
     @Test
     fun uiState_isSuccessWhenRepositoryHasPostings() = runTest {
-        repo.seed(Posting(1, "Monthly rent"))
+        repo.seed(Posting(1, "Groceries"))
         val vm = PostingListViewModel(getPostingsUseCase)
         val state = vm.uiState.first { it !is PostingListUiState.Loading }
         assertIs<PostingListUiState.Success>(state)
@@ -45,7 +45,7 @@ class PostingListViewModelTest {
         val vm = PostingListViewModel(getPostingsUseCase)
         vm.uiState.first { it !is PostingListUiState.Loading }
 
-        repo.insertPosting(app.oreshkov.ledger.core.model.data.NewPosting("Monthly rent"))
+        repo.insertPosting(app.oreshkov.ledger.core.model.data.NewPosting("Groceries"))
         val state = vm.uiState.first { it is PostingListUiState.Success }
         assertIs<PostingListUiState.Success>(state)
     }
@@ -65,7 +65,7 @@ class PostingListViewModelTest {
         vm.uiState.first { it is PostingListUiState.Error }
 
         repo.shouldThrowOnGetAll = false
-        repo.seed(Posting(1, "Monthly rent"))
+        repo.seed(Posting(1, "Groceries"))
         vm.retry()
 
         val state = vm.uiState.first { it is PostingListUiState.Success }

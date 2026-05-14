@@ -13,8 +13,8 @@ class GetPostingsUseCaseTest {
 
     @Test
     fun `invoke returns flow of postings from repository`() = runTest {
-        val posting1 = Posting(1L, "Fuel")
-        val posting2 = Posting(2L, "Grocery")
+        val posting1 = Posting(1L, "Groceries")
+        val posting2 = Posting(2L, "Other Groceries")
         repo.seed(posting1, posting2)
 
         val result = useCase().first()

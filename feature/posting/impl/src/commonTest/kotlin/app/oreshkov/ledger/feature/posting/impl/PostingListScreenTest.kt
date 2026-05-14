@@ -47,8 +47,8 @@ class PostingListScreenTest : PlatformComposeUiTest() {
     @Test
     fun successState_showsPostingsList() = runComposeUiTest {
         val postings = listOf(
-            Posting(1, "Monthly rent"),
-            Posting(2, "Grocery")
+            Posting(1, "Groceries"),
+            Posting(2, "Other Groceries")
         )
         setContent {
             PostingListContent(
@@ -58,8 +58,8 @@ class PostingListScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("Monthly rent").assertIsDisplayed()
-        onNodeWithText("Grocery").assertIsDisplayed()
+        onNodeWithText("Groceries").assertIsDisplayed()
+        onNodeWithText("Other Groceries").assertIsDisplayed()
     }
 
     @Test
@@ -79,7 +79,7 @@ class PostingListScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun clickingPosting_triggersOnPostingClick() = runComposeUiTest {
-        val posting = Posting(1, "Monthly rent")
+        val posting = Posting(1, "Groceries")
         var clickedPostingId: Long? = null
         setContent {
             PostingListContent(
@@ -89,7 +89,7 @@ class PostingListScreenTest : PlatformComposeUiTest() {
                 onRetry = {}
             )
         }
-        onNodeWithText("Monthly rent").performClick()
+        onNodeWithText("Groceries").performClick()
         assertEquals(1L, clickedPostingId)
     }
 }

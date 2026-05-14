@@ -26,7 +26,7 @@ class PostingDetailsViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val deletePostingUseCase = DeletePostingUseCase(repo)
-    private val posting  = Posting(1, "Monthly rent")
+    private val posting  = Posting(1, "Groceries")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }
