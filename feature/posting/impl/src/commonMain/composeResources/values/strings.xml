@@ -17,23 +17,14 @@
     <string name="posting_details_delete_dialog_body">This action cannot be undone.</string>
     <string name="posting_details_delete_confirm">Delete</string>
     <string name="posting_details_delete_cancel">Cancel</string>
-    <string name="posting_details_field_amount">Amount</string>
-    <string name="posting_details_field_currency">Currency</string>
     <string name="posting_details_field_narrative">Narrative</string>
-    <string name="posting_details_field_timestamp">Timestamp</string>
     <string name="posting_details_go_back">Go back</string>
 
     <!-- Posting Edit -->
     <string name="posting_edit_title_add">Add Posting</string>
     <string name="posting_edit_title_edit">Edit Posting</string>
     <string name="posting_edit_save">Save</string>
-    <string name="posting_edit_field_amount">Amount</string>
-    <string name="posting_edit_field_currency">Currency</string>
     <string name="posting_edit_field_narrative">Narrative</string>
-    <string name="posting_edit_field_timestamp">Timestamp</string>
-    <string name="posting_edit_error_amount_invalid">Invalid amount</string>
-    <string name="posting_edit_error_timestamp_invalid">Invalid timestamp</string>
-    <string name="posting_edit_error_currency_required">Currency is required</string>
     <string name="posting_edit_error_narrative_required">Narrative is required</string>
     <string name="posting_edit_error_load_failed">Failed to load posting details.</string>
     <string name="posting_edit_error_not_found">Posting not found.</string>
