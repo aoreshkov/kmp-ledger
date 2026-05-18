@@ -123,4 +123,22 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
         onNodeWithText("Save").performClick()
         assertTrue(saveClicked)
     }
+
+    @Test
+    fun notFoundState_showsNotFoundMessageAndGoBackButton() = runComposeUiTest {
+        var backClicked = false
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.NotFound,
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = { backClicked = true },
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Posting not found.").assertIsDisplayed()
+        onNodeWithText("Go back").performClick()
+        assertTrue(backClicked)
+    }
 }

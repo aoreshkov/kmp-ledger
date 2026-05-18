@@ -105,6 +105,23 @@ class PostingEditViewModelTest {
         assertIs<PostingEditUiState.Error>(vm.uiState.value)
     }
 
+    @Test
+    fun retry_reloadsPostingAfterFailure() = runTest {
+        // 1. Initial failure
+        repo.shouldThrowOnGetById = true
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
+        vm.uiState.first { it is PostingEditUiState.Error }
+
+        // 2. Fix repository and retry
+        repo.shouldThrowOnGetById = false
+        repo.seed(existing)
+        vm.retry()
+
+        // 3. Verify success
+        val editing = vm.uiState.first { it is PostingEditUiState.Editing } as PostingEditUiState.Editing
+        assertEquals(existing.narrative, editing.narrative)
+    }
+
     // --- save error ---
 
     @Test

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class OfflineFirstPostingRepositoryTest {
@@ -48,6 +49,35 @@ class OfflineFirstPostingRepositoryTest {
 
         val remaining = fakeDao.entities.value
         assertTrue(remaining.isEmpty())
+    }
+
+    @Test
+    fun updatePosting_mapsToEntityAndCallsDao() = runTest {
+        val initialEntity = PostingEntity(1, "Old")
+        fakeDao.insert(initialEntity)
+        val updatedPosting = Posting(1, "New")
+
+        repository.updatePosting(updatedPosting)
+
+        val entities = fakeDao.entities.value
+        assertEquals(1, entities.size)
+        assertEquals("New", entities[0].narrative)
+    }
+
+    @Test
+    fun getPostingById_returnsMappedModel() = runTest {
+        val entity = PostingEntity(1, "Groceries")
+        fakeDao.insert(entity)
+
+        val posting = repository.getPostingById(1).first()
+        assertEquals(1, posting?.id)
+        assertEquals("Groceries", posting?.narrative)
+    }
+
+    @Test
+    fun getPostingById_returnsNullWhenNotFound() = runTest {
+        val nonExistent = repository.getPostingById(99).first()
+        assertNull(nonExistent)
     }
 }
 

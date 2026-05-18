@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -80,6 +81,25 @@ class PostingDetailsViewModelTest {
         runCurrent()
         assertTrue(eventReceived)
         assertTrue(repo.deletedPostings.contains(posting))
+        job.cancel()
+    }
+
+    @Test
+    fun deletePosting_doesNothingWhenStateIsNotSuccess() = runTest {
+        // 1. Repository is empty, so state will be NotFound
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = 99)
+        vm.uiState.first { it !is PostingDetailsUiState.Loading }
+
+        var eventReceived = false
+        val job = launch { vm.deletedEvent.collect { eventReceived = true } }
+
+        // 2. Attempt deletion
+        vm.deletePosting()
+        runCurrent()
+
+        // 3. Verify no deletion occurred and no event was sent
+        assertTrue(repo.deletedPostings.isEmpty())
+        assertFalse(eventReceived)
         job.cancel()
     }
 }

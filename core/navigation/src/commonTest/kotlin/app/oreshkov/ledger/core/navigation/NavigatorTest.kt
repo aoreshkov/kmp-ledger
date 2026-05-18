@@ -50,4 +50,15 @@ class NavigatorTest {
         nav.goTo(TestKey("b"))
         assertEquals(listOf(start, TestKey("a"), TestKey("b")), nav.backStack)
     }
+
+    @Test
+    fun bind_replacesActiveBackStack() {
+        val newStack = androidx.compose.runtime.mutableStateListOf<NavKey>(TestKey("other"))
+        nav.bind(newStack)
+
+        nav.goTo(TestKey("detail"))
+
+        // Verify via the Navigator's public API
+        assertEquals(listOf(TestKey("other"), TestKey("detail")), nav.backStack)
+    }
 }
