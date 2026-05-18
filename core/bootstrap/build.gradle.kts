@@ -15,5 +15,8 @@ kotlin {
             implementation(project(":feature:posting:api"))
             implementation(project(":feature:posting:impl"))
         }
+        commonTest.dependencies {
+            implementation(libs.koin.test)
+        }
     }
 }
