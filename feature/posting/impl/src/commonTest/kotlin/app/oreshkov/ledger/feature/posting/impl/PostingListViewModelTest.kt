@@ -51,6 +51,18 @@ class PostingListViewModelTest {
     }
 
     @Test
+    fun uiState_updatesWhenLastPostingIsDeleted() = runTest {
+        val posting = Posting(1, "Groceries")
+        repo.seed(posting)
+        val vm = PostingListViewModel(getPostingsUseCase)
+        vm.uiState.first { it is PostingListUiState.Success }
+
+        repo.deletePosting(posting)
+        val state = vm.uiState.first { it is PostingListUiState.Empty }
+        assertIs<PostingListUiState.Empty>(state)
+    }
+
+    @Test
     fun uiState_isErrorWhenRepositoryThrows() = runTest {
         repo.shouldThrowOnGetAll = true
         val vm = PostingListViewModel(getPostingsUseCase)

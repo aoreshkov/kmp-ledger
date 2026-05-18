@@ -9,6 +9,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
@@ -90,5 +91,23 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         onNodeWithText("Delete").performClick()
         
         assertTrue(deleteConfirmed)
+    }
+
+    @Test
+    fun successState_clickingEdit_triggersOnEditClickWithCorrectId() = runComposeUiTest {
+        var editClickedId: Long? = null
+        setContent {
+            PostingDetailsContent(
+                uiState = PostingDetailsUiState.Success(Posting(42, "Groceries")),
+                onNavigateBack = {},
+                onEditClick = { id -> editClickedId = id },
+                onDeleteClick = {},
+                onRetry = {}
+            )
+        }
+
+        onNodeWithContentDescription("Edit Posting").performClick()
+
+        assertEquals(42L, editClickedId)
     }
 }
