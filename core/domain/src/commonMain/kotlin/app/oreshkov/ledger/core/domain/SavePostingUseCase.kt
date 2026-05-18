@@ -13,6 +13,8 @@ class SavePostingUseCase(
         id: Long?,
         narrative: String
     ) {
+        require(narrative.isNotBlank()) { "Narrative cannot be blank" }
+
         if (id == null) {
             repository.insertPosting(
                 NewPosting(

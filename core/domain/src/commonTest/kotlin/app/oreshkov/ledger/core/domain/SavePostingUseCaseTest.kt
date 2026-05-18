@@ -4,6 +4,7 @@ import app.oreshkov.ledger.core.test.FakePostingRepository
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class SavePostingUseCaseTest {
@@ -33,5 +34,14 @@ class SavePostingUseCaseTest {
         assertTrue(repo.insertedPostings.isEmpty())
         assertEquals(1L, repo.updatedPostings.first().id)
         assertEquals("Groceries", repo.updatedPostings.first().narrative)
+    }
+
+    @Test
+    fun `invoke with blank narrative throws exception`() = runTest {
+        assertFailsWith<IllegalArgumentException> {
+            useCase(id = null, narrative = "  ")
+        }
+        assertTrue(repo.insertedPostings.isEmpty())
+        assertTrue(repo.updatedPostings.isEmpty())
     }
 }
