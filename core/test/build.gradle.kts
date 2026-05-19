@@ -16,8 +16,7 @@ kotlin {
         commonMain.dependencies {
             api(libs.kotlin.test)
             api(libs.junit)
-            api(project(":core:model"))
-            api(project(":core:data"))
+            api(project(":core:domain"))
         }
         androidMain.dependencies {
             api(libs.robolectric)

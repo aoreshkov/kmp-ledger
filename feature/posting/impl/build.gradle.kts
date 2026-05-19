@@ -17,6 +17,7 @@ kotlin {
             implementation(libs.compose.material3.adaptive.nav3)
             implementation(project(":core:common"))
             implementation(project(":core:compose"))
+            implementation(project(":core:data"))
             implementation(project(":core:domain"))
             implementation(project(":core:navigation"))
             implementation(project(":feature:posting:api"))

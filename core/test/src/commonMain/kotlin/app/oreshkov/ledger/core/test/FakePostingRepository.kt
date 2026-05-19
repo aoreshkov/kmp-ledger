@@ -1,6 +1,6 @@
 package app.oreshkov.ledger.core.test
 
-import app.oreshkov.ledger.core.data.repository.PostingRepository
+import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
 import kotlinx.coroutines.flow.Flow

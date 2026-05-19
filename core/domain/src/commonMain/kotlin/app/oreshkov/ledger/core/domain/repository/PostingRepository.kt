@@ -1,4 +1,4 @@
-package app.oreshkov.ledger.core.data.repository
+package app.oreshkov.ledger.core.domain.repository
 
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting

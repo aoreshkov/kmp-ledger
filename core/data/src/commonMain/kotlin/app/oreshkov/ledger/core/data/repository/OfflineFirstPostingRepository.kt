@@ -3,6 +3,7 @@ package app.oreshkov.ledger.core.data.repository
 import app.oreshkov.ledger.core.data.model.asEntity
 import app.oreshkov.ledger.core.data.model.asExternalModel
 import app.oreshkov.ledger.core.database.dao.PostingDao
+import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
 import kotlinx.coroutines.flow.Flow

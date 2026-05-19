@@ -12,7 +12,6 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             api(project(":core:model"))
-            implementation(project(":core:data"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
