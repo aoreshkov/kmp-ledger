@@ -4,14 +4,13 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.runtime.saveable.rememberSaveable
 import app.oreshkov.ledger.core.data.di.DataModule
-import app.oreshkov.ledger.core.navigation.Navigator
+import app.oreshkov.ledger.core.navigation.LocalNavigator
 import app.oreshkov.ledger.feature.posting.api.navigation.PostingDetail
 import app.oreshkov.ledger.feature.posting.api.navigation.PostingEdit
 import app.oreshkov.ledger.feature.posting.api.navigation.PostingList
 import app.oreshkov.ledger.feature.posting.impl.PostingDetailsScreen
 import app.oreshkov.ledger.feature.posting.impl.PostingEditScreen
 import app.oreshkov.ledger.feature.posting.impl.PostingListScreen
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -33,7 +32,7 @@ val postingNavigationModule = module {
     navigation<PostingList>(
         metadata = ListDetailSceneStrategy.listPane()
     ) {
-        val navigator = koinInject<Navigator>()
+        val navigator = LocalNavigator.current
         PostingListScreen(
             onNavigateToEdit = { id -> navigator.goTo(PostingEdit(id)) },
             onNavigateToDetails = { id -> navigator.goTo(PostingDetail(id)) },
@@ -44,7 +43,7 @@ val postingNavigationModule = module {
     navigation<PostingDetail>(
         metadata = ListDetailSceneStrategy.detailPane()
     ) { route ->
-        val navigator = koinInject<Navigator>()
+        val navigator = LocalNavigator.current
         val vmKey = rememberSaveable(route) { "posting_details_${route.id}_${Uuid.random()}" }
         PostingDetailsScreen(
             onNavigateBack = { navigator.goBack() },
@@ -60,7 +59,7 @@ val postingNavigationModule = module {
     navigation<PostingEdit>(
         metadata = ListDetailSceneStrategy.detailPane()
     ) { route ->
-        val navigator = koinInject<Navigator>()
+        val navigator = LocalNavigator.current
         val vmKey = rememberSaveable(route) { "posting_edit_${route.id ?: "new"}_${Uuid.random()}" }
 
         PostingEditScreen(

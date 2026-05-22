@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.navigation3.runtime.NavKey
 import androidx.savedstate.serialization.SavedStateConfiguration
-import app.oreshkov.ledger.core.navigation.Navigator
 import app.oreshkov.ledger.core.navigation.StartDestination
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
 import kotlinx.serialization.Serializable
@@ -39,7 +38,6 @@ class AppTest : PlatformComposeUiTest() {
         startKoin {
             modules(
                 module {
-                    single { Navigator(startKey) }
                     single { StartDestination(startKey) }
                     single {
                         SavedStateConfiguration {

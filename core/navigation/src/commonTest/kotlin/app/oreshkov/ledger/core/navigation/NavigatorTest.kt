@@ -1,5 +1,6 @@
 package app.oreshkov.ledger.core.navigation
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import kotlin.test.Test
@@ -13,11 +14,12 @@ class NavigatorTest {
     private data class TestKey(val name: String) : NavKey
 
     private val start = TestKey("home")
-    private val nav   = Navigator(start)
+    private val backStack = mutableStateListOf<NavKey>(start)
+    private val nav   = Navigator(backStack)
 
     @Test
     fun initialBackStackContainsStart() {
-        assertEquals(listOf(start), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start), nav.backStack)
     }
 
     @Test
@@ -35,30 +37,19 @@ class NavigatorTest {
     fun goBack_removesLastDestination() {
         nav.goTo(TestKey("detail"))
         nav.goBack()
-        assertEquals(listOf(start), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start), nav.backStack)
     }
 
     @Test
     fun goBack_doesNotEmptyStackBelowStart() {
         nav.goBack()
-        assertEquals(listOf(start), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start), nav.backStack)
     }
 
     @Test
     fun goTo_appendsDestination() {
         nav.goTo(TestKey("a"))
         nav.goTo(TestKey("b"))
-        assertEquals(listOf(start, TestKey("a"), TestKey("b")), nav.backStack)
-    }
-
-    @Test
-    fun bind_replacesActiveBackStack() {
-        val newStack = androidx.compose.runtime.mutableStateListOf<NavKey>(TestKey("other"))
-        nav.bind(newStack)
-
-        nav.goTo(TestKey("detail"))
-
-        // Verify via the Navigator's public API
-        assertEquals(listOf(TestKey("other"), TestKey("detail")), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start, TestKey("a"), TestKey("b")), nav.backStack)
     }
 }

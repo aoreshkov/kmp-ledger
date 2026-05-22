@@ -1,26 +1,17 @@
 package app.oreshkov.ledger.core.navigation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.navigation3.runtime.NavKey
 
-class Navigator(startDestination: NavKey) {
-    private var _backStack by mutableStateOf<MutableList<NavKey>>(mutableStateListOf(startDestination))
-    val backStack: List<NavKey> get() = _backStack
-
-    fun bind(backStack: MutableList<NavKey>) {
-        _backStack = backStack
-    }
-
+class Navigator(val backStack: MutableList<NavKey>) {
     fun goTo(destination: NavKey) {
-        _backStack.add(destination)
+        backStack.add(destination)
     }
 
-    fun canGoBack(): Boolean = _backStack.size > 1
+    fun canGoBack(): Boolean = backStack.size > 1
 
     fun goBack() {
-        if (canGoBack()) _backStack.removeLast()
+        if (canGoBack()) {
+            backStack.removeAt(backStack.size - 1)
+        }
     }
 }
