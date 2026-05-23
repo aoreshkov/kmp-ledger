@@ -38,8 +38,11 @@ fun App() {
 
             val entryProvider = koinEntryProvider<NavKey>()
             val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
-            val saveableStateDecorator = rememberSaveableStateHolderNavEntryDecorator<NavKey>()
-            val viewModelStoreDecorator = rememberViewModelStoreNavEntryDecorator<NavKey>()
+            
+            val decorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
+                rememberViewModelStoreNavEntryDecorator<NavKey>()
+            )
 
             CompositionLocalProvider(LocalNavigator provides navigator) {
                 NavDisplay(
@@ -47,7 +50,7 @@ fun App() {
                     onBack = { navigator.goBack() },
                     sceneStrategies = listOf(listDetailStrategy),
                     entryProvider = entryProvider,
-                    entryDecorators = listOf(saveableStateDecorator, viewModelStoreDecorator)
+                    entryDecorators = decorators
                 )
             }
         }

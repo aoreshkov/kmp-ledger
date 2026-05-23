@@ -26,6 +26,7 @@ androidx-material3 = "1.11.0-alpha07"
 koin = "4.2.1"
 koin-compiler = "0.6.2"
 kotlinx-coroutines = "1.11.0"
+kotlinx-serialization = "1.11.0"
 
 # Test
 androidx-test-core = "1.7.0"
@@ -79,6 +80,7 @@ sqlite-bundled-jvm = { module = "androidx.sqlite:sqlite-bundled-jvm", version.re
 # Kotlinx
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 
 # Test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
