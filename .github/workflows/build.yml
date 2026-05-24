@@ -23,7 +23,7 @@ jobs:
         uses: ./.github/actions/gradle-setup
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew allTests
 
       - name: Upload test reports
         if: always()

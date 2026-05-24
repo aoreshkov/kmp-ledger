@@ -16,7 +16,15 @@ kotlin {
             implementation(project(":feature:posting:impl"))
         }
         commonTest.dependencies {
+        }
+        jvmTest.dependencies {
             implementation(libs.koin.test)
+        }
+        val androidHostTest by getting {
+            kotlin.srcDir("src/jvmTest/kotlin")
+            dependencies {
+                implementation(libs.koin.test)
+            }
         }
     }
 }

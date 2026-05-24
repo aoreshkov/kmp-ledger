@@ -3,6 +3,7 @@ package app.oreshkov.ledger.core.bootstrap.di
 import app.oreshkov.ledger.feature.posting.api.navigation.PostingList
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 /**
  * Unit tests for BootstrapModule provider logic.
@@ -25,6 +26,6 @@ class BootstrapModuleTest {
         
         // Ensure configuration is successfully created
         // (Deep inspection of serializersModule is limited by the library API)
-        assert(config.serializersModule != null)
+        assertNotNull(config.serializersModule)
     }
 }

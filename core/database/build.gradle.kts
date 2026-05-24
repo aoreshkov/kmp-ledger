@@ -14,6 +14,16 @@ kotlin {
         withDeviceTest {}
     }
 
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "Ledger"
+            isStatic = true
+        }
+    }
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.koin.android)
@@ -22,9 +32,9 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.room3.runtime)
             implementation(libs.sqlite.bundled)
+            implementation(libs.kotlinx.coroutines.core)
         }
         jvmMain.dependencies {
-            implementation(libs.sqlite.bundled.jvm)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -32,7 +42,7 @@ kotlin {
         }
         val androidHostTest by getting {
             dependencies {
-                implementation(libs.sqlite.bundled.jvm )
+                implementation(libs.sqlite.bundled.jvm)
             }
         }
     }
@@ -45,4 +55,6 @@ room3 {
 dependencies {
     add("kspAndroid", libs.room3.compiler)
     add("kspJvm", libs.room3.compiler)
+    add("kspIosArm64", libs.room3.compiler)
+    add("kspIosSimulatorArm64", libs.room3.compiler)
 }

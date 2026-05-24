@@ -16,6 +16,4 @@ abstract class LedgerDatabase : RoomDatabase() {
     abstract fun postingDao(): PostingDao
 }
 
-expect object LedgerDatabaseConstructor : RoomDatabaseConstructor<LedgerDatabase> {
-    override fun initialize(): LedgerDatabase
-}
+expect object LedgerDatabaseConstructor : RoomDatabaseConstructor<LedgerDatabase>

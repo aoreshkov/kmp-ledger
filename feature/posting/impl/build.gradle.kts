@@ -15,6 +15,7 @@ kotlin {
             implementation(libs.compose.material.icons.core)
             implementation(libs.compose.material3)
             implementation(libs.compose.material3.adaptive.nav3)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(project(":core:common"))
             implementation(project(":core:compose"))
             implementation(project(":core:data"))

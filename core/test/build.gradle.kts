@@ -17,13 +17,16 @@ kotlin {
             api(libs.kotlin.test)
             api(libs.junit)
             api(project(":core:domain"))
+            implementation(libs.compose.runtime)
+            implementation(libs.kotlinx.coroutines.core)
         }
         androidMain.dependencies {
             api(libs.robolectric)
-            implementation(libs.compose.runtime)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
+        }
+        iosMain.dependencies {
         }
     }
 }

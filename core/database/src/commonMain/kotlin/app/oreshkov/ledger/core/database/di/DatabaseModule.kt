@@ -17,7 +17,7 @@ class DatabaseModule {
     ): LedgerDatabase =
         builder
             .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.IO)
+            .setQueryCoroutineContext(Dispatchers.Default)
             .build()
 
     @Single
