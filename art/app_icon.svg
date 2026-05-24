@@ -1,0 +1,25 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background (Optional for Adaptive Icons) -->
+    <rect width="1024" height="1024" rx="160" fill="#1C1C1E"/>
+
+    <!-- Safe Zone Guide (Invisible) -->
+    <!-- <circle cx="512" cy="512" r="338" stroke="white" stroke-dasharray="10 10" opacity="0.2"/> -->
+
+    <g id="KMP-Ledger-Icon">
+        <!-- The "Ledger Bar" (Vertical part of K) -->
+        <rect x="320" y="250" width="100" height="524" rx="20" fill="url(#kotlin_gradient)"/>
+
+        <!-- The Top Page/Branch -->
+        <path d="M480 512L680 312C700 292 730 292 750 312L780 342C800 362 800 392 780 412L580 612L480 512Z" fill="url(#kotlin_gradient)"/>
+
+        <!-- The Bottom Page (Accent - represents the 'Ledger Entry') -->
+        <path d="M480 512L680 712C700 732 730 732 750 712L780 682C800 662 800 632 780 612L580 412L480 512Z" fill="#E24462" fill-opacity="0.9"/>
+    </g>
+
+    <defs>
+        <linearGradient id="kotlin_gradient" x1="320" y1="250" x2="800" y2="774" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#7F52FF"/>
+            <stop offset="1" stop-color="#B125EA"/>
+        </linearGradient>
+    </defs>
+</svg>
