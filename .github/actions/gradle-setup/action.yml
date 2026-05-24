@@ -1,0 +1,13 @@
+name: gradle-setup
+description: "Setup Java and Gradle with caching"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: "17"
+        distribution: "temurin"
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
