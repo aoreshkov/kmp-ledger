@@ -13,7 +13,7 @@ kotlin {
         minSdk = libs.findVersion("android-sdk-min").get().requiredVersion.toInt()
 
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
     jvm()
