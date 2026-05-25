@@ -1,12 +1,7 @@
 import SwiftUI
-import Ledger
 
 @main
-struct iosApp: App {
-    init() {
-        MainViewControllerKt.initKoin()
-    }
-
+struct iOSApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
