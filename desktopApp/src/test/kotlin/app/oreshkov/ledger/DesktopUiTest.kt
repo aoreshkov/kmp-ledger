@@ -2,7 +2,7 @@ package app.oreshkov.ledger
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import app.oreshkov.ledger.core.ui.App
 import app.oreshkov.ledger.feature.posting.impl.di.postingNavigationModule
 import org.koin.core.context.stopKoin
