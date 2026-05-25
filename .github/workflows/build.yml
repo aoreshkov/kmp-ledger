@@ -81,3 +81,17 @@ jobs:
             desktopApp/build/compose/binaries/main/dmg/*
             desktopApp/build/compose/binaries/main/deb/*
             desktopApp/build/compose/binaries/main/rpm/*
+
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      - name: Build iOS Framework
+        run: ./gradlew :core:bootstrap:embedSwiftExportForXcode

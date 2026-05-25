@@ -9,11 +9,12 @@
 **Supported Platforms:**
 
 ![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![iOS](https://img.shields.io/badge/Platform-iOS-000000?style=for-the-badge&logo=apple&logoColor=white)
 ![Desktop](https://img.shields.io/badge/Platform-Desktop-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 
 ---
 
-**Ledger** is a Kotlin Multiplatform reference project for Android and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
+**Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
 > **Note:** Because this project tracks alpha/beta library versions (Room 3, Navigation 3, Compose Multiplatform RC), the API surface of some dependencies may change. Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
@@ -37,6 +38,7 @@
 | Room 3 | 3.0.0-alpha04 | Local database with KMP support |
 | Navigation 3 | 1.1.1 | Type-safe declarative navigation |
 | Koin | 4.2.1 | Dependency injection with annotation processing |
+| Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
 | Lifecycle / ViewModel | 2.11.0-beta01 | State management and lifecycle-aware components |
 | Android SDK | compile/target 37, min 24 | Android target |
@@ -49,7 +51,7 @@ Ledger follows a strict unidirectional layered architecture. Each layer depends 
 
 ```
 ┌─────────────────────────────────────┐
-│           androidApp / desktopApp   │  Platform entry points
+│ androidApp / iosApp / desktopApp    │  Platform entry points
 └────────────────┬────────────────────┘
                  │
 ┌────────────────▼────────────────────┐
@@ -283,6 +285,14 @@ All tests use pure Kotlin — no mocking framework.
 ./gradlew :desktopApp:run
 ```
 
+### Run on iOS
+
+1.  Open `iosApp/iosApp.xcodeproj` in Xcode.
+2.  Select a simulator or real device.
+3.  Click **Run**.
+
+> **Note:** The iOS app uses the experimental **Swift Export** for direct Kotlin-to-Swift interoperability. For ProMotion (120Hz) support, ensure `CADisableMinimumFrameDurationOnPhone` is set to `YES` in the **Target > Info** tab of the Xcode project (Xcode 13+ manages this via a generated plist).
+
 ### Run all tests
 
 ```bash
@@ -303,6 +313,7 @@ kmp-ledger/
 ├── gradle/
 │   └── libs.versions.toml        # Centralised version catalog
 ├── androidApp/                   # Android entry point
+├── iosApp/                       # iOS entry point (Swift)
 ├── desktopApp/                   # Desktop (JVM) entry point
 ├── core/
 │   ├── bootstrap/                # Root DI wiring

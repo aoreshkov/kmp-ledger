@@ -1,11 +1,14 @@
 plugins {
-    id("ledger.kotlin.multiplatform.koin")
+    id("ledger.kotlin.multiplatform.koin.compose")
 }
 
 kotlin {
     android {
         namespace = "app.oreshkov.ledger.core.bootstrap"
-        withHostTest {}
+    }
+
+    swiftExport {
+        moduleName = "Ledger"
     }
 
     sourceSets {
