@@ -92,6 +92,9 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
+      - name: Debug
+        run: pwd && ls -la && where gradlew
+
       - name: Build iOS simulator app
         run: |
           xcodebuild build \
