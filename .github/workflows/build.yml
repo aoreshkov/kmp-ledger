@@ -81,10 +81,9 @@ jobs:
             desktopApp/build/compose/binaries/main/dmg/*
             desktopApp/build/compose/binaries/main/deb/*
             desktopApp/build/compose/binaries/main/rpm/*
-
   build-ios:
     name: Build iOS
-    runs-on: macos-latest
+    runs-on: macos-26
     needs: check
     steps:
       - name: Checkout
@@ -93,5 +92,19 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
-      - name: Build iOS Framework
-        run: ./gradlew :core:bootstrap:embedSwiftExportForXcode
+      - name: Build iOS simulator app
+        run: |
+          xcodebuild build \
+            -project iosApp/iosApp.xcodeproj \
+            -scheme iosApp \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath ./build \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -verbose
+
+      - name: Upload iOS App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-simulator
+          path: ./build/Build/Products/Debug-iphonesimulator/*.app
