@@ -10,7 +10,7 @@ import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
 @Module(includes = [AppModule::class, PostingModule::class])
-class BootstrapModule {
+internal class BootstrapModule {
     @Single
     fun startDestination() = StartDestination(PostingList)
 

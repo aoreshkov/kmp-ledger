@@ -10,7 +10,7 @@ import org.koin.plugin.module.dsl.startKoin
 import platform.UIKit.UIViewController
 
 @KoinApplication(modules = [BootstrapModule::class])
-class LedgerApp
+internal class LedgerApp
 
 fun MainViewController(): UIViewController {
     startKoin<LedgerApp> {
