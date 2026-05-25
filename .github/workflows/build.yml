@@ -92,10 +92,9 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
-      - name: Debug
-        run: pwd && ls -la && where gradlew
-
       - name: Build iOS simulator app
+        env:
+          GRADLE_HOME: ${{ github.workspace }}
         run: |
           xcodebuild build \
             -project iosApp/iosApp.xcodeproj \
