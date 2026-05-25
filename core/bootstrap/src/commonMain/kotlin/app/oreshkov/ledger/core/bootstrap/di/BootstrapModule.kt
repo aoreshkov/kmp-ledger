@@ -8,9 +8,13 @@ import app.oreshkov.ledger.feature.posting.api.navigation.serializerPostings
 import app.oreshkov.ledger.feature.posting.impl.di.PostingModule
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
 
+@OptIn(ExperimentalObjCRefinement::class)
+@HiddenFromObjC
 @Module(includes = [AppModule::class, PostingModule::class])
-internal class BootstrapModule {
+class BootstrapModule {
     @Single
     fun startDestination() = StartDestination(PostingList)
 
