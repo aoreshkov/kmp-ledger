@@ -7,8 +7,6 @@ android-sdk-target = "37"
 kotlin = "2.3.21"
 ksp = "2.3.8"
 
-kotlin-gradle-plugin = "2.4.0-Beta2"
-
 # Jetpack
 androidx-activity = "1.13.0"
 androidx-lifecycle = "2.11.0-beta01"
@@ -37,7 +35,7 @@ robolectric = "4.16.1"
 
 [libraries]
 # Build
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 
 # AndroidX
