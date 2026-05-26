@@ -16,10 +16,10 @@ import kotlin.native.HiddenFromObjC
 @Module(includes = [AppModule::class, PostingModule::class])
 class BootstrapModule {
     @Single
-    fun startDestination() = StartDestination(PostingList)
+    internal fun startDestination() = StartDestination(PostingList)
 
     @Single
-    fun savedStateConfiguration() = SavedStateConfiguration {
+    internal fun savedStateConfiguration() = SavedStateConfiguration {
         serializersModule = serializerPostings
     }
 }
