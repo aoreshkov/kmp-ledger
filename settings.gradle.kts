@@ -30,6 +30,7 @@ dependencyResolutionManagement {
 
 include(":androidApp")
 include(":desktopApp")
+include(":iosExport")
 include(":core:bootstrap")
 include(":core:common")
 include(":core:compose")

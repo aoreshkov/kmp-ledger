@@ -52,9 +52,13 @@ Ledger follows a strict unidirectional layered architecture. Each layer depends 
 ```
 ┌─────────────────────────────────────┐
 │ androidApp / iosApp / desktopApp    │  Platform entry points
-└────────────────┬────────────────────┘
-                 │
-┌────────────────▼────────────────────┐
+└───────┬──────────────┬──────────────┘
+        │              │
+        │      ┌───────▼───────┐
+        │      │   iosExport   │  Swift Export bridge
+        │      └───────┬───────┘
+        │              │
+┌───────▼──────────────▼──────────────┐
 │              core:ui                │  App composable, theme, NavDisplay setup
 │           core:navigation           │  Navigator, StartDestination
 │           core:bootstrap            │  Root Koin module wiring
@@ -99,6 +103,7 @@ Supporting modules (no layer dependency):
 | `core:ui` | Root `App` composable, Material 3 theme, `NavDisplay` wiring. |
 | `core:bootstrap` | Root Koin module that wires all sub-modules together and provides `StartDestination` and `SavedStateConfiguration`. |
 | `core:test` | `FakePostingRepository` and `PlatformComposeUiTest` expect/actual. Consumed by all test source sets. |
+| `iosExport` | Bridge module for Swift Export. Contains the `MainViewController` and Koin initialization for iOS. |
 | `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`) and their serializers module. Consumed by both the feature impl and the bootstrap/navigation modules. |
 | `feature:posting:impl` | `PostingListScreen`, `PostingDetailsScreen`, `PostingEditScreen`, their ViewModels, and the Koin navigation module (`postingNavigationModule`). |
 
@@ -315,6 +320,7 @@ kmp-ledger/
 ├── androidApp/                   # Android entry point
 ├── iosApp/                       # iOS entry point (Swift)
 ├── desktopApp/                   # Desktop (JVM) entry point
+├── iosExport/                    # Swift Export bridge for iOS
 ├── core/
 │   ├── bootstrap/                # Root DI wiring
 │   ├── common/                   # DataResult, asResult()

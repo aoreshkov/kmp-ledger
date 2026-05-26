@@ -4,7 +4,7 @@ import Ledger
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Self.Context) -> UIViewController {
-        MainViewControllerKt.MainViewController()
+        LedgerKt.MainViewController()
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Self.Context) {}

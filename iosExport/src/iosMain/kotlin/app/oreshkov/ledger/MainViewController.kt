@@ -1,4 +1,4 @@
-package app.oreshkov.ledger.core.bootstrap
+package app.oreshkov.ledger
 
 import androidx.compose.ui.window.ComposeUIViewController
 import app.oreshkov.ledger.core.bootstrap.di.BootstrapModule
@@ -12,12 +12,13 @@ import platform.UIKit.UIViewController
 @KoinApplication(modules = [BootstrapModule::class])
 internal class LedgerApp
 
-fun MainViewController(): UIViewController {
+public fun MainViewController(): UIViewController = ComposeUIViewController {
+    App()
+}
+
+public fun initializeKoin() {
     startKoin<LedgerApp> {
         printLogger(Level.DEBUG)
         modules(postingNavigationModule)
-    }
-    return ComposeUIViewController {
-        App()
     }
 }
