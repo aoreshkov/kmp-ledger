@@ -8,11 +8,3 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.koin.compiler) apply false
 }
-
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            force(libs.kotlinx.coroutines.core)
-        }
-    }
-}
