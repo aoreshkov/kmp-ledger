@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.koin.compiler) apply false
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
 }
