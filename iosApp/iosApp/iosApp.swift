@@ -4,7 +4,7 @@ import Ledger
 @main
 struct iOSApp: App {
     init() {
-        initializeKoin()
+        MainViewControllerKt.initializeKoin()
     }
 
     var body: some Scene {
