@@ -26,6 +26,7 @@ koin = "4.2.1"
 koin-compiler = "1.0.0"
 kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.11.0"
+kotlinx-binary-compatibility-validator = "0.18.1"
 
 # Test
 androidx-test-core = "1.7.0"
@@ -103,3 +104,4 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room3 = { id = "androidx.room3", version.ref = "androidx-room" }
 koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-compiler" }
+kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlinx-binary-compatibility-validator" }
