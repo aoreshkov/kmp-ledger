@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.swiftexport.ExperimentalSwiftExportDsl
+
 plugins {
     id("ledger.kotlin.multiplatform.koin.compose")
 }
@@ -9,20 +11,22 @@ kotlin {
 
     iosArm64 {
         binaries.framework {
-            baseName = "Ledger"
+            baseName = "LedgerBinary"
             isStatic = true
         }
     }
 
     iosSimulatorArm64 {
         binaries.framework {
-            baseName = "Ledger"
+            baseName = "LedgerBinary"
             isStatic = true
         }
     }
 
+    @OptIn(ExperimentalSwiftExportDsl::class)
     swiftExport {
         moduleName = "Ledger"
+        flattenPackage = "app.oreshkov.ledger"
     }
 
     sourceSets {
