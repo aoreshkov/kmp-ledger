@@ -4,10 +4,11 @@ import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Provided
 
 @Factory
 class GetPostingUseCase(
-    private val repository: PostingRepository
+    @Provided private val repository: PostingRepository
 ) {
     operator fun invoke(id: Long): Flow<Posting?> = repository.getPostingById(id)
 }

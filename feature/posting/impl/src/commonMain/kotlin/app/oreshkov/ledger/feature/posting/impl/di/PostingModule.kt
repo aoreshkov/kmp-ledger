@@ -4,6 +4,7 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.runtime.saveable.rememberSaveable
 import app.oreshkov.ledger.core.data.di.DataModule
+import app.oreshkov.ledger.core.domain.di.DomainModule
 import app.oreshkov.ledger.core.navigation.LocalNavigator
 import app.oreshkov.ledger.feature.posting.api.navigation.PostingDetail
 import app.oreshkov.ledger.feature.posting.api.navigation.PostingEdit
@@ -21,7 +22,7 @@ import org.koin.dsl.navigation3.navigation
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@Module(includes = [DataModule::class])
+@Module(includes = [DataModule::class, DomainModule::class])
 @ComponentScan("app.oreshkov.ledger.feature.posting.impl")
 class PostingModule
 

@@ -4,10 +4,11 @@ import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Provided
 
 @Factory
 class SavePostingUseCase(
-    private val repository: PostingRepository
+    @Provided private val repository: PostingRepository
 ) {
     suspend operator fun invoke(
         id: Long?,
