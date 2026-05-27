@@ -21,6 +21,7 @@ dependencies {
     testImplementation(libs.kotlin.test)
     testImplementation(libs.koin.test)
     testImplementation(libs.compose.ui.test)
+    testImplementation(libs.koin.compose)
 }
 
 compose.desktop {

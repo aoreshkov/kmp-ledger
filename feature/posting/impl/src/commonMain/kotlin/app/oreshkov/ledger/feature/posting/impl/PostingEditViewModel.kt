@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
+import org.koin.core.annotation.Provided
 
 sealed interface PostingEditUiState {
     data object Loading : PostingEditUiState
@@ -34,8 +35,8 @@ sealed interface PostingEditUiState {
 
 @KoinViewModel
 class PostingEditViewModel(
-    private val getPostingUseCase: GetPostingUseCase,
-    private val savePostingUseCase: SavePostingUseCase,
+    @Provided private val getPostingUseCase: GetPostingUseCase,
+    @Provided private val savePostingUseCase: SavePostingUseCase,
     @InjectedParam private val postingId: Long?
 ) : ViewModel() {
 

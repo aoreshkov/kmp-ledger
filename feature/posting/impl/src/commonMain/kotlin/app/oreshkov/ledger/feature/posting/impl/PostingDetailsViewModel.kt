@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
+import org.koin.core.annotation.Provided
 
 sealed interface PostingDetailsUiState {
     data object Loading : PostingDetailsUiState
@@ -31,8 +32,8 @@ sealed interface PostingDetailsUiState {
 @OptIn(ExperimentalCoroutinesApi::class)
 @KoinViewModel
 class PostingDetailsViewModel(
-    private val getPostingUseCase: GetPostingUseCase,
-    private val deletePostingUseCase: DeletePostingUseCase,
+    @Provided private val getPostingUseCase: GetPostingUseCase,
+    @Provided private val deletePostingUseCase: DeletePostingUseCase,
     @InjectedParam private val postingId: Long
 ) : ViewModel() {
     private val retryTrigger = MutableStateFlow(0)

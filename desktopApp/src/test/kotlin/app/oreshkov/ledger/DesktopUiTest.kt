@@ -5,30 +5,25 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import app.oreshkov.ledger.core.ui.App
 import app.oreshkov.ledger.feature.posting.impl.di.postingNavigationModule
-import org.koin.core.context.stopKoin
-import org.koin.plugin.module.dsl.startKoin
-import kotlin.test.AfterTest
+import org.koin.compose.KoinIsolatedContext
 import kotlin.test.Test
+import org.koin.plugin.module.dsl.koinApplication
 
 @OptIn(ExperimentalTestApi::class)
 class DesktopUiTest {
 
-    @AfterTest
-    fun tearDown() {
-        stopKoin()
-    }
-
     @Test
     fun app_starts_and_shows_posting_list() = runDesktopComposeUiTest {
-        startKoin<LedgerApp> {
-            modules(postingNavigationModule)
-        }
-
         setContent {
-            App()
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    modules(postingNavigationModule)
+                }
+            ) {
+                App()
+            }
         }
 
-        // "My Postings" is the title of the PostingListScreen
         onNodeWithText("My Postings").assertExists()
     }
 }

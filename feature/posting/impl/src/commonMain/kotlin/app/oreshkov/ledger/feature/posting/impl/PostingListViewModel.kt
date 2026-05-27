@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.KoinViewModel
+import org.koin.core.annotation.Provided
 
 sealed interface PostingListUiState {
     data object Loading : PostingListUiState
@@ -26,7 +27,7 @@ sealed interface PostingListUiState {
 @OptIn(ExperimentalCoroutinesApi::class)
 @KoinViewModel
 class PostingListViewModel(
-    private val getPostingsUseCase: GetPostingsUseCase
+    @Provided private val getPostingsUseCase: GetPostingsUseCase
 ) : ViewModel() {
 
     private val retryTrigger = MutableStateFlow(0)
