@@ -1,5 +1,6 @@
 package app.oreshkov.ledger.core.test
 
+import app.oreshkov.ledger.core.common.util.randomUuidString
 import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.update
 class FakePostingRepository : PostingRepository {
 
     private val _postings = MutableStateFlow<List<Posting>>(emptyList())
-    private var nextId = 1L
 
     val insertedPostings = mutableListOf<NewPosting>()
     val deletedPostings  = mutableListOf<Posting>()
@@ -26,7 +26,7 @@ class FakePostingRepository : PostingRepository {
     override suspend fun insertPosting(posting: NewPosting) {
         if (failNextWrite) { failNextWrite = false; error("DB error") }
         insertedPostings += posting
-        _postings.update { it + Posting(nextId++, posting.narrative) }
+        _postings.update { it + Posting(randomUuidString(), posting.narrative) }
     }
 
     override suspend fun deletePosting(posting: Posting) {
@@ -49,7 +49,7 @@ class FakePostingRepository : PostingRepository {
 
     var shouldThrowOnGetById: Boolean = false
 
-    override fun getPostingById(id: Long): Flow<Posting?> = flow {
+    override fun getPostingById(id: String): Flow<Posting?> = flow {
         if (shouldThrowOnGetById) error("DB error")
         emitAll(_postings.map { list -> list.find { it.id == id } })
     }

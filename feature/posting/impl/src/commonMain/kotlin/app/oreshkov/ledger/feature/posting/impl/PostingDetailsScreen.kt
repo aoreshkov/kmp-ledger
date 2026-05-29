@@ -54,7 +54,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun PostingDetailsScreen(
     onNavigateBack: () -> Unit,
-    onEditClick: (Long) -> Unit,
+    onEditClick: (String) -> Unit,
     onDeleted: () -> Unit,
     viewModel: PostingDetailsViewModel
 ) {
@@ -78,7 +78,7 @@ fun PostingDetailsScreen(
 internal fun PostingDetailsContent(
     uiState: PostingDetailsUiState,
     onNavigateBack: () -> Unit,
-    onEditClick: (Long) -> Unit,
+    onEditClick: (String) -> Unit,
     onDeleteClick: () -> Unit,
     onRetry: () -> Unit,
 ) {

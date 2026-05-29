@@ -34,7 +34,7 @@ sealed interface PostingDetailsUiState {
 class PostingDetailsViewModel(
     @Provided private val getPostingUseCase: GetPostingUseCase,
     @Provided private val deletePostingUseCase: DeletePostingUseCase,
-    @InjectedParam private val postingId: Long
+    @InjectedParam private val postingId: String
 ) : ViewModel() {
     private val retryTrigger = MutableStateFlow(0)
 

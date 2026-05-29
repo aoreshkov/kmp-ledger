@@ -37,7 +37,7 @@ sealed interface PostingEditUiState {
 class PostingEditViewModel(
     @Provided private val getPostingUseCase: GetPostingUseCase,
     @Provided private val savePostingUseCase: SavePostingUseCase,
-    @InjectedParam private val postingId: Long?
+    @InjectedParam private val postingId: String?
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<PostingEditUiState>(

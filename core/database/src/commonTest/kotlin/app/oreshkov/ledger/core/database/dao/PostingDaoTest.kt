@@ -29,17 +29,17 @@ class PostingDaoTest {
 
     @Test
     fun insertAndGetPosting() = runTest {
-        val posting = PostingEntity(id = 1, narrative = "Groceries")
+        val posting = PostingEntity(id = "1", narrative = "Groceries")
         dao.insert(posting)
 
-        val loaded = dao.getPostingById(1).first()
+        val loaded = dao.getPostingById("1").first()
         assertEquals(posting, loaded)
     }
 
     @Test
     fun getAllPostings() = runTest {
-        val posting1 = PostingEntity(id = 1, narrative = "Groceries")
-        val posting2 = PostingEntity(id = 2, narrative = "Other Groceries")
+        val posting1 = PostingEntity(id = "1", narrative = "Groceries")
+        val posting2 = PostingEntity(id = "2", narrative = "Other Groceries")
         dao.insert(posting1)
         dao.insert(posting2)
 
@@ -50,23 +50,23 @@ class PostingDaoTest {
 
     @Test
     fun updatePosting() = runTest {
-        val posting = PostingEntity(id = 1, narrative = "Groceries")
+        val posting = PostingEntity(id = "1", narrative = "Groceries")
         dao.insert(posting)
 
         val updatedPosting = posting.copy(narrative = "Groceries updated")
         dao.update(updatedPosting)
 
-        val loaded = dao.getPostingById(1).first()
+        val loaded = dao.getPostingById("1").first()
         assertEquals("Groceries updated", loaded?.narrative)
     }
 
     @Test
     fun deletePosting() = runTest {
-        val posting = PostingEntity(id = 1, narrative = "Groceries")
+        val posting = PostingEntity(id = "1", narrative = "Groceries")
         dao.insert(posting)
         dao.delete(posting)
 
-        val loaded = dao.getPostingById(1).first()
+        val loaded = dao.getPostingById("1").first()
         assertNull(loaded)
     }
 }

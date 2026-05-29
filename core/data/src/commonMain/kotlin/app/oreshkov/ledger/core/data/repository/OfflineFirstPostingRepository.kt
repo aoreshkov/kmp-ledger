@@ -19,7 +19,7 @@ class OfflineFirstPostingRepository(private val postingDao: PostingDao) : Postin
     override suspend fun updatePosting(posting: Posting) =
         postingDao.update(posting = posting.asEntity())
 
-    override fun getPostingById(id: Long): Flow<Posting?> =
+    override fun getPostingById(id: String): Flow<Posting?> =
         postingDao.getPostingById(id).map { it?.asExternalModel() }
 
     override fun getAllPostings(): Flow<List<Posting>> =

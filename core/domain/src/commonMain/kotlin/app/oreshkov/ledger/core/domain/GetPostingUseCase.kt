@@ -10,5 +10,5 @@ import org.koin.core.annotation.Provided
 class GetPostingUseCase(
     @Provided private val repository: PostingRepository
 ) {
-    operator fun invoke(id: Long): Flow<Posting?> = repository.getPostingById(id)
+    operator fun invoke(id: String): Flow<Posting?> = repository.getPostingById(id)
 }

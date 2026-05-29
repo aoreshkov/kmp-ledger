@@ -21,7 +21,7 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun getAllPostings_mapsEntitiesToModels() = runTest {
-        val entity = PostingEntity(1, "Groceries")
+        val entity = PostingEntity("1", "Groceries")
         fakeDao.insert(entity)
 
         val postings = repository.getAllPostings().first()
@@ -41,9 +41,9 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun deletePosting_callsDaoDelete() = runTest {
-        val entity = PostingEntity(1, "Groceries")
+        val entity = PostingEntity("1", "Groceries")
         fakeDao.insert(entity)
-        val posting = Posting(1, "Groceries")
+        val posting = Posting("1", "Groceries")
 
         repository.deletePosting(posting)
 
@@ -53,9 +53,9 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun updatePosting_mapsToEntityAndCallsDao() = runTest {
-        val initialEntity = PostingEntity(1, "Old")
+        val initialEntity = PostingEntity("1", "Old")
         fakeDao.insert(initialEntity)
-        val updatedPosting = Posting(1, "New")
+        val updatedPosting = Posting("1", "New")
 
         repository.updatePosting(updatedPosting)
 
@@ -66,17 +66,17 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun getPostingById_returnsMappedModel() = runTest {
-        val entity = PostingEntity(1, "Groceries")
+        val entity = PostingEntity("1", "Groceries")
         fakeDao.insert(entity)
 
-        val posting = repository.getPostingById(1).first()
-        assertEquals(1, posting?.id)
+        val posting = repository.getPostingById("1").first()
+        assertEquals("1", posting?.id)
         assertEquals("Groceries", posting?.narrative)
     }
 
     @Test
     fun getPostingById_returnsNullWhenNotFound() = runTest {
-        val nonExistent = repository.getPostingById(99).first()
+        val nonExistent = repository.getPostingById("99").first()
         assertNull(nonExistent)
     }
 }
@@ -98,5 +98,5 @@ class FakePostingDao : PostingDao {
 
     override fun getAllPostings(): Flow<List<PostingEntity>> = entities
 
-    override fun getPostingById(id: Long): Flow<PostingEntity?> = entities.map { list -> list.find { it.id == id } }
+    override fun getPostingById(id: String): Flow<PostingEntity?> = entities.map { list -> list.find { it.id == id } }
 }

@@ -13,10 +13,10 @@ sealed interface PostingRoute : NavKey
 data object PostingList : PostingRoute
 
 @Serializable
-data class PostingDetail(val id: Long) : PostingRoute
+data class PostingDetail(val id: String) : PostingRoute
 
 @Serializable
-data class PostingEdit(val id: Long?) : PostingRoute
+data class PostingEdit(val id: String?) : PostingRoute
 
 @OptIn(ExperimentalSerializationApi::class)
 val serializerPostings = SerializersModule {

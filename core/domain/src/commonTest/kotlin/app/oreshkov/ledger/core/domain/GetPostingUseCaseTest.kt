@@ -14,17 +14,17 @@ class GetPostingUseCaseTest {
 
     @Test
     fun `invoke returns posting flow from repository when posting exists`() = runTest {
-        val posting = Posting(1L, "Groceries")
+        val posting = Posting("1", "Groceries")
         repo.seed(posting)
 
-        val result = useCase(1L).first()
+        val result = useCase("1").first()
 
         assertEquals(posting, result)
     }
 
     @Test
     fun `invoke returns null flow when posting does not exist`() = runTest {
-        val result = useCase(99L).first()
+        val result = useCase("99").first()
         assertNull(result)
     }
 }

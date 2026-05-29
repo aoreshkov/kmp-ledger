@@ -26,13 +26,13 @@ class SavePostingUseCaseTest {
     @Test
     fun `invoke with id calls updatePosting`() = runTest {
         useCase(
-            id = 1L,
+            id = "1",
             narrative = "Groceries"
         )
 
         assertEquals(1, repo.updatedPostings.size)
         assertTrue(repo.insertedPostings.isEmpty())
-        assertEquals(1L, repo.updatedPostings.first().id)
+        assertEquals("1", repo.updatedPostings.first().id)
         assertEquals("Groceries", repo.updatedPostings.first().narrative)
     }
 

@@ -12,7 +12,7 @@ class DeletePostingUseCaseTest {
 
     @Test
     fun `invoke calls deletePosting with correct posting`() = runTest {
-        val posting = Posting(1L, "Groceries")
+        val posting = Posting("1", "Groceries")
         useCase(posting)
 
         assertEquals(1, repo.deletedPostings.size)

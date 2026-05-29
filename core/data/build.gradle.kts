@@ -16,6 +16,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             api(project(":core:model"))
             api(project(":core:domain"))
+            implementation(project(":core:common"))
             implementation(project(":core:database"))
         }
         commonTest.dependencies {

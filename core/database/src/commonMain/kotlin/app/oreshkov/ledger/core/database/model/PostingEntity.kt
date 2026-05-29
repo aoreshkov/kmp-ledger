@@ -5,7 +5,7 @@ import androidx.room3.PrimaryKey
 
 @Entity(tableName = "postings")
 data class PostingEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey
+    val id: String,
     val narrative: String,
 )

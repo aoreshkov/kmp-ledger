@@ -21,6 +21,7 @@ kotlin {
             api(libs.kotlin.test)
             api(libs.junit)
             api(project(":core:domain"))
+            api(project(":core:common"))
             implementation(libs.compose.runtime)
             implementation(libs.kotlinx.coroutines.core)
         }

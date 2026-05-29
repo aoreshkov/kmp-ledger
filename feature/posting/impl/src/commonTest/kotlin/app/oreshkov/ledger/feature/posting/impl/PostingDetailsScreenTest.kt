@@ -52,7 +52,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
     @Test
     fun successState_showsPostingDetails() = runComposeUiTest {
         val posting = Posting(
-            id = 1,
+            id = "1",
             narrative = "Groceries"
         )
         setContent {
@@ -69,7 +69,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun successState_clickingDelete_showsConfirmationDialog() = runComposeUiTest {
-        val posting = Posting(1, "Groceries")
+        val posting = Posting("1", "Groceries")
         var deleteConfirmed = false
         setContent {
             PostingDetailsContent(
@@ -95,10 +95,10 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun successState_clickingEdit_triggersOnEditClickWithCorrectId() = runComposeUiTest {
-        var editClickedId: Long? = null
+        var editClickedId: String? = null
         setContent {
             PostingDetailsContent(
-                uiState = PostingDetailsUiState.Success(Posting(42, "Groceries")),
+                uiState = PostingDetailsUiState.Success(Posting("42", "Groceries")),
                 onNavigateBack = {},
                 onEditClick = { id -> editClickedId = id },
                 onDeleteClick = {},
@@ -108,6 +108,6 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
         onNodeWithContentDescription("Edit Posting").performClick()
 
-        assertEquals(42L, editClickedId)
+        assertEquals("42", editClickedId)
     }
 }

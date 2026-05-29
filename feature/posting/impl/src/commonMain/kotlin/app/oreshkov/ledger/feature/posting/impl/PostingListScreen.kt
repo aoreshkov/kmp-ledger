@@ -38,8 +38,8 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PostingListScreen(
-    onNavigateToEdit: (Long?) -> Unit,
-    onNavigateToDetails: (Long) -> Unit,
+    onNavigateToEdit: (String?) -> Unit,
+    onNavigateToDetails: (String) -> Unit,
     viewModel: PostingListViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -57,7 +57,7 @@ fun PostingListScreen(
 internal fun PostingListContent(
     uiState: PostingListUiState,
     onAddClick: () -> Unit,
-    onPostingClick: (Long) -> Unit,
+    onPostingClick: (String) -> Unit,
     onRetry: () -> Unit,
 ) {
     Scaffold(

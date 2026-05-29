@@ -23,5 +23,5 @@ interface PostingDao {
     fun getAllPostings(): Flow<List<PostingEntity>>
 
     @Query("SELECT * FROM postings WHERE id = :id")
-    fun getPostingById(id: Long): Flow<PostingEntity?>
+    fun getPostingById(id: String): Flow<PostingEntity?>
 }

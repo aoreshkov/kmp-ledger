@@ -28,7 +28,7 @@ class PostingEditViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val savePostingUseCase = SavePostingUseCase(repo)
-    private val existing = Posting(1, "Groceries")
+    private val existing = Posting("1", "Groceries")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }
@@ -92,7 +92,7 @@ class PostingEditViewModelTest {
 
     @Test
     fun init_showsNotFoundWhenPostingDoesNotExist() = runTest {
-        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = 99)
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = "99")
         vm.uiState.first { it !is PostingEditUiState.Loading }
         assertIs<PostingEditUiState.NotFound>(vm.uiState.value)
     }
@@ -100,7 +100,7 @@ class PostingEditViewModelTest {
     @Test
     fun init_showsErrorWhenTechnicalFailure() = runTest {
         repo.shouldThrowOnGetById = true
-        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = 1)
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = "1")
         vm.uiState.first { it !is PostingEditUiState.Loading }
         assertIs<PostingEditUiState.Error>(vm.uiState.value)
     }

@@ -47,8 +47,8 @@ class PostingListScreenTest : PlatformComposeUiTest() {
     @Test
     fun successState_showsPostingsList() = runComposeUiTest {
         val postings = listOf(
-            Posting(1, "Groceries"),
-            Posting(2, "Other Groceries")
+            Posting("1", "Groceries"),
+            Posting("2", "Other Groceries")
         )
         setContent {
             PostingListContent(
@@ -79,8 +79,8 @@ class PostingListScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun clickingPosting_triggersOnPostingClick() = runComposeUiTest {
-        val posting = Posting(1, "Groceries")
-        var clickedPostingId: Long? = null
+        val posting = Posting("1", "Groceries")
+        var clickedPostingId: String? = null
         setContent {
             PostingListContent(
                 uiState = PostingListUiState.Success(listOf(posting)),
@@ -90,6 +90,6 @@ class PostingListScreenTest : PlatformComposeUiTest() {
             )
         }
         onNodeWithText("Groceries").performClick()
-        assertEquals(1L, clickedPostingId)
+        assertEquals("1", clickedPostingId)
     }
 }

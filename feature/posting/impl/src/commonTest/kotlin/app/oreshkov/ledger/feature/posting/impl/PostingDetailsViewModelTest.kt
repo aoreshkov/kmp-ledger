@@ -27,7 +27,7 @@ class PostingDetailsViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val deletePostingUseCase = DeletePostingUseCase(repo)
-    private val posting  = Posting(1, "Groceries")
+    private val posting  = Posting("1", "Groceries")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }
@@ -42,7 +42,7 @@ class PostingDetailsViewModelTest {
 
     @Test
     fun uiState_isNotFoundWhenPostingDoesNotExist() = runTest {
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = 99)
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = "99")
         val state = vm.uiState.first { it !is PostingDetailsUiState.Loading }
         assertIs<PostingDetailsUiState.NotFound>(state)
     }
@@ -87,7 +87,7 @@ class PostingDetailsViewModelTest {
     @Test
     fun deletePosting_doesNothingWhenStateIsNotSuccess() = runTest {
         // 1. Repository is empty, so state will be NotFound
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = 99)
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = "99")
         vm.uiState.first { it !is PostingDetailsUiState.Loading }
 
         var eventReceived = false

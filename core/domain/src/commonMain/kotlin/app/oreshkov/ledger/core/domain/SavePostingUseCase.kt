@@ -11,7 +11,7 @@ class SavePostingUseCase(
     @Provided private val repository: PostingRepository
 ) {
     suspend operator fun invoke(
-        id: Long?,
+        id: String?,
         narrative: String
     ) {
         require(narrative.isNotBlank()) { "Narrative cannot be blank" }
