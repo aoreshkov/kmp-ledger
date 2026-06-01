@@ -4,10 +4,10 @@ runs:
   using: "composite"
   steps:
     - name: Setup Java
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@c76542e887e59b2075b224e756c66c0d60d70b6f # v5
       with:
         java-version: "21"
         distribution: "temurin"
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@11d4d8349286d5e683f8863673f324c0841c69dc # v6

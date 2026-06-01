@@ -31,7 +31,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "ledger"
-            packageVersion = "1.0.0"
+            packageVersion = project.property("ledger.version.name").toString()
 
             linux {
                 iconFile.set(project.file("appIcons/LinuxIcon.png"))

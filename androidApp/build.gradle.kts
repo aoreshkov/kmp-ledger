@@ -35,8 +35,8 @@ android {
         applicationId = "app.oreshkov.ledger"
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.target.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = project.property("ledger.version.code").toString().toInt()
+        versionName = project.property("ledger.version.name").toString()
     }
     packaging {
         resources {

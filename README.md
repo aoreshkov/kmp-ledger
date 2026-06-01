@@ -343,3 +343,20 @@ kmp-ledger/
 ## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Releasing
+
+To release a new version:
+
+1. Update `ledger.version.name` and `ledger.version.code` in `gradle.properties`.
+2. Add the new version and its changes to `CHANGELOG.md` under the `## [Unreleased]` section.
+3. Once ready, change `## [Unreleased]` to `## [x.y.z] - YYYY-MM-DD`.
+4. Commit and push your changes to `main`.
+5. Create and push a new tag:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+6. The GitHub Release workflow will automatically build the binaries and create a GitHub Release with the changelog notes.

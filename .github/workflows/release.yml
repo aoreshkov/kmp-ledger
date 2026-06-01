@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    name: Build Android Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      - name: Build Android Release APK
+        run: ./gradlew :androidApp:assembleRelease
+
+      - name: Upload Android Release APK
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-release-apk
+          path: androidApp/build/outputs/apk/release/*.apk
+
+  build-desktop:
+    name: Build Desktop Release (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      - name: Package Desktop App
+        run: ./gradlew :desktopApp:packageDistributionForCurrentOS --no-configuration-cache
+
+      - name: Upload Desktop Artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: desktop-release-binaries-${{ matrix.os }}
+          path: |
+            desktopApp/build/compose/binaries/main/app/*
+            desktopApp/build/compose/binaries/main/msi/*
+            desktopApp/build/compose/binaries/main/dmg/*
+            desktopApp/build/compose/binaries/main/deb/*
+            desktopApp/build/compose/binaries/main/rpm/*
+
+  create-release:
+    name: Create GitHub Release
+    needs: [build-android, build-desktop]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.1
+        with:
+          path: artifacts
+
+      - name: Extract Changelog
+        id: extract_changelog
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          # Extract section between the version header and the next header
+          sed -n "/## \[$VERSION\]/,/## /p" CHANGELOG.md | sed '$d' > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "No release notes found for $VERSION" > release_notes.md
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@b4309334810695cc707e7b64f331006526a575b9 # v3.0.0
+        with:
+          body_path: release_notes.md
+          generate_release_notes: true
+          files: |
+            artifacts/**/*.apk
+            artifacts/**/*.msi
+            artifacts/**/*.dmg
+            artifacts/**/*.deb
+            artifacts/**/*.rpm
+            artifacts/**/*.zip
+            artifacts/**/*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
