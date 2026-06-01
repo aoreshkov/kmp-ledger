@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -27,7 +27,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-reports
           path: "**/build/reports/tests/"
@@ -38,7 +38,7 @@ jobs:
     needs: check
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -47,7 +47,7 @@ jobs:
         run: ./gradlew :androidApp:assembleDebug
 
       - name: Upload Android debug APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android-apk
           path: androidApp/build/outputs/apk/debug/*.apk
@@ -61,7 +61,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -72,7 +72,7 @@ jobs:
         # it will be handled by the gradle task itself.
 
       - name: Upload Desktop Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-binaries-${{ matrix.os }}
           path: |
@@ -87,7 +87,7 @@ jobs:
     needs: check
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -104,7 +104,7 @@ jobs:
             -verbose
 
       - name: Upload iOS App Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ios-app-simulator
           path: ./build/Build/Products/Debug-iphonesimulator/*.app

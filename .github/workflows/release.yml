@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -25,7 +25,7 @@ jobs:
         run: ./gradlew :androidApp:assembleRelease
 
       - name: Upload Android Release APK
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: android-release-apk
           path: androidApp/build/outputs/apk/release/*.apk
@@ -38,7 +38,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -49,7 +49,7 @@ jobs:
         run: ./gradlew :desktopApp:packageDistributionForCurrentOS --no-configuration-cache
 
       - name: Upload Desktop Artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-release-binaries-${{ matrix.os }}
           path: |
@@ -67,12 +67,12 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: Download all artifacts
-        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.1
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
 
@@ -87,7 +87,7 @@ jobs:
           fi
 
       - name: Create Release
-        uses: softprops/action-gh-release@b4309334810695cc707e7b64f331006526a575b9 # v3.0.0
+        uses: softprops/action-gh-release@v3
         with:
           body_path: release_notes.md
           generate_release_notes: true
