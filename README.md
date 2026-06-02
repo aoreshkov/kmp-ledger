@@ -34,7 +34,7 @@
 |---|---|---|
 | Kotlin | 2.3.21 | Language and compiler |
 | Kotlin Gradle Plugin | 2.4.0-Beta2 | Build tooling |
-| Compose Multiplatform | 1.11.0 | Shared UI (Android + Desktop) |
+| Compose Multiplatform | 1.11.1 | Shared UI (Android, iOS, Desktop) |
 | Room 3 | 3.0.0-alpha04 | Local database with KMP support |
 | Navigation 3 | 1.1.1 | Type-safe declarative navigation |
 | Koin | 4.2.1 | Dependency injection with annotation processing |
