@@ -38,6 +38,8 @@
 | Room 3 | 3.0.0-alpha04 | Local database with KMP support |
 | Navigation 3 | 1.1.1 | Type-safe declarative navigation |
 | Koin | 4.2.1 | Dependency injection with annotation processing |
+| Kermit | 2.1.0 | Kotlin Multiplatform logging |
+| SLF4J / Logback | 2.0.18 / 1.5.34 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
 | Lifecycle / ViewModel | 2.11.0-beta01 | State management and lifecycle-aware components |
@@ -246,6 +248,10 @@ val postingNavigationModule = module {
     }
 }
 ```
+
+### 7. Multiplatform Logging with Kermit
+
+Ledger uses **Kermit** for unified logging. Platform-specific writers are provided via `expect`/`actual` functions in `core:common`, ensuring that logs are routed to the appropriate system (Logcat on Android, OSLog on iOS, and SLF4J/Logback on Desktop).
 
 ---
 
