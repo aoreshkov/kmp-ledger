@@ -19,6 +19,7 @@ kotlin {
             implementation(project(":feature:posting:impl"))
         }
         commonTest.dependencies {
+            implementation(libs.kermit)
         }
         jvmTest.dependencies {
             implementation(libs.koin.test)

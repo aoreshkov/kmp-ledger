@@ -1,5 +1,5 @@
 plugins {
-    id("ledger.kotlin.multiplatform")
+    id("ledger.kotlin.multiplatform.koin")
 }
 
 kotlin {
@@ -11,6 +11,14 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kermit)
+        }
+        androidMain.dependencies {
+            implementation(libs.slf4j.android)
+        }
+        jvmMain.dependencies {
+            implementation(libs.slf4j.api)
+            implementation(libs.logback.classic)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

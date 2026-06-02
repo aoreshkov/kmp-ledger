@@ -24,6 +24,7 @@ kotlin {
             implementation(libs.koin.compose.navigation)
 
             api(project(":core:navigation"))
+            api(project(":core:common"))
         }
     }
 }
