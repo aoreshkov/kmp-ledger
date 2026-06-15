@@ -5,6 +5,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import app.oreshkov.ledger.core.database.LedgerDatabase
 import app.oreshkov.ledger.core.database.dao.PostingDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -17,7 +18,7 @@ class DatabaseModule {
     ): LedgerDatabase =
         builder
             .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.Default)
+            .setQueryCoroutineContext(Dispatchers.IO)
             .build()
 
     @Single

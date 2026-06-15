@@ -32,12 +32,12 @@
 
 | Library | Version | Role |
 |---|---|---|
-| Kotlin | 2.3.21 | Language and compiler |
-| Kotlin Gradle Plugin | 2.4.0-Beta2 | Build tooling |
+| Kotlin | 2.4.0 | Language and compiler |
+| Kotlin Gradle Plugin | 2.4.0 | Build tooling |
 | Compose Multiplatform | 1.11.1 | Shared UI (Android, iOS, Desktop) |
-| Room 3 | 3.0.0-alpha04 | Local database with KMP support |
-| Navigation 3 | 1.1.1 | Type-safe declarative navigation |
-| Koin | 4.2.1 | Dependency injection with annotation processing |
+| Room 3 | 3.0.0-alpha06 | Local database with KMP support |
+| Navigation 3 | 1.1.2 | Type-safe declarative navigation |
+| Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
 | SLF4J / Logback | 2.0.18 / 1.5.34 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
@@ -193,7 +193,7 @@ expect class PlatformDatabaseModule
 // androidMain — Android implementation using Context
 @Module actual class PlatformDatabaseModule {
     @Single
-    fun provideRoomBuilder(context: Context): RoomDatabase.Builder<LedgerDatabase> =
+    fun provideRoomBuilder(@Provided context: Context): RoomDatabase.Builder<LedgerDatabase> =
         Room.databaseBuilder(context, name = context.getDatabasePath("ledger.db").absolutePath)
 }
 
@@ -221,9 +221,9 @@ class GetPostingUseCase(private val repository: PostingRepository) { ... }
 
 @KoinViewModel
 class PostingDetailsViewModel(
-    private val getPostingUseCase: GetPostingUseCase,
-    private val deletePostingUseCase: DeletePostingUseCase,
-    @InjectedParam private val postingId: Long   // injected at call site via parametersOf()
+    @Provided private val getPostingUseCase: GetPostingUseCase,
+    @Provided private val deletePostingUseCase: DeletePostingUseCase,
+    @InjectedParam private val postingId: String
 ) : ViewModel()
 ```
 
@@ -234,7 +234,7 @@ Screens are registered as Koin navigation entries, keeping navigation and DI ful
 ```kotlin
 val postingNavigationModule = module {
     navigation<PostingList>(metadata = ListDetailSceneStrategy.listPane()) {
-        val navigator = koinInject<Navigator>()
+        val navigator = LocalNavigator.current
         PostingListScreen(
             onNavigateToEdit = { id -> navigator.goTo(PostingEdit(id)) },
             onNavigateToDetails = { id -> navigator.goTo(PostingDetail(id)) },
@@ -242,7 +242,9 @@ val postingNavigationModule = module {
         )
     }
     navigation<PostingDetail>(metadata = ListDetailSceneStrategy.detailPane()) { route ->
+        val navigator = LocalNavigator.current
         PostingDetailsScreen(
+            onNavigateBack = { navigator.goBack() },
             viewModel = koinViewModel(parameters = { parametersOf(route.id) })
         )
     }

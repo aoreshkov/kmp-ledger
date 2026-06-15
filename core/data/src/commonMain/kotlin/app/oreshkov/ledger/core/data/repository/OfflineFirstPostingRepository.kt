@@ -13,8 +13,8 @@ class OfflineFirstPostingRepository(private val postingDao: PostingDao) : Postin
     override suspend fun insertPosting(posting: NewPosting) =
         postingDao.insert(posting = posting.asEntity())
 
-    override suspend fun deletePosting(posting: Posting) =
-        postingDao.delete(posting = posting.asEntity())
+    override suspend fun deletePosting(id: String) =
+        postingDao.deleteById(id)
 
     override suspend fun updatePosting(posting: Posting) =
         postingDao.update(posting = posting.asEntity())

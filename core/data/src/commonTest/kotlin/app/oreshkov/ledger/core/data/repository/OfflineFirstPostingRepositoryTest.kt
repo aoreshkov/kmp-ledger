@@ -45,7 +45,7 @@ class OfflineFirstPostingRepositoryTest {
         fakeDao.insert(entity)
         val posting = Posting("1", "Groceries")
 
-        repository.deletePosting(posting)
+        repository.deletePosting(posting.id)
 
         val remaining = fakeDao.entities.value
         assertTrue(remaining.isEmpty())
@@ -88,8 +88,8 @@ class FakePostingDao : PostingDao {
         entities.value = entities.value + posting
     }
 
-    override suspend fun delete(posting: PostingEntity) {
-        entities.value = entities.value.filterNot { it.id == posting.id }
+    override suspend fun deleteById(id: String) {
+        entities.value = entities.value.filterNot { it.id == id }
     }
 
     override suspend fun update(posting: PostingEntity) {

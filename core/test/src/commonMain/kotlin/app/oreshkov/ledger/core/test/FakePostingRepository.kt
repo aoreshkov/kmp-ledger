@@ -29,9 +29,10 @@ class FakePostingRepository : PostingRepository {
         _postings.update { it + Posting(randomUuidString(), posting.narrative) }
     }
 
-    override suspend fun deletePosting(posting: Posting) {
-        deletedPostings += posting
-        _postings.update { it.filterNot { c -> c.id == posting.id } }
+    override suspend fun deletePosting(id: String) {
+        val posting = _postings.value.find { it.id == id }
+        if (posting != null) deletedPostings += posting
+        _postings.update { it.filterNot { c -> c.id == id } }
     }
 
     override suspend fun updatePosting(posting: Posting) {

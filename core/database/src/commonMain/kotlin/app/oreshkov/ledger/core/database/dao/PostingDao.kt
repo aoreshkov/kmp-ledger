@@ -13,8 +13,8 @@ interface PostingDao {
     @Insert
     suspend fun insert(posting: PostingEntity)
 
-    @Delete
-    suspend fun delete(posting: PostingEntity)
+    @Query("DELETE FROM postings WHERE id = :id")
+    suspend fun deleteById(id: String)
 
     @Update
     suspend fun update(posting: PostingEntity)

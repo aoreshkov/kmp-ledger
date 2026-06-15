@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostingRepository {
     suspend fun insertPosting(posting: NewPosting)
-    suspend fun deletePosting(posting: Posting)
+    suspend fun deletePosting(id: String)
     suspend fun updatePosting(posting: Posting)
     fun getPostingById(id: String): Flow<Posting?>
     fun getAllPostings(): Flow<List<Posting>>

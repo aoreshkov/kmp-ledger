@@ -19,7 +19,7 @@ class NavigatorTest {
 
     @Test
     fun initialBackStackContainsStart() {
-        assertEquals<List<NavKey>>(listOf(start), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start), nav.entries)
     }
 
     @Test
@@ -37,19 +37,19 @@ class NavigatorTest {
     fun goBack_removesLastDestination() {
         nav.goTo(TestKey("detail"))
         nav.goBack()
-        assertEquals<List<NavKey>>(listOf(start), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start), nav.entries)
     }
 
     @Test
     fun goBack_doesNotEmptyStackBelowStart() {
         nav.goBack()
-        assertEquals<List<NavKey>>(listOf(start), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start), nav.entries)
     }
 
     @Test
     fun goTo_appendsDestination() {
         nav.goTo(TestKey("a"))
         nav.goTo(TestKey("b"))
-        assertEquals<List<NavKey>>(listOf(start, TestKey("a"), TestKey("b")), nav.backStack)
+        assertEquals<List<NavKey>>(listOf(start, TestKey("a"), TestKey("b")), nav.entries)
     }
 }

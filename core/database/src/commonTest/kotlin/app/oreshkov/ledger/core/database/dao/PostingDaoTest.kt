@@ -64,7 +64,7 @@ class PostingDaoTest {
     fun deletePosting() = runTest {
         val posting = PostingEntity(id = "1", narrative = "Groceries")
         dao.insert(posting)
-        dao.delete(posting)
+        dao.deleteById(posting.id)
 
         val loaded = dao.getPostingById("1").first()
         assertNull(loaded)

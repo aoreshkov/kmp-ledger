@@ -57,7 +57,7 @@ class PostingListViewModelTest {
         val vm = PostingListViewModel(getPostingsUseCase)
         vm.uiState.first { it is PostingListUiState.Success }
 
-        repo.deletePosting(posting)
+        repo.deletePosting(posting.id)
         val state = vm.uiState.first { it is PostingListUiState.Empty }
         assertIs<PostingListUiState.Empty>(state)
     }

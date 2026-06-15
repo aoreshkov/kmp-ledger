@@ -61,25 +61,39 @@ class PostingEditViewModel(
         if (postingId == null) return
         _uiState.value = PostingEditUiState.Loading
         viewModelScope.launch {
-            val result = getPostingUseCase(postingId)
+            getPostingUseCase(postingId)
                 .asResult()
-                .first { it !is DataResult.Loading }
+                .collect { result ->
+                    _uiState.update { currentState ->
+                        when (result) {
+                            is DataResult.Success -> {
+                                val posting = result.data
+                                if (posting != null) {
+                                    if (currentState is PostingEditUiState.Editing) {
+                                        currentState
+                                    } else {
+                                        PostingEditUiState.Editing(
+                                            isEditMode = true,
+                                            narrative = posting.narrative,
+                                        )
+                                    }
+                                } else {
+                                    PostingEditUiState.NotFound
+                                }
+                            }
 
-            _uiState.value = when (result) {
-                is DataResult.Success -> {
-                    val posting = result.data
-                    if (posting != null) {
-                        PostingEditUiState.Editing(
-                            isEditMode = true,
-                            narrative = posting.narrative,
-                        )
-                    } else {
-                        PostingEditUiState.NotFound
+                            is DataResult.Error -> {
+                                if (currentState is PostingEditUiState.Editing) currentState
+                                else PostingEditUiState.Error
+                            }
+
+                            is DataResult.Loading -> {
+                                if (currentState is PostingEditUiState.Editing) currentState
+                                else PostingEditUiState.Loading
+                            }
+                        }
                     }
                 }
-                is DataResult.Error -> PostingEditUiState.Error
-                is DataResult.Loading -> PostingEditUiState.Loading
-            }
         }
     }
 
@@ -96,13 +110,12 @@ class PostingEditViewModel(
         if (!editing.isValid) return
 
         viewModelScope.launch {
-            try {
-                savePostingUseCase(
-                    id = postingId,
-                    narrative = editing.narrative
-                )
+            savePostingUseCase(
+                id = postingId,
+                narrative = editing.narrative
+            ).onSuccess {
                 _navigationEvent.send(Unit)
-            } catch (e: Exception) {
+            }.onFailure {
                 updateEditing { it.copy(saveError = true) }
             }
         }

@@ -174,4 +174,33 @@ class PostingEditViewModelTest {
         assertFalse((vm.uiState.value as? PostingEditUiState.Editing)?.saveError ?: false)
         job.cancel()
     }
+
+    // --- reactive updates ---
+
+    @Test
+    fun uiState_switchesToNotFoundWhenPostingIsDeletedExternally() = runTest {
+        repo.seed(existing)
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
+        vm.uiState.first { it is PostingEditUiState.Editing }
+
+        repo.deletePosting(existing.id)
+        runCurrent()
+
+        assertIs<PostingEditUiState.NotFound>(vm.uiState.value)
+    }
+
+    @Test
+    fun uiState_doesNotOverwriteUserInputWhenPostingIsUpdatedExternally() = runTest {
+        repo.seed(existing)
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, postingId = existing.id)
+        vm.uiState.first { it is PostingEditUiState.Editing }
+
+        vm.onNarrativeChange("User typed this")
+
+        repo.updatePosting(existing.copy(narrative = "Background update"))
+        runCurrent()
+
+        val editing = assertIs<PostingEditUiState.Editing>(vm.uiState.value)
+        assertEquals("User typed this", editing.narrative)
+    }
 }

@@ -83,12 +83,12 @@ internal fun PostingEditContent(
     onSaveClick: () -> Unit,
     onRetry: () -> Unit,
 ) {
+    val isEditMode = (uiState as? PostingEditUiState.Editing)?.isEditMode == true
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
-                    val isEditMode = (uiState as? PostingEditUiState.Editing)?.isEditMode == true
                     Text(
                         if (isEditMode) stringResource(Res.string.posting_edit_title_edit)
                         else stringResource(Res.string.posting_edit_title_add)

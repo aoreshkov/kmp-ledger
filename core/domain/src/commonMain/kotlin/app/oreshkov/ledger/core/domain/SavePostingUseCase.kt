@@ -13,7 +13,7 @@ class SavePostingUseCase(
     suspend operator fun invoke(
         id: String?,
         narrative: String
-    ) {
+    ): Result<Unit> = runCatching {
         require(narrative.isNotBlank()) { "Narrative cannot be blank" }
 
         if (id == null) {

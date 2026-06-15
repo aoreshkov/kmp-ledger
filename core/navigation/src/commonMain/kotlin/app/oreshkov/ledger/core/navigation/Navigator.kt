@@ -2,7 +2,7 @@ package app.oreshkov.ledger.core.navigation
 
 import androidx.navigation3.runtime.NavKey
 
-class Navigator(val backStack: MutableList<NavKey>) {
+class Navigator(private val backStack: MutableList<NavKey>) {
     fun goTo(destination: NavKey) {
         backStack.add(destination)
     }
@@ -14,4 +14,6 @@ class Navigator(val backStack: MutableList<NavKey>) {
             backStack.removeAt(backStack.size - 1)
         }
     }
+
+    val entries: List<NavKey> get() = backStack.toList()
 }

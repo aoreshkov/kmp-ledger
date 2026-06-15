@@ -69,8 +69,9 @@ class PostingDetailsViewModel(
         val state = uiState.value
         if (state !is PostingDetailsUiState.Success) return
         viewModelScope.launch {
-            deletePostingUseCase(state.posting)
-            _deletedEvent.send(Unit)
+            deletePostingUseCase(state.posting.id).onSuccess {
+                _deletedEvent.send(Unit)
+            }
         }
     }
 }
