@@ -4,8 +4,8 @@ android-gradle-plugin = "9.2.1"
 android-sdk-compile = "37"
 android-sdk-min = "24"
 android-sdk-target = "37"
-kotlin = "2.3.21"
-ksp = "2.3.8"
+kotlin = "2.4.0"
+ksp = "2.3.9"
 
 # Jetpack
 androidx-activity = "1.13.0"
@@ -22,8 +22,8 @@ compose-material-icons = "1.7.3"
 androidx-material3 = "1.11.0-alpha07"
 
 # Third-party
-koin = "4.2.1"
-koin-compiler = "1.0.0"
+koin = "4.2.2"
+koin-compiler = "1.0.1"
 kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.11.0"
 kotlinx-binary-compatibility-validator = "0.18.1"
