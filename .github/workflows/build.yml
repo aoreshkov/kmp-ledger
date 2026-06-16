@@ -92,8 +92,9 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
-      - name: Build iOS simulator app
+      - name: Build iOS simulator app and run tests
         run: |
+          ./gradlew iosSimulatorArm64Test
           xcodebuild build \
             -project iosApp/iosApp.xcodeproj \
             -scheme iosApp \

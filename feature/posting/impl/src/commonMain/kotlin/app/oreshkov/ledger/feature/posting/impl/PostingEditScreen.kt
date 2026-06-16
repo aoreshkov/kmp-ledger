@@ -24,6 +24,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,7 +55,9 @@ fun PostingEditScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val errorMessage = stringResource(Res.string.posting_edit_error_save_failed)
 
-    val saveError = (uiState as? PostingEditUiState.Editing)?.saveError == true
+    val saveError by remember {
+        derivedStateOf { (uiState as? PostingEditUiState.Editing)?.saveError == true }
+    }
     LaunchedEffect(saveError) {
         if (saveError) snackbarHostState.showSnackbar(errorMessage)
     }
@@ -83,7 +86,9 @@ internal fun PostingEditContent(
     onSaveClick: () -> Unit,
     onRetry: () -> Unit,
 ) {
-    val isEditMode = (uiState as? PostingEditUiState.Editing)?.isEditMode == true
+    val isEditMode by remember(uiState) {
+        derivedStateOf { (uiState as? PostingEditUiState.Editing)?.isEditMode == true }
+    }
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {

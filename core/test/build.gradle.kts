@@ -19,7 +19,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.kotlin.test)
-            api(libs.junit)
             api(project(":core:domain"))
             api(project(":core:common"))
             implementation(libs.compose.runtime)
@@ -27,8 +26,10 @@ kotlin {
         }
         androidMain.dependencies {
             api(libs.robolectric)
+            api(libs.junit)
         }
         jvmMain.dependencies {
+            api(libs.junit)
             implementation(compose.desktop.currentOs)
         }
         iosMain.dependencies {

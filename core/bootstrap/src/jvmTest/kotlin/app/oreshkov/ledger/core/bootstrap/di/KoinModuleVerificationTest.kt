@@ -18,8 +18,8 @@ class KoinModuleVerificationTest {
         BootstrapModule().module().verify(
             extraTypes = listOf(NavKey::class),
             injections = injectedParameters(
-                definition<PostingDetailsViewModel>(Long::class),
-                definition<PostingEditViewModel>(Long::class),
+                definition<PostingDetailsViewModel>(String::class),
+                definition<PostingEditViewModel>(String::class),
                 definition<Logger>(LoggerConfig::class),
             )
         )

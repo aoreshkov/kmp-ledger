@@ -11,7 +11,6 @@ kotlin {
             enable = true
         }
         withHostTest {}
-        withDeviceTest {}
     }
 
     compilerOptions {
