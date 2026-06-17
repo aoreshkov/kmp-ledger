@@ -1,6 +1,6 @@
 # Ledger
 
-![Kotlin](https://img.shields.io/badge/Kotlin-2.3%2B-7F52FF?logo=kotlin&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.4%2B-7F52FF?logo=kotlin&logoColor=white)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-4285F4?logo=jetpackcompose&logoColor=white)
 ![Room 3](https://img.shields.io/badge/Database-Room%203-3DDC84?logo=android&logoColor=white)
 ![Navigation 3](https://img.shields.io/badge/Navigation-3-blue)
@@ -42,7 +42,7 @@
 | SLF4J / Logback | 2.0.18 / 1.5.34 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
-| Lifecycle / ViewModel | 2.11.0-beta01 | State management and lifecycle-aware components |
+| Lifecycle / ViewModel | 2.11.0-beta02 | State management and lifecycle-aware components |
 | Android SDK | compile/target 37, min 24 | Android target |
 
 ---
