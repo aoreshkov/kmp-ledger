@@ -21,4 +21,16 @@ class DeletePostingUseCaseTest {
         assertEquals(1, repo.deletedPostings.size)
         assertEquals(posting, repo.deletedPostings.first())
     }
+
+    @Test
+    fun `invoke returns failure when repository throws`() = runTest {
+        val posting = Posting("1", "Groceries")
+        repo.seed(posting)
+        repo.failNextWrite = true
+
+        val result = useCase(posting.id)
+
+        assertTrue(result.isFailure)
+        assertTrue(repo.deletedPostings.isEmpty())
+    }
 }

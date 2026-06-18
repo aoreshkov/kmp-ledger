@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class GetPostingsUseCaseTest {
     private val repo = FakePostingRepository()
@@ -22,5 +23,14 @@ class GetPostingsUseCaseTest {
         assertEquals(2, result.size)
         assertEquals(posting1, result[0])
         assertEquals(posting2, result[1])
+    }
+
+    @Test
+    fun `invoke propagates repository failure`() = runTest {
+        repo.shouldThrowOnGetAll = true
+
+        assertFailsWith<IllegalStateException> {
+            useCase().first()
+        }
     }
 }

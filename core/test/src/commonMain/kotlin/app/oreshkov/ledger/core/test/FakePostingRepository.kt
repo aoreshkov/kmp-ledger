@@ -30,6 +30,7 @@ class FakePostingRepository : PostingRepository {
     }
 
     override suspend fun deletePosting(id: String) {
+        if (failNextWrite) { failNextWrite = false; error("DB error") }
         val posting = _postings.value.find { it.id == id }
         if (posting != null) deletedPostings += posting
         _postings.update { it.filterNot { c -> c.id == id } }

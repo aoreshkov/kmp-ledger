@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.swing)
     testImplementation(project(":core:data"))
     testImplementation(project(":core:database"))
+    testImplementation(libs.room3.runtime)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.koin.test)
     testImplementation(libs.compose.ui.test)
