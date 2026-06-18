@@ -10,4 +10,5 @@ dependencies {
     compileOnly(libs.koin.gradle.plugin)
     compileOnly(libs.compose.gradle.plugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
+    compileOnly(libs.kover.gradle.plugin)
 }

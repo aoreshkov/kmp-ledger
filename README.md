@@ -39,6 +39,7 @@
 | Navigation 3 | 1.1.2 | Type-safe declarative navigation |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
+| Kover | 0.9.8 | Kotlin Multiplatform code coverage |
 | SLF4J / Logback | 2.0.18 / 1.5.34 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
@@ -119,6 +120,7 @@ Rather than duplicating Gradle configuration across modules, all shared setup li
 
 ```
 ledger.kotlin.multiplatform          → KMP + Android library targets, JVM 17, kotlin-test
+  └─ (applied automatically)          → + JetBrains Kover (code coverage)
   └─ ledger.kotlin.multiplatform.koin     → + Koin core, annotations, and compiler plugin
        └─ ledger.kotlin.multiplatform.koin.compose  → + Compose, resources, ui-test, core:test
 ```
@@ -265,6 +267,9 @@ All tests use pure Kotlin — no mocking framework.
 
 **ViewModel tests** use `UnconfinedTestDispatcher` set as the main dispatcher in `@BeforeTest`, ensuring coroutines and `StateFlow` updates run eagerly and can be asserted synchronously.
 
+**Code Coverage:**
+The project uses **JetBrains Kover** for multiplatform coverage tracking. Coverage is automatically collected for all `commonMain` logic across JVM and Android targets. Reports are aggregated at the root project level and filtered to exclude generated code (Koin factories, Compose singletons, etc.).
+
 **Layer coverage:**
 
 | Layer | Test approach |
@@ -311,6 +316,13 @@ All tests use pure Kotlin — no mocking framework.
 ```bash
 ./gradlew allTests
 ```
+
+### Generate Coverage Report
+
+```bash
+./gradlew koverHtmlReport
+```
+The aggregated report will be generated at `build/reports/kover/html/index.html`.
 
 ---
 

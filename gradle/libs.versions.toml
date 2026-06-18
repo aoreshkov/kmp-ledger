@@ -6,6 +6,7 @@ android-sdk-min = "24"
 android-sdk-target = "37"
 kotlin = "2.4.0"
 ksp = "2.3.9"
+kover = "0.9.8"
 
 # Jetpack
 androidx-activity = "1.13.0"
@@ -43,6 +44,7 @@ robolectric = "4.16.1"
 # Build
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+kover-gradle-plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 
 # Logging
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
@@ -114,4 +116,5 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room3 = { id = "androidx.room3", version.ref = "androidx-room" }
 koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-compiler" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlinx-binary-compatibility-validator" }
