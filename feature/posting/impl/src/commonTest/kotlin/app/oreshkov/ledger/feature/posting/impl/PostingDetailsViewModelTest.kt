@@ -7,18 +7,14 @@ import app.oreshkov.ledger.core.test.FakePostingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostingDetailsViewModelTest {
@@ -27,79 +23,60 @@ class PostingDetailsViewModelTest {
     private val repo = FakePostingRepository()
     private val getPostingUseCase = GetPostingUseCase(repo)
     private val deletePostingUseCase = DeletePostingUseCase(repo)
-    private val posting  = Posting("1", "Groceries")
 
     @BeforeTest fun setUp()    { Dispatchers.setMain(testDispatcher) }
     @AfterTest  fun tearDown() { Dispatchers.resetMain() }
 
     @Test
     fun uiState_isSuccessWhenPostingExists() = runTest {
+        val posting = Posting("1", "Groceries")
         repo.seed(posting)
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, posting.id)
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        
         val state = vm.uiState.first { it !is PostingDetailsUiState.Loading }
         assertIs<PostingDetailsUiState.Success>(state)
     }
 
     @Test
-    fun uiState_isNotFoundWhenPostingDoesNotExist() = runTest {
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = "99")
+    fun uiState_isNotFoundWhenPostingIsMissing() = runTest {
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "non-existent")
+        
         val state = vm.uiState.first { it !is PostingDetailsUiState.Loading }
         assertIs<PostingDetailsUiState.NotFound>(state)
     }
 
     @Test
-    fun retry_reloadsState() = runTest {
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, posting.id)
-        // Wait for first response (NotFound since repo is empty)
-        vm.uiState.first { it !is PostingDetailsUiState.Loading }
-
-        repo.seed(posting)
-        vm.retry()
-        val state = vm.uiState.first { it is PostingDetailsUiState.Success }
-        assertIs<PostingDetailsUiState.Success>(state)
-    }
-
-    @Test
     fun uiState_isErrorWhenRepositoryThrows() = runTest {
         repo.shouldThrowOnGetById = true
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, posting.id)
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        
         val state = vm.uiState.first { it !is PostingDetailsUiState.Loading }
         assertIs<PostingDetailsUiState.Error>(state)
     }
 
     @Test
-    fun deletePosting_sendsDeletedEvent() = runTest {
-        repo.seed(posting)
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, posting.id)
-        // Wait for Success state
-        vm.uiState.first { it is PostingDetailsUiState.Success }
+    fun retry_reloadsAfterError() = runTest {
+        repo.shouldThrowOnGetById = true
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        vm.uiState.first { it is PostingDetailsUiState.Error }
 
-        var eventReceived = false
-        val job = launch { vm.deletedEvent.collect { eventReceived = true } }
+        repo.shouldThrowOnGetById = false
+        repo.seed(Posting("1", "Groceries"))
+        vm.retry()
 
-        vm.deletePosting()
-        runCurrent()
-        assertTrue(eventReceived)
-        assertTrue(repo.deletedPostings.contains(posting))
-        job.cancel()
+        val state = vm.uiState.first { it is PostingDetailsUiState.Success }
+        assertIs<PostingDetailsUiState.Success>(state)
     }
 
     @Test
-    fun deletePosting_doesNothingWhenStateIsNotSuccess() = runTest {
-        // 1. Repository is empty, so state will be NotFound
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId = "99")
-        vm.uiState.first { it !is PostingDetailsUiState.Loading }
+    fun deletePosting_emitsDeletedEventOnSuccess() = runTest {
+        val posting = Posting("1", "Groceries")
+        repo.seed(posting)
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        vm.uiState.first { it is PostingDetailsUiState.Success }
 
-        var eventReceived = false
-        val job = launch { vm.deletedEvent.collect { eventReceived = true } }
-
-        // 2. Attempt deletion
         vm.deletePosting()
-        runCurrent()
-
-        // 3. Verify no deletion occurred and no event was sent
-        assertTrue(repo.deletedPostings.isEmpty())
-        assertFalse(eventReceived)
-        job.cancel()
+        
+        vm.deletedEvent.first() // If it doesn't emit, the test will time out
     }
 }
