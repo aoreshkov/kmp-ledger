@@ -37,6 +37,7 @@ android {
         targetSdk = libs.versions.android.sdk.target.get().toInt()
         versionCode = project.property("ledger.version.code").toString().toInt()
         versionName = project.property("ledger.version.name").toString()
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -50,6 +51,15 @@ android {
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
+        managedDevices {
+            localDevices {
+                create("aospAtd30") {
+                    device = "Pixel 2"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd"
+                }
+            }
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

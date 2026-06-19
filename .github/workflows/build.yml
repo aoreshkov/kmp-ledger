@@ -52,6 +52,33 @@ jobs:
           name: android-apk
           path: androidApp/build/outputs/apk/debug/*.apk
 
+  instrumented-tests:
+    name: Run Instrumented Tests
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run instrumented tests on managed device
+        run: ./gradlew :androidApp:aospAtd30DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+
+      - name: Upload instrumented test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: instrumented-test-reports
+          path: androidApp/build/outputs/androidTest-results/managedDevice/
+
   build-desktop:
     name: Build Desktop (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
