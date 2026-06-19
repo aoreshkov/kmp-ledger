@@ -11,3 +11,5 @@ runs:
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v6
+      with:
+        add-sdk-licenses: true
