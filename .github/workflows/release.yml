@@ -81,7 +81,7 @@ jobs:
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           # Extract section between the version header and the next header
-          sed -n "/## \[$VERSION\]/,/## /p" CHANGELOG.md | sed '$d' > release_notes.md
+          sed -n "/^## \[$VERSION\]/,/^## /p" CHANGELOG.md | sed '$d' > release_notes.md
           if [ ! -s release_notes.md ]; then
             echo "No release notes found for $VERSION" > release_notes.md
           fi
