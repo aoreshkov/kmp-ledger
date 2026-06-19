@@ -35,8 +35,11 @@ kover {
                     "*_Factory",
                     "*_Provide*",
                     "*\$\$serializer",
-                    "*.generated.resources.*"
+                    "*.generated.resources.*",
+                    "*_HiltModules*",
+                    "*_KoinModule*"
                 )
+                annotatedBy("androidx.compose.ui.tooling.preview.Preview")
             }
         }
     }

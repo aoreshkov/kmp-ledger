@@ -16,7 +16,7 @@
 
 **Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
-> **Note:** Because this project tracks alpha/beta library versions (Room 3, Navigation 3, Compose Multiplatform RC), the API surface of some dependencies may change. Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+> **Note:** Kotlin, Compose Multiplatform, Navigation 3, Koin, and Coroutines are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: Room 3 / AndroidX SQLite (Release Candidate), AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
 ---
 
@@ -35,8 +35,8 @@
 | Kotlin | 2.4.0 | Language and compiler |
 | Kotlin Gradle Plugin | 2.4.0 | Build tooling |
 | Compose Multiplatform | 1.11.1 | Shared UI (Android, iOS, Desktop) |
-| Room 3 | 3.0.0-alpha06 | Local database with KMP support |
-| Navigation 3 | 1.1.2 | Type-safe declarative navigation |
+| Room 3 / SQLite | 3.0.0-rc01 / 2.7.0-rc01 | Local database with KMP support |
+| Navigation 3 | 1.1.3 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
 | Kover | 0.9.8 | Kotlin Multiplatform code coverage |
@@ -44,6 +44,8 @@
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
 | Lifecycle / ViewModel | 2.11.0-beta02 | State management and lifecycle-aware components |
+| Material3 Adaptive | 1.3.0-beta02 | List/detail adaptive layouts |
+| Material3 (Compose) | 1.11.0-alpha07 | Material You components |
 | Android SDK | compile/target 37, min 24 | Android target |
 
 ---
