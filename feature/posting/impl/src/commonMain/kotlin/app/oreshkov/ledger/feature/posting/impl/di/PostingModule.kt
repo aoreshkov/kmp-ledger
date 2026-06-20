@@ -2,7 +2,6 @@ package app.oreshkov.ledger.feature.posting.impl.di
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
-import androidx.compose.runtime.saveable.rememberSaveable
 import app.oreshkov.ledger.core.data.di.DataModule
 import app.oreshkov.ledger.core.domain.di.DomainModule
 import app.oreshkov.ledger.core.navigation.LocalNavigator
@@ -19,16 +18,12 @@ import org.koin.core.annotation.Module
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Module(includes = [DataModule::class, DomainModule::class])
 @ComponentScan("app.oreshkov.ledger.feature.posting.impl")
 class PostingModule
 
-@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3AdaptiveApi::class,
-    ExperimentalUuidApi::class
-)
+@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3AdaptiveApi::class)
 val postingNavigationModule = module {
     navigation<PostingList>(
         metadata = ListDetailSceneStrategy.listPane()
@@ -45,13 +40,13 @@ val postingNavigationModule = module {
         metadata = ListDetailSceneStrategy.detailPane()
     ) { route ->
         val navigator = LocalNavigator.current
-        val vmKey = rememberSaveable(route) { "posting_details_${route.id}_${Uuid.random()}" }
+        // ViewModel identity is scoped to this back-stack entry by
+        // rememberViewModelStoreNavEntryDecorator (see App.kt); no manual key needed.
         PostingDetailsScreen(
             onNavigateBack = { navigator.goBack() },
             onEditClick = { id -> navigator.goTo(PostingEdit(id)) },
             onDeleted = { navigator.goBack() },
             viewModel = koinViewModel(
-                key = vmKey,
                 parameters = { parametersOf(route.id) }
             )
         )
@@ -61,12 +56,9 @@ val postingNavigationModule = module {
         metadata = ListDetailSceneStrategy.detailPane()
     ) { route ->
         val navigator = LocalNavigator.current
-        val vmKey = rememberSaveable(route) { "posting_edit_${route.id ?: "new"}_${Uuid.random()}" }
-
         PostingEditScreen(
             onNavigateBack = { navigator.goBack() },
             viewModel = koinViewModel(
-                key = vmKey,
                 parameters = { parametersOf(route.id) }
             )
         )

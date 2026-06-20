@@ -2,8 +2,6 @@ package app.oreshkov.ledger.feature.posting.impl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.oreshkov.ledger.core.common.result.DataResult
-import app.oreshkov.ledger.core.common.result.asResult
 import app.oreshkov.ledger.core.domain.GetPostingUseCase
 import app.oreshkov.ledger.core.domain.SavePostingUseCase
 import kotlinx.coroutines.channels.Channel
@@ -61,39 +59,22 @@ class PostingEditViewModel(
         if (postingId == null) return
         _uiState.value = PostingEditUiState.Loading
         viewModelScope.launch {
-            getPostingUseCase(postingId)
-                .asResult()
-                .collect { result ->
-                    _uiState.update { currentState ->
-                        when (result) {
-                            is DataResult.Success -> {
-                                val posting = result.data
-                                if (posting != null) {
-                                    if (currentState is PostingEditUiState.Editing) {
-                                        currentState
-                                    } else {
-                                        PostingEditUiState.Editing(
-                                            isEditMode = true,
-                                            narrative = posting.narrative,
-                                        )
-                                    }
-                                } else {
-                                    PostingEditUiState.NotFound
-                                }
-                            }
-
-                            is DataResult.Error -> {
-                                if (currentState is PostingEditUiState.Editing) currentState
-                                else PostingEditUiState.Error
-                            }
-
-                            is DataResult.Loading -> {
-                                if (currentState is PostingEditUiState.Editing) currentState
-                                else PostingEditUiState.Loading
-                            }
-                        }
+            // One-shot snapshot to seed the form. Using first() lets the underlying
+            // Room flow complete so the coroutine ends — retry() can no longer stack
+            // additional, never-completing collectors on top of each other.
+            _uiState.value = runCatching { getPostingUseCase(postingId).first() }.fold(
+                onSuccess = { posting ->
+                    if (posting != null) {
+                        PostingEditUiState.Editing(
+                            isEditMode = true,
+                            narrative = posting.narrative,
+                        )
+                    } else {
+                        PostingEditUiState.NotFound
                     }
-                }
+                },
+                onFailure = { PostingEditUiState.Error }
+            )
         }
     }
 

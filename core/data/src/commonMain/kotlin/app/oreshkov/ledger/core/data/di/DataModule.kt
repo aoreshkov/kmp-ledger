@@ -1,5 +1,7 @@
 package app.oreshkov.ledger.core.data.di
 
+import app.oreshkov.ledger.core.common.dispatcher.AppDispatchers
+import app.oreshkov.ledger.core.common.di.DispatcherModule
 import app.oreshkov.ledger.core.data.repository.OfflineFirstPostingRepository
 import app.oreshkov.ledger.core.domain.di.DomainModule
 import app.oreshkov.ledger.core.domain.repository.PostingRepository
@@ -8,8 +10,11 @@ import app.oreshkov.ledger.core.database.di.DatabaseModule
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
-@Module(includes = [DatabaseModule::class, DomainModule::class])
+@Module(includes = [DatabaseModule::class, DomainModule::class, DispatcherModule::class])
 class DataModule {
      @Single
-     fun providePostingRepository(postingDao: PostingDao): PostingRepository = OfflineFirstPostingRepository(postingDao)
+     fun providePostingRepository(
+         postingDao: PostingDao,
+         dispatchers: AppDispatchers,
+     ): PostingRepository = OfflineFirstPostingRepository(postingDao, dispatchers)
 }

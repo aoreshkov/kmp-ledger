@@ -99,7 +99,7 @@ internal fun PostingListContent(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(uiState.postings, key = { it.id }) { posting ->
-                            PostingListItem(posting = posting, onClick = { onPostingClick(posting.id) })
+                            PostingListItem(posting = posting, onClick = onPostingClick)
                         }
                     }
                 }
@@ -109,9 +109,9 @@ internal fun PostingListContent(
 }
 
 @Composable
-private fun PostingListItem(posting: Posting, onClick: () -> Unit) {
+private fun PostingListItem(posting: Posting, onClick: (String) -> Unit) {
     Card(
-        onClick = onClick,
+        onClick = { onClick(posting.id) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

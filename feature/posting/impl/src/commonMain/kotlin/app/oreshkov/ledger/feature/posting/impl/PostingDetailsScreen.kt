@@ -25,7 +25,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,9 +85,7 @@ internal fun PostingDetailsContent(
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    val isSuccess by remember(uiState) {
-        derivedStateOf { uiState is PostingDetailsUiState.Success }
-    }
+    val isSuccess = uiState is PostingDetailsUiState.Success
 
     if (showDeleteDialog) {
         AlertDialog(
@@ -132,7 +129,7 @@ internal fun PostingDetailsContent(
         },
         floatingActionButton = {
             if (isSuccess) {
-                FloatingActionButton(onClick = { onEditClick((uiState as PostingDetailsUiState.Success).posting.id) }) {
+                FloatingActionButton(onClick = { onEditClick(uiState.posting.id) }) {
                     Icon(Icons.Default.Edit, contentDescription = stringResource(Res.string.posting_details_edit_content_description))
                 }
             }

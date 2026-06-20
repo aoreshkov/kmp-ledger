@@ -1,23 +1,29 @@
 package app.oreshkov.ledger.core.data.repository
 
+import app.oreshkov.ledger.core.common.dispatcher.AppDispatchers
 import app.oreshkov.ledger.core.database.dao.PostingDao
 import app.oreshkov.ledger.core.database.model.PostingEntity
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class OfflineFirstPostingRepositoryTest {
 
     private val fakeDao = FakePostingDao()
-    private val repository = OfflineFirstPostingRepository(fakeDao)
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val repository = OfflineFirstPostingRepository(fakeDao, TestAppDispatchers(testDispatcher))
 
     @Test
     fun getAllPostings_mapsEntitiesToModels() = runTest {
@@ -79,6 +85,11 @@ class OfflineFirstPostingRepositoryTest {
         val nonExistent = repository.getPostingById("99").first()
         assertNull(nonExistent)
     }
+}
+
+private class TestAppDispatchers(dispatcher: CoroutineDispatcher) : AppDispatchers {
+    override val io: CoroutineDispatcher = dispatcher
+    override val default: CoroutineDispatcher = dispatcher
 }
 
 class FakePostingDao : PostingDao {
