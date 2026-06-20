@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.model.data.Posting
@@ -77,7 +78,7 @@ internal fun PostingListContent(
             contentAlignment = Alignment.Center
         ) {
             when (uiState) {
-                is PostingListUiState.Loading -> CircularProgressIndicator()
+                is PostingListUiState.Loading -> CircularProgressIndicator(modifier = Modifier.testTag("loading"))
                 is PostingListUiState.Error -> Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)

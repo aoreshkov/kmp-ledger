@@ -2,6 +2,7 @@ package app.oreshkov.ledger.feature.posting.impl
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
@@ -10,6 +11,7 @@ import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
@@ -94,6 +96,30 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
     }
 
     @Test
+    fun successState_clickingDelete_cancelDismissesDialog() = runComposeUiTest {
+        val posting = Posting("1", "Groceries")
+        var deleteConfirmed = false
+        setContent {
+            PostingDetailsContent(
+                uiState = PostingDetailsUiState.Success(posting),
+                onNavigateBack = {},
+                onEditClick = {},
+                onDeleteClick = { deleteConfirmed = true },
+                onRetry = {}
+            )
+        }
+
+        onNodeWithContentDescription("Delete Posting").performClick()
+        onNodeWithText("Delete posting?").assertIsDisplayed()
+        
+        onNodeWithText("Cancel").performClick()
+        
+        // Dialog should be gone
+        onNodeWithText("Delete posting?").assertDoesNotExist()
+        assertFalse(deleteConfirmed)
+    }
+
+    @Test
     fun successState_clickingEdit_triggersOnEditClickWithCorrectId() = runComposeUiTest {
         var editClickedId: String? = null
         setContent {
@@ -109,5 +135,19 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         onNodeWithContentDescription("Edit Posting").performClick()
 
         assertEquals("42", editClickedId)
+    }
+
+    @Test
+    fun loadingState_showsProgressIndicator() = runComposeUiTest {
+        setContent {
+            PostingDetailsContent(
+                uiState = PostingDetailsUiState.Loading,
+                onNavigateBack = {},
+                onEditClick = {},
+                onDeleteClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithTag("loading").assertIsDisplayed()
     }
 }

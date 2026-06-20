@@ -33,4 +33,17 @@ class DataResultTest {
         assertIs<DataResult.Error>(error)
         assertEquals(boom, error.exception)
     }
+
+    @Test
+    fun asResult_emitsMultipleSuccesses() = runTest {
+        val results = flow {
+            emit(1)
+            emit(2)
+        }.asResult().toList()
+        
+        assertEquals(3, results.size)
+        assertIs<DataResult.Loading>(results[0])
+        assertEquals(DataResult.Success(1), results[1])
+        assertEquals(DataResult.Success(2), results[2])
+    }
 }

@@ -3,18 +3,47 @@ package app.oreshkov.ledger.feature.posting.impl
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
+import app.oreshkov.ledger.core.domain.GetPostingUseCase
+import app.oreshkov.ledger.core.domain.SavePostingUseCase
+import app.oreshkov.ledger.core.test.FakePostingRepository
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalTestApi::class)
+@OptIn(ExperimentalTestApi::class, ExperimentalCoroutinesApi::class)
 class PostingEditScreenTest : PlatformComposeUiTest() {
+
+    @BeforeTest
+    fun setUp() {
+        try {
+            Dispatchers.setMain(StandardTestDispatcher())
+        } catch (e: Exception) {
+            // Already set or not supported
+        }
+    }
+
+    @AfterTest
+    fun tearDown() {
+        try {
+            Dispatchers.resetMain()
+        } catch (e: Exception) {
+            // Not set
+        }
+    }
 
     @Test
     fun validationErrors_areShown_whenFieldsAreBlankAndTouched() = runComposeUiTest {
@@ -140,5 +169,43 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
         onNodeWithText("Posting not found.").assertIsDisplayed()
         onNodeWithText("Go back").performClick()
         assertTrue(backClicked)
+    }
+
+    @Test
+    fun saveError_showsSnackbar() = runComposeUiTest {
+        val repo = FakePostingRepository()
+        val getPostingUseCase = GetPostingUseCase(repo)
+        val savePostingUseCase = SavePostingUseCase(repo)
+        val viewModel = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
+        
+        setContent {
+             PostingEditScreen(
+                onNavigateBack = {},
+                viewModel = viewModel
+            )
+        }
+
+        // Simulate save error
+        repo.failNextWrite = true
+        onNodeWithText("Narrative").performTextInput("Groceries")
+        onNodeWithText("Save").performClick()
+
+        // Snackbar should appear
+        onNodeWithText("Failed to save. Please try again.").assertIsDisplayed()
+    }
+
+    @Test
+    fun loadingState_showsProgressIndicator() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Loading,
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithTag("loading").assertIsDisplayed()
     }
 }

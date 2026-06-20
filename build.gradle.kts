@@ -33,11 +33,9 @@ kover {
                 classes(
                     "*ComposableSingletons*",
                     "*_Factory",
-                    "*_Provide*",
                     "*\$\$serializer",
                     "*.generated.resources.*",
-                    "*_HiltModules*",
-                    "*_KoinModule*"
+                    "*_HiltModules*"
                 )
                 annotatedBy("androidx.compose.ui.tooling.preview.Preview")
             }

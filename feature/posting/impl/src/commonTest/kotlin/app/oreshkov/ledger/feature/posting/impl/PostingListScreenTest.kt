@@ -3,6 +3,7 @@ package app.oreshkov.ledger.feature.posting.impl
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
@@ -91,5 +92,18 @@ class PostingListScreenTest : PlatformComposeUiTest() {
         }
         onNodeWithText("Groceries").performClick()
         assertEquals("1", clickedPostingId)
+    }
+
+    @Test
+    fun loadingState_showsProgressIndicator() = runComposeUiTest {
+        setContent {
+            PostingListContent(
+                uiState = PostingListUiState.Loading,
+                onAddClick = {},
+                onPostingClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithTag("loading").assertIsDisplayed()
     }
 }
