@@ -209,7 +209,7 @@ jobs:
             -sdk iphonesimulator \
             -configuration Debug \
             -derivedDataPath ./build \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -destination 'generic/platform=iOS Simulator' \
             -verbose
 
       - name: Upload iOS App Artifact

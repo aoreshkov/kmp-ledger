@@ -1,0 +1,3 @@
+# Default owner for everything in the repository.
+# Used for review routing and (if branch protection requires reviews) auto-requests.
+* @aoreshkov

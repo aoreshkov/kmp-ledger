@@ -13,9 +13,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify-version:
+    name: Verify tag matches version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Check tag against gradle.properties
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PROP_VERSION="$(grep '^ledger.version.name=' gradle.properties | cut -d= -f2)"
+          echo "Tag: $TAG_VERSION | gradle.properties: $PROP_VERSION"
+          if [ "$TAG_VERSION" != "$PROP_VERSION" ]; then
+            echo "::error::Tag 'v$TAG_VERSION' does not match ledger.version.name='$PROP_VERSION' in gradle.properties."
+            exit 1
+          fi
+
   build-android:
     name: Build Android Release
     runs-on: ubuntu-latest
+    needs: verify-version
     timeout-minutes: 30
     steps:
       - name: Checkout
@@ -55,6 +76,7 @@ jobs:
   build-desktop:
     name: Build Desktop Release (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    needs: verify-version
     timeout-minutes: 45
     strategy:
       matrix:
@@ -89,6 +111,8 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+      id-token: write       # mint OIDC token for provenance attestation
+      attestations: write   # write the build provenance attestation
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -99,6 +123,19 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           path: artifacts
+
+      - name: Generate checksums
+        run: |
+          cd artifacts
+          find . -type f \( -name '*.apk' -o -name '*.msi' -o -name '*.dmg' \
+            -o -name '*.deb' -o -name '*.rpm' -o -name '*.zip' -o -name '*.tar.gz' \) -print0 \
+            | xargs -0 sha256sum > ../SHA256SUMS
+          cat ../SHA256SUMS
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4
+        with:
+          subject-checksums: SHA256SUMS
 
       - name: Extract Changelog
         id: extract_changelog
@@ -123,5 +160,6 @@ jobs:
             artifacts/**/*.rpm
             artifacts/**/*.zip
             artifacts/**/*.tar.gz
+            SHA256SUMS
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
