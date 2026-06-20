@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -35,7 +35,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: test-reports
           path: "**/build/reports/tests/"
@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -56,7 +56,7 @@ jobs:
         run: ./gradlew :androidApp:assembleDebug
 
       - name: Upload Android debug APK
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: android-apk
           path: androidApp/build/outputs/apk/debug/*.apk
@@ -68,7 +68,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -87,7 +87,7 @@ jobs:
 
       - name: Upload instrumented test reports
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: instrumented-test-reports
           path: androidApp/build/outputs/androidTest-results/managedDevice/
@@ -102,7 +102,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -113,7 +113,7 @@ jobs:
         # it will be handled by the gradle task itself.
 
       - name: Upload Desktop Artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: desktop-binaries-${{ matrix.os }}
           path: |
@@ -129,7 +129,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -147,7 +147,7 @@ jobs:
             -verbose
 
       - name: Upload iOS App Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: ios-app-simulator
           path: ./build/Build/Products/Debug-iphonesimulator/*.app
