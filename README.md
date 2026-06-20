@@ -382,3 +382,22 @@ To release a new version:
    git push origin v1.0.0
    ```
 6. The GitHub Release workflow will automatically build the binaries and create a GitHub Release with the changelog notes.
+
+### Android release signing
+
+The release workflow signs the Android APK when the following **repository secrets**
+(Settings → Secrets and variables → Actions) are present. If they are absent, the
+release job logs a warning and produces an unsigned APK; local `assembleRelease`
+builds are always unsigned.
+
+| Secret | Description |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | The signing keystore (`.jks`/`.keystore`) file, base64-encoded without line wrapping (`base64 -w0 your.jks`). |
+| `ANDROID_KEYSTORE_PASSWORD` | Password for the keystore (store password). |
+| `ANDROID_KEY_ALIAS` | Alias of the signing key inside the keystore. |
+| `ANDROID_KEY_PASSWORD` | Password for that key (equal to the store password for PKCS12 keystores). |
+
+The alias and passwords are chosen when the keystore is created
+(`keytool -genkeypair -keystore your.jks -alias <alias> -keyalg RSA -keysize 2048 -validity 10000 -storetype PKCS12`).
+Keep the keystore backed up and private — for Google Play distribution it is your
+**upload key**, and updates must be signed with the same key.
