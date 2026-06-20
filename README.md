@@ -272,6 +272,8 @@ All tests use pure Kotlin — no mocking framework.
 **Code Coverage:**
 The project uses **JetBrains Kover** for multiplatform coverage tracking. Coverage is automatically collected for all `commonMain` logic across JVM and Android targets. Reports are aggregated at the root project level and filtered to exclude generated code (Koin factories, Compose singletons, etc.).
 
+In CI, the `check` job runs `koverXmlReport` and posts a coverage summary as a comment on each pull request, alongside a test-results summary with inline annotations for any failures. The aggregated HTML report is also uploaded as a build artifact.
+
 **Layer coverage:**
 
 | Layer | Test approach |

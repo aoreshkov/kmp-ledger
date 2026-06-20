@@ -19,10 +19,42 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Filter changed paths
+        id: filter
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4
+        with:
+          # 'code' is true unless every changed file is docs-only.
+          filters: |
+            code:
+              - '**'
+              - '!**/*.md'
+              - '!.github/assets/**'
+              - '!LICENSE'
+
   check:
     name: Run Tests and Lint
     runs-on: ubuntu-latest
+    needs: changes
+    # Run on any non-docs change; always run for manual dispatch (no diff base).
+    if: needs.changes.outputs.code == 'true' || github.event_name == 'workflow_dispatch'
     timeout-minutes: 30
+    permissions:
+      contents: read
+      checks: write          # publish test results as a check run + annotations
+      pull-requests: write   # post the coverage summary comment on PRs
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -30,8 +62,34 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
-      - name: Run unit tests
-        run: ./gradlew allTests
+      - name: Run tests and coverage
+        run: ./gradlew allTests koverXmlReport
+
+      - name: Publish test results
+        if: always()
+        uses: mikepenz/action-junit-report@d9f48fc87bc235f7e214acf696ca5abc0a986f16 # v6
+        with:
+          report_paths: "**/build/test-results/**/TEST-*.xml"
+          detailed_summary: true
+          include_passed: false
+          # The Gradle step above already fails the job on test failures;
+          # this step only surfaces them in the summary + annotations.
+          fail_on_failure: false
+
+      - name: Publish coverage report
+        # PR-only (comments need a PR) and tolerant: Dependabot/fork PRs run with
+        # a read-only token, so commenting may be denied — don't fail the build.
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: madrapps/jacoco-report@e51ce1f46f7f8b5331593f935e59cbaf44b84920 # v1.8.0
+        with:
+          paths: ${{ github.workspace }}/build/reports/kover/report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Code Coverage
+          update-comment: true
+          # Informational only for now; raise these (or add koverVerify) to enforce.
+          min-coverage-overall: 0
+          min-coverage-changed-files: 0
 
       - name: Upload test reports
         if: always()
@@ -39,6 +97,14 @@ jobs:
         with:
           name: test-reports
           path: "**/build/reports/tests/"
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: coverage-report
+          path: build/reports/kover/
+          if-no-files-found: ignore
 
   build-android:
     name: Build Android
@@ -151,3 +217,24 @@ jobs:
         with:
           name: ios-app-simulator
           path: ./build/Build/Products/Debug-iphonesimulator/*.app
+
+  # Single stable status check. Make THIS the required check in branch protection:
+  # it passes when the build jobs succeed OR are skipped (docs-only changes),
+  # and fails if any of them failed or were cancelled.
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs: [changes, check, build-android, instrumented-tests, build-desktop, build-ios]
+    steps:
+      - name: Verify required jobs succeeded
+        run: |
+          echo "Job results: ${{ join(needs.*.result, ', ') }}"
+          for result in ${{ join(needs.*.result, ' ') }}; do
+            case "$result" in
+              success|skipped) ;;
+              *) echo "::error::A required job concluded with '$result'."; exit 1 ;;
+            esac
+          done
+          echo "All required jobs passed or were skipped."
