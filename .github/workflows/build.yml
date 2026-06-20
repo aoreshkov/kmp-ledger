@@ -63,7 +63,9 @@ jobs:
         uses: ./.github/actions/gradle-setup
 
       - name: Run tests and coverage
-        run: ./gradlew allTests koverXmlReport
+        # koverVerify enforces the coverage floors defined in the root build.gradle.kts
+        # (line/branch/instruction); a regression below them fails the build.
+        run: ./gradlew allTests koverXmlReport koverVerify
 
       - name: Publish test results
         if: always()

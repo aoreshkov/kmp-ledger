@@ -1,3 +1,5 @@
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library.multiplatform) apply false
@@ -20,7 +22,6 @@ dependencies {
     kover(project(":core:domain"))
     kover(project(":core:model"))
     kover(project(":core:navigation"))
-    kover(project(":core:test"))
     kover(project(":core:ui"))
     kover(project(":feature:posting:api"))
     kover(project(":feature:posting:impl"))
@@ -35,9 +36,28 @@ kover {
                     "*_Factory",
                     "*\$\$serializer",
                     "*.generated.resources.*",
-                    "*_HiltModules*"
+                    "*.compose.resources.*",
+                    "*_HiltModules*",
+                    // DI wiring lives in *.di packages; validated by Koin verify(),
+                    // not by execution — exclude so coverage reflects real logic.
+                    "*.di.*"
                 )
                 annotatedBy("androidx.compose.ui.tooling.preview.Preview")
+            }
+        }
+
+        // Coverage floors, set just below the current baseline (line 89%, branch 59%,
+        // instruction 85%) to block regressions. Ratchet up as P2 adds branch/edge tests
+        // (target: branch >= 70%). Run via `./gradlew koverVerify`.
+        verify {
+            rule("Minimum line coverage") {
+                minBound(85, CoverageUnit.LINE)
+            }
+            rule("Minimum branch coverage") {
+                minBound(55, CoverageUnit.BRANCH)
+            }
+            rule("Minimum instruction coverage") {
+                minBound(80, CoverageUnit.INSTRUCTION)
             }
         }
     }
