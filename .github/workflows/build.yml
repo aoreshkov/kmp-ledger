@@ -7,6 +7,13 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096M -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -15,6 +22,7 @@ jobs:
   check:
     name: Run Tests and Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -36,6 +44,7 @@ jobs:
     name: Build Android
     runs-on: ubuntu-latest
     needs: check
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -56,6 +65,7 @@ jobs:
     name: Run Instrumented Tests
     runs-on: ubuntu-latest
     needs: check
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -86,6 +96,7 @@ jobs:
     name: Build Desktop (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     needs: check
+    timeout-minutes: 45
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -115,6 +126,7 @@ jobs:
     name: Build iOS
     runs-on: macos-26
     needs: check
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v6
