@@ -13,5 +13,9 @@ kotlin {
             api(libs.androidx.navigation3.runtime)
             implementation(libs.kotlinx.serialization.core)
         }
+
+        commonTest.dependencies {
+            implementation(libs.kotlinx.serialization.json)
+        }
     }
 }

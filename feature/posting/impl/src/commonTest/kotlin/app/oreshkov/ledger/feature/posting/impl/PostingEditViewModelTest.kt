@@ -79,10 +79,53 @@ class PostingEditViewModelTest {
     @Test
     fun savePosting_emitsNavigationEventOnSuccess() = runTest {
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
+        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Groceries")
+
         vm.savePosting()
-        
-        vm.navigationEvent.first() // If it doesn't emit, the test will time out
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(1, events.size)
+    }
+
+    @Test
+    fun savePosting_withInvalidInput_isNoOp() = runTest {
+        // Blank narrative is invalid: savePosting() must early-return without navigating.
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
+        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
+
+        vm.savePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue(events.isEmpty())
+        val state = vm.uiState.value as PostingEditUiState.Editing
+        assertFalse(state.isValid)
+        assertTrue(state.narrativeError)
+    }
+
+    @Test
+    fun savePosting_whenNotEditing_isNoOp() = runTest {
+        // Defensive guard: when the screen isn't in Editing (here NotFound), both the
+        // updateEditing(else) and the `as? Editing ?: return` paths must no-op.
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "non-existent")
+        vm.uiState.first { it is PostingEditUiState.NotFound }
+        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
+
+        vm.savePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue(events.isEmpty())
+        assertIs<PostingEditUiState.NotFound>(vm.uiState.value)
+    }
+
+    @Test
+    fun loadFailure_setsErrorState() = runTest {
+        // Direct cover of the runCatching{}.fold(onFailure) branch in loadPosting().
+        repo.shouldThrowOnGetById = true
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "1")
+
+        val state = vm.uiState.first { it !is PostingEditUiState.Loading }
+        assertIs<PostingEditUiState.Error>(state)
     }
 
     @Test

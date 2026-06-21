@@ -14,7 +14,9 @@ import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostingDetailsViewModelTest {
@@ -70,13 +72,42 @@ class PostingDetailsViewModelTest {
 
     @Test
     fun deletePosting_emitsDeletedEventOnSuccess() = runTest {
-        val posting = Posting("1", "Groceries")
-        repo.seed(posting)
+        repo.seed(Posting("1", "Groceries"))
         val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
         vm.uiState.first { it is PostingDetailsUiState.Success }
+        val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
 
         vm.deletePosting()
-        
-        vm.deletedEvent.first() // If it doesn't emit, the test will time out
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(1, events.size)
+    }
+
+    @Test
+    fun deletePosting_whenNotSuccess_isNoOp() = runTest {
+        // NotFound (not Success): deletePosting() must early-return without emitting.
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "non-existent")
+        vm.uiState.first { it is PostingDetailsUiState.NotFound }
+        val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
+
+        vm.deletePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue(events.isEmpty())
+    }
+
+    @Test
+    fun deletePosting_whenDeleteFails_doesNotEmitEvent() = runTest {
+        // Success state, but the delete fails: the event is only sent onSuccess.
+        repo.seed(Posting("1", "Groceries"))
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        vm.uiState.first { it is PostingDetailsUiState.Success }
+        val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
+
+        repo.failNextWrite = true
+        vm.deletePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue(events.isEmpty())
     }
 }
