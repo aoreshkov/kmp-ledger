@@ -1,7 +1,9 @@
 package app.oreshkov.ledger
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.room3.Room
 import androidx.room3.RoomDatabase
@@ -36,5 +38,24 @@ class DesktopUiTest {
         }
 
         onNodeWithText("My Postings").assertExists()
+    }
+
+    @Test
+    fun app_navigatesFromListToAddScreen() = runDesktopComposeUiTest {
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(postingNavigationModule, inMemoryDatabaseModule)
+                }
+            ) {
+                App()
+            }
+        }
+
+        // Real graph: real NavDisplay + real ViewModels over a real in-memory Room DB.
+        onNodeWithText("My Postings").assertExists()
+        onNodeWithContentDescription("Add Posting").performClick()
+        onNodeWithText("Add Posting").assertExists()
     }
 }
