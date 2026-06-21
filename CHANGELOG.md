@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-06-21
+
+### Added
+- Added an injectable `AppDispatchers` seam (`DefaultAppDispatchers`) and `DispatcherModule` so coroutine dispatchers are provided via Koin.
+- Added Kover code coverage with aggregate floors (line/branch/instruction) and per-module rules, enforced in CI via `koverVerify`.
+- Added a signed Android release build configuration that activates when CI supplies keystore credentials via environment variables.
+- Added a Gradle managed virtual device (`aospAtd30`) and an instrumented-test CI job.
+- Added an opt-in Compose compiler stability/skippability report (`-Pledger.composeCompilerReports=true`).
+- Added build provenance attestation, SHA-256 checksums, and a tag-versus-`gradle.properties` version verification job to the release workflow.
+- Added a dependency-review workflow, Dependabot config, CODEOWNERS, security policy, and issue/PR templates.
+- Added path-filtering plus JUnit and coverage reporting to the build CI workflow.
+
+### Changed
+- Moved repository database work off the main thread using `withContext`/`flowOn` on the injected IO dispatcher in `OfflineFirstPostingRepository`.
+- Replaced `derivedStateOf` wrappers in posting screens with direct state reads and added test tags for UI testing.
+- Removed manual `koinViewModel` keys from navigation entries, relying on the navigation back-stack ViewModel store decorator instead.
+- Pinned GitHub Actions to commit SHAs and added concurrency, timeouts, and least-privilege permissions across workflows.
+- Upgraded Room and SQLite to 3.0.0-rc01 / 2.7.0-rc01.
+- Upgraded Navigation 3 runtime to 1.1.3.
+- Upgraded the Gradle wrapper to 9.6.0.
+
+### Fixed
+- Fixed the posting edit screen seeding its form with a never-completing flow collector; it now takes a one-shot snapshot via `first()` so retries no longer stack collectors.
+- Fixed the release workflow changelog extraction to anchor section headers to the start of the line.
+
 ## [1.1.1] - 2026-06-17
 
 ### Added
@@ -46,7 +71,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/aoreshkov/kmp-ledger/releases/tag/v1.0.0

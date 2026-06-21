@@ -11,26 +11,24 @@ context: fork
 ## Previous tag
 !`git tag --sort=-version:refname | head -1`
 
-## Files changed since last tag
-!`git diff $(git tag --sort=-version:refname | head -1)..HEAD --name-only`
-
 New version: $version
 
 ## Steps
 
 ### 1. Resolve previous tag
 
-The previous tag and changed file list are pre-loaded above. Note the tag (e.g. `v1.1.1`).
+The previous tag is pre-loaded above. Note the tag (e.g. `v1.1.1`).
 
 ### 2. Analyse actual source changes
 
 **Do not use git commit messages.** Derive the changelog entirely from the source diff.
 
-Run `git diff <last_tag>..HEAD` scoped to the file groups below, one group at a time, and read the output carefully:
+Run the following commands in order, one group at a time, and read the output carefully:
 
-1. **Kotlin sources** — `git diff <last_tag>..HEAD -- '*.kt'`
-2. **Build & dependency files** — `git diff <last_tag>..HEAD -- '*.kts' 'gradle/libs.versions.toml' 'gradle.properties'`
-3. **CI/config files** — `git diff <last_tag>..HEAD -- '.github/'`
+1. **Full file list** — `git diff <last_tag>..HEAD --name-only`
+2. **Kotlin sources** — `git diff <last_tag>..HEAD -- '*.kt'`
+3. **Build & dependency files** — `git diff <last_tag>..HEAD -- '*.kts' 'gradle/libs.versions.toml' 'gradle.properties'`
+4. **CI/config files** — `git diff <last_tag>..HEAD -- '.github/'`
 
 From these diffs identify:
 - **Added**: new screens, new use cases, new public functions or classes, new features, new CI steps
