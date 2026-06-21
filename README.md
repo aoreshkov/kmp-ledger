@@ -102,12 +102,12 @@ Supporting modules (no layer dependency):
 | `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. |
 | `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers. |
 | `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`). Each wraps a repository call with a single responsibility. |
-| `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension. |
+| `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension, plus `AppDispatchers` interface and `DispatcherModule` Koin binding. |
 | `core:compose` | Shared Compose components used across feature modules (e.g. `LabeledField`). |
 | `core:navigation` | `Navigator` (backstack wrapper) and `StartDestination` value class. Framework-agnostic. |
 | `core:ui` | Root `App` composable, Material 3 theme, `NavDisplay` wiring. |
 | `core:bootstrap` | Root Koin module that wires all sub-modules together and provides `StartDestination` and `SavedStateConfiguration`. |
-| `core:test` | `FakePostingRepository` and `PlatformComposeUiTest` expect/actual. Consumed by all test source sets. |
+| `core:test` | `FakePostingRepository`, `PlatformComposeUiTest` expect/actual, and shared posting fixture builders (`posting()`, `newPosting()`, `postings()`). Consumed by all test source sets. |
 | `iosExport` | Bridge module for Swift Export. Contains the `MainViewController` and Koin initialization for iOS. |
 | `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`) and their serializers module. Consumed by both the feature impl and the bootstrap/navigation modules. |
 | `feature:posting:impl` | `PostingListScreen`, `PostingDetailsScreen`, `PostingEditScreen`, their ViewModels, and the Koin navigation module (`postingNavigationModule`). |
@@ -144,6 +144,14 @@ plugins {
     id("ledger.kotlin.multiplatform.koin")
 }
 ```
+
+The compose convention plugin can also emit Compose compiler stability/skippability reports on demand:
+
+```bash
+./gradlew assemble -Pledger.composeCompilerReports=true
+```
+
+Reports are written to each module's `build/compose_compiler/` directory and are off by default so normal builds aren't slowed.
 
 ### 2. Feature API / Implementation split
 
@@ -259,6 +267,19 @@ val postingNavigationModule = module {
 
 Ledger uses **Kermit** for unified logging. Platform-specific writers are provided via `expect`/`actual` functions in `core:common`, ensuring that logs are routed to the appropriate system (Logcat on Android, OSLog on iOS, and SLF4J/Logback on Desktop).
 
+### 8. Injectable dispatcher seam (`AppDispatchers`)
+
+`AppDispatchers` is an injectable interface over the coroutine dispatchers used by the data layer:
+
+```kotlin
+interface AppDispatchers {
+    val io: CoroutineDispatcher
+    val default: CoroutineDispatcher
+}
+```
+
+Production code receives `DefaultAppDispatchers` (backed by `Dispatchers.IO` / `Dispatchers.Default`) via Koin. Tests supply a `TestAppDispatchers` backed by a `TestDispatcher`, so `withContext` and `flowOn` calls run on the test scheduler without any platform-specific thread semantics. `DispatcherModule` in `core:common` wires the production binding; `core:data` consumes it via `DataModule`.
+
 ---
 
 ## Testing Strategy
@@ -272,7 +293,11 @@ All tests use pure Kotlin — no mocking framework.
 **Code Coverage:**
 The project uses **JetBrains Kover** for multiplatform coverage tracking. Coverage is automatically collected for all `commonMain` logic across JVM and Android targets. Reports are aggregated at the root project level and filtered to exclude generated code (Koin factories, Compose singletons, etc.).
 
-In CI, the `check` job runs `koverXmlReport` and posts a coverage summary as a comment on each pull request, alongside a test-results summary with inline annotations for any failures. The aggregated HTML report is also uploaded as a build artifact.
+Coverage is **enforced**, not just reported: CI runs `koverVerify`, which fails the build if coverage drops below the configured floors. The root project sets aggregate floors (88% line / 60% branch / 84% instruction), and the pure-logic modules `core:data`, `core:domain`, and `feature:posting:api` each add stricter per-module floors (90% line / 85% branch).
+
+In CI, the `check` job runs `koverXmlReport koverVerify` and posts a coverage summary as a comment on each pull request, alongside a test-results summary with inline annotations for any failures. The aggregated HTML report is also uploaded as a build artifact. Docs-only changes skip the build and test jobs entirely (a `changes` path filter gates them, with a single `ci-success` status check as the required gate).
+
+A separate `instrumented-tests` job runs the Android smoke suite on a **Gradle Managed Device** (`aospAtd30`: Pixel 2, API 30, AOSP ATD). This exercises the real shipped APK — real Koin startup, real platform Room database, real Navigation 3 graph — keeping end-to-end integration coverage separate from the JVM host-test pass. Supply-chain hardening is provided by a `dependency-review` workflow and Dependabot-maintained, SHA-pinned GitHub Actions.
 
 **Layer coverage:**
 
@@ -284,7 +309,7 @@ In CI, the `check` job runs `koverXmlReport` and posts a coverage summary as a c
 | `core:common` | `DataResultTest` for the `asResult()` extension |
 | `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level) |
 | `core:ui` | App-level Compose UI test |
-| DI modules | Compile-time validation (Koin Compiler Plugin) + App-level integration tests |
+| DI modules | Compile-time validation (Koin Compiler Plugin) + runtime `verify()` (`KoinModuleTest`) + App-level integration tests |
 
 ---
 
@@ -384,6 +409,8 @@ To release a new version:
    git push origin v1.0.0
    ```
 6. The GitHub Release workflow will automatically build the binaries and create a GitHub Release with the changelog notes.
+
+> **Note:** The release workflow includes a `verify-version` job that fails immediately if the pushed tag does not match `ledger.version.name` in `gradle.properties`. It also generates a `SHA256SUMS` file attached to the release and publishes a [SLSA build provenance attestation](https://slsa.dev) via `actions/attest-build-provenance`.
 
 ### Android release signing
 

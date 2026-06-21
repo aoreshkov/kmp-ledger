@@ -8,20 +8,18 @@ allowed-tools: Bash(git tag*), Bash(git diff*), Read
 ## Previous tag
 !`git tag --sort=-version:refname | head -1`
 
-## Files changed since last tag
-!`git diff $(git tag --sort=-version:refname | head -1)..HEAD --name-only`
-
-Analyse the changes above against the current README.md and produce a plan of what needs updating. Do not edit any files.
+Analyse the changes since the previous tag against the current README.md and produce a plan of what needs updating. Do not edit any files.
 
 ## Steps
 
 ### 1. Collect the source diff
 
-The previous tag and changed file list are pre-loaded above. Now run the targeted diffs and read the output carefully:
+The previous tag is pre-loaded above. Run the following commands in order and read the output carefully:
 
-1. `git diff <last_tag>..HEAD -- '*.kt'` — Kotlin sources
-2. `git diff <last_tag>..HEAD -- '*.kts' 'gradle/libs.versions.toml' 'gradle.properties'` — build and dependency files
-3. `git diff <last_tag>..HEAD -- '.github/'` — CI/config files
+1. `git diff <last_tag>..HEAD --name-only` — full list of changed files
+2. `git diff <last_tag>..HEAD -- '*.kt'` — Kotlin sources
+3. `git diff <last_tag>..HEAD -- '*.kts' 'gradle/libs.versions.toml' 'gradle.properties'` — build and dependency files
+4. `git diff <last_tag>..HEAD -- '.github/'` — CI/config files
 
 **Do not use git commit messages.** Derive everything from the actual diffs.
 
