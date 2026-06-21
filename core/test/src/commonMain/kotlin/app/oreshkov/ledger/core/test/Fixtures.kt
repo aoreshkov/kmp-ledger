@@ -17,3 +17,7 @@ fun newPosting(
 /** Convenience for the common multi-row list case (PostingList screen/VM). */
 fun postings(vararg narratives: String): List<Posting> =
     narratives.mapIndexed { index, narrative -> posting(id = (index + 1).toString(), narrative = narrative) }
+
+/** N sequential postings: id "1".."N", narrative "Posting 1".."Posting N". */
+fun postings(count: Int): List<Posting> =
+    (1..count).map { posting(id = it.toString(), narrative = "Posting $it") }

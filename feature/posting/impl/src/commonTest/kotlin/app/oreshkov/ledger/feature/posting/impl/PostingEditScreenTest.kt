@@ -3,12 +3,16 @@ package app.oreshkov.ledger.feature.posting.impl
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.test.waitUntilExactlyOneExists
 import app.oreshkov.ledger.core.domain.GetPostingUseCase
 import app.oreshkov.ledger.core.domain.SavePostingUseCase
 import app.oreshkov.ledger.core.test.FakePostingRepository
@@ -64,6 +68,52 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
         }
 
         onNodeWithText("Narrative is required").performScrollTo().assertIsDisplayed()
+        onNodeWithText("Save").assertIsNotEnabled()
+    }
+
+    @Test
+    fun narrativeError_notShown_whenUntouched() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Editing(narrative = ""),
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Narrative is required").assertDoesNotExist()
+    }
+
+    @Test
+    fun saveButton_isDisabled_whenNarrativeBlank() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Editing(narrative = ""),
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Save").assertIsNotEnabled()
+    }
+
+    @Test
+    fun saveButton_isEnabled_whenNarrativePresent() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Editing(narrative = "Groceries"),
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Save").assertIsEnabled()
     }
 
     @Test
@@ -190,7 +240,8 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
         onNodeWithText("Narrative").performTextInput("Groceries")
         onNodeWithText("Save").performClick()
 
-        // Snackbar should appear
+        // Snackbar should appear (wait for the async LaunchedEffect to surface it).
+        waitUntilExactlyOneExists(hasText("Failed to save. Please try again."))
         onNodeWithText("Failed to save. Please try again.").assertIsDisplayed()
     }
 

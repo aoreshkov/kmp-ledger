@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.v2.runComposeUiTest
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
 import app.oreshkov.ledger.core.test.posting
@@ -88,6 +89,21 @@ class PostingListScreenTest : PlatformComposeUiTest() {
         }
         onNodeWithText("Groceries").performClick()
         assertEquals("1", clickedPostingId)
+    }
+
+    @Test
+    fun successState_scrollsToLaterPosting() = runComposeUiTest {
+        val items = postings(30)
+        setContent {
+            PostingListContent(
+                uiState = PostingListUiState.Success(items),
+                onAddClick = {},
+                onPostingClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithTag("posting_list").performScrollToIndex(29)
+        onNodeWithText("Posting 30").assertIsDisplayed()
     }
 
     @Test
