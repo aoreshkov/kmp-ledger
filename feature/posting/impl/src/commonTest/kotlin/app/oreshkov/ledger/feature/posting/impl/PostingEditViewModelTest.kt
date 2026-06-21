@@ -2,8 +2,8 @@ package app.oreshkov.ledger.feature.posting.impl
 
 import app.oreshkov.ledger.core.domain.GetPostingUseCase
 import app.oreshkov.ledger.core.domain.SavePostingUseCase
-import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.FakePostingRepository
+import app.oreshkov.ledger.core.test.posting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -50,9 +50,9 @@ class PostingEditViewModelTest {
 
     @Test
     fun uiState_isEditingAfterLoadingSuccessfully() = runTest {
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "1")
-        
+
         val state = vm.uiState.first { it is PostingEditUiState.Editing } as PostingEditUiState.Editing
         assertTrue(state.isEditMode)
         assertEquals("Groceries", state.narrative)
@@ -146,7 +146,7 @@ class PostingEditViewModelTest {
         vm.uiState.first { it is PostingEditUiState.Error }
 
         repo.shouldThrowOnGetById = false
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         vm.retry()
 
         val state = vm.uiState.first { it is PostingEditUiState.Editing }

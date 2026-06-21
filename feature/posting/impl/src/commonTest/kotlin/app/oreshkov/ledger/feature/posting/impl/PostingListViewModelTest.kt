@@ -1,8 +1,9 @@
 package app.oreshkov.ledger.feature.posting.impl
 
 import app.oreshkov.ledger.core.domain.GetPostingsUseCase
-import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.FakePostingRepository
+import app.oreshkov.ledger.core.test.newPosting
+import app.oreshkov.ledger.core.test.posting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -34,7 +35,7 @@ class PostingListViewModelTest {
 
     @Test
     fun uiState_isSuccessWhenRepositoryHasPostings() = runTest {
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         val vm = PostingListViewModel(getPostingsUseCase)
         val state = vm.uiState.first { it !is PostingListUiState.Loading }
         assertIs<PostingListUiState.Success>(state)
@@ -45,19 +46,19 @@ class PostingListViewModelTest {
         val vm = PostingListViewModel(getPostingsUseCase)
         vm.uiState.first { it !is PostingListUiState.Loading }
 
-        repo.insertPosting(app.oreshkov.ledger.core.model.data.NewPosting("Groceries"))
+        repo.insertPosting(newPosting())
         val state = vm.uiState.first { it is PostingListUiState.Success }
         assertIs<PostingListUiState.Success>(state)
     }
 
     @Test
     fun uiState_updatesWhenLastPostingIsDeleted() = runTest {
-        val posting = Posting("1", "Groceries")
-        repo.seed(posting)
+        val seeded = posting()
+        repo.seed(seeded)
         val vm = PostingListViewModel(getPostingsUseCase)
         vm.uiState.first { it is PostingListUiState.Success }
 
-        repo.deletePosting(posting.id)
+        repo.deletePosting(seeded.id)
         val state = vm.uiState.first { it is PostingListUiState.Empty }
         assertIs<PostingListUiState.Empty>(state)
     }
@@ -77,7 +78,7 @@ class PostingListViewModelTest {
         vm.uiState.first { it is PostingListUiState.Error }
 
         repo.shouldThrowOnGetAll = false
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         vm.retry()
 
         val state = vm.uiState.first { it is PostingListUiState.Success }

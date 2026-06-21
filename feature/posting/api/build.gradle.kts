@@ -20,6 +20,7 @@ kover {
 kotlin {
     android {
         namespace = "app.oreshkov.ledger.feature.posting.api"
+        withHostTest {}
     }
 
     sourceSets {

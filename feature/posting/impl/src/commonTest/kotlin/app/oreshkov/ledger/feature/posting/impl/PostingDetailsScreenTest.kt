@@ -7,8 +7,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
-import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
+import app.oreshkov.ledger.core.test.posting
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -53,13 +53,9 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun successState_showsPostingDetails() = runComposeUiTest {
-        val posting = Posting(
-            id = "1",
-            narrative = "Groceries"
-        )
         setContent {
             PostingDetailsContent(
-                uiState = PostingDetailsUiState.Success(posting),
+                uiState = PostingDetailsUiState.Success(posting()),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = {},
@@ -71,11 +67,10 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun successState_clickingDelete_showsConfirmationDialog() = runComposeUiTest {
-        val posting = Posting("1", "Groceries")
         var deleteConfirmed = false
         setContent {
             PostingDetailsContent(
-                uiState = PostingDetailsUiState.Success(posting),
+                uiState = PostingDetailsUiState.Success(posting()),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = { deleteConfirmed = true },
@@ -97,11 +92,10 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun successState_clickingDelete_cancelDismissesDialog() = runComposeUiTest {
-        val posting = Posting("1", "Groceries")
         var deleteConfirmed = false
         setContent {
             PostingDetailsContent(
-                uiState = PostingDetailsUiState.Success(posting),
+                uiState = PostingDetailsUiState.Success(posting()),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = { deleteConfirmed = true },
@@ -124,7 +118,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         var editClickedId: String? = null
         setContent {
             PostingDetailsContent(
-                uiState = PostingDetailsUiState.Success(Posting("42", "Groceries")),
+                uiState = PostingDetailsUiState.Success(posting(id = "42")),
                 onNavigateBack = {},
                 onEditClick = { id -> editClickedId = id },
                 onDeleteClick = {},

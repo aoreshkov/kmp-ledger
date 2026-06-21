@@ -33,7 +33,7 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
         }
-        val androidHostTest by getting {
+        getByName("androidHostTest") {
             dependencies {
                 implementation(libs.sqlite.bundled.jvm)
             }

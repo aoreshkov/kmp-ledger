@@ -2,8 +2,8 @@ package app.oreshkov.ledger.feature.posting.impl
 
 import app.oreshkov.ledger.core.domain.DeletePostingUseCase
 import app.oreshkov.ledger.core.domain.GetPostingUseCase
-import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.FakePostingRepository
+import app.oreshkov.ledger.core.test.posting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -31,8 +31,7 @@ class PostingDetailsViewModelTest {
 
     @Test
     fun uiState_isSuccessWhenPostingExists() = runTest {
-        val posting = Posting("1", "Groceries")
-        repo.seed(posting)
+        repo.seed(posting())
         val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
         
         val state = vm.uiState.first { it !is PostingDetailsUiState.Loading }
@@ -63,7 +62,7 @@ class PostingDetailsViewModelTest {
         vm.uiState.first { it is PostingDetailsUiState.Error }
 
         repo.shouldThrowOnGetById = false
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         vm.retry()
 
         val state = vm.uiState.first { it is PostingDetailsUiState.Success }
@@ -72,7 +71,7 @@ class PostingDetailsViewModelTest {
 
     @Test
     fun deletePosting_emitsDeletedEventOnSuccess() = runTest {
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
         vm.uiState.first { it is PostingDetailsUiState.Success }
         val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
@@ -99,7 +98,7 @@ class PostingDetailsViewModelTest {
     @Test
     fun deletePosting_whenDeleteFails_doesNotEmitEvent() = runTest {
         // Success state, but the delete fails: the event is only sent onSuccess.
-        repo.seed(Posting("1", "Groceries"))
+        repo.seed(posting())
         val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
         vm.uiState.first { it is PostingDetailsUiState.Success }
         val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)

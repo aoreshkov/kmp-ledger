@@ -3,8 +3,8 @@ package app.oreshkov.ledger.core.data.repository
 import app.oreshkov.ledger.core.common.dispatcher.AppDispatchers
 import app.oreshkov.ledger.core.database.dao.PostingDao
 import app.oreshkov.ledger.core.database.model.PostingEntity
-import app.oreshkov.ledger.core.model.data.Posting
-import app.oreshkov.ledger.core.model.data.NewPosting
+import app.oreshkov.ledger.core.test.newPosting
+import app.oreshkov.ledger.core.test.posting
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -37,8 +37,7 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun insertPosting_mapsNewPostingToEntity() = runTest {
-        val newPosting = NewPosting("Groceries")
-        repository.insertPosting(newPosting)
+        repository.insertPosting(newPosting())
 
         val entities = fakeDao.entities.value
         assertEquals(1, entities.size)
@@ -49,9 +48,8 @@ class OfflineFirstPostingRepositoryTest {
     fun deletePosting_callsDaoDelete() = runTest {
         val entity = PostingEntity("1", "Groceries")
         fakeDao.insert(entity)
-        val posting = Posting("1", "Groceries")
 
-        repository.deletePosting(posting.id)
+        repository.deletePosting(posting().id)
 
         val remaining = fakeDao.entities.value
         assertTrue(remaining.isEmpty())
@@ -61,7 +59,7 @@ class OfflineFirstPostingRepositoryTest {
     fun updatePosting_mapsToEntityAndCallsDao() = runTest {
         val initialEntity = PostingEntity("1", "Old")
         fakeDao.insert(initialEntity)
-        val updatedPosting = Posting("1", "New")
+        val updatedPosting = posting(narrative = "New")
 
         repository.updatePosting(updatedPosting)
 

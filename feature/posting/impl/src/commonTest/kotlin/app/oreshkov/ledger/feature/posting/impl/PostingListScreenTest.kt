@@ -7,8 +7,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
-import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
+import app.oreshkov.ledger.core.test.posting
+import app.oreshkov.ledger.core.test.postings
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -47,13 +48,9 @@ class PostingListScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun successState_showsPostingsList() = runComposeUiTest {
-        val postings = listOf(
-            Posting("1", "Groceries"),
-            Posting("2", "Other Groceries")
-        )
         setContent {
             PostingListContent(
-                uiState = PostingListUiState.Success(postings),
+                uiState = PostingListUiState.Success(postings("Groceries", "Other Groceries")),
                 onAddClick = {},
                 onPostingClick = {},
                 onRetry = {}
@@ -80,11 +77,10 @@ class PostingListScreenTest : PlatformComposeUiTest() {
 
     @Test
     fun clickingPosting_triggersOnPostingClick() = runComposeUiTest {
-        val posting = Posting("1", "Groceries")
         var clickedPostingId: String? = null
         setContent {
             PostingListContent(
-                uiState = PostingListUiState.Success(listOf(posting)),
+                uiState = PostingListUiState.Success(listOf(posting())),
                 onAddClick = {},
                 onPostingClick = { clickedPostingId = it },
                 onRetry = {}

@@ -24,7 +24,7 @@ kotlin {
         jvmTest.dependencies {
             implementation(libs.koin.test)
         }
-        val androidHostTest by getting {
+        getByName("androidHostTest") {
             kotlin.srcDir("src/jvmTest/kotlin")
             dependencies {
                 implementation(libs.koin.test)

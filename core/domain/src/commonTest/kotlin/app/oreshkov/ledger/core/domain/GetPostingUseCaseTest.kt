@@ -1,7 +1,7 @@
 package app.oreshkov.ledger.core.domain
 
-import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.test.FakePostingRepository
+import app.oreshkov.ledger.core.test.posting
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -14,12 +14,11 @@ class GetPostingUseCaseTest {
 
     @Test
     fun `invoke returns posting flow from repository when posting exists`() = runTest {
-        val posting = Posting("1", "Groceries")
-        repo.seed(posting)
+        repo.seed(posting())
 
         val result = useCase("1").first()
 
-        assertEquals(posting, result)
+        assertEquals(posting(), result)
     }
 
     @Test
