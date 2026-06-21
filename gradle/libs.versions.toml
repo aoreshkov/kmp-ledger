@@ -20,7 +20,7 @@ androidx-sqlite = "2.7.0-rc01"
 # Compose
 compose-multiplatform = "1.11.1"
 compose-material-icons = "1.7.3"
-androidx-material3 = "1.12.0-alpha02"
+androidx-material3 = "1.11.0-alpha07"
 
 # Third-party
 koin = "4.2.2"
