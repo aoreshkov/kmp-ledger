@@ -46,18 +46,17 @@ kover {
             }
         }
 
-        // Coverage floors, set just below the current baseline (line 89%, branch 59%,
-        // instruction 85%) to block regressions. Ratchet up as P2 adds branch/edge tests
-        // (target: branch >= 70%). Run via `./gradlew koverVerify`.
+        // Aggregate floors block regressions; branch stays modest (Compose synthetic
+        // branches). Per-module logic floors live in those modules' build files.
         verify {
-            rule("Minimum line coverage") {
-                minBound(85, CoverageUnit.LINE)
+            rule("Aggregate line coverage") {
+                minBound(88, CoverageUnit.LINE)
             }
-            rule("Minimum branch coverage") {
-                minBound(55, CoverageUnit.BRANCH)
+            rule("Aggregate branch coverage") {
+                minBound(60, CoverageUnit.BRANCH)
             }
-            rule("Minimum instruction coverage") {
-                minBound(80, CoverageUnit.INSTRUCTION)
+            rule("Aggregate instruction coverage") {
+                minBound(84, CoverageUnit.INSTRUCTION)
             }
         }
     }

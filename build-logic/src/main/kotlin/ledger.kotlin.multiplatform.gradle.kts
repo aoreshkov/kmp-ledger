@@ -27,3 +27,23 @@ kotlin {
         }
     }
 }
+
+// Shared Kover report excludes (keep in sync with the root aggregate excludes).
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    "*ComposableSingletons*",
+                    "*_Factory",
+                    "*\$\$serializer",
+                    "*.generated.resources.*",
+                    "*.compose.resources.*",
+                    "*_HiltModules*",
+                    "*.di.*",
+                )
+                annotatedBy("androidx.compose.ui.tooling.preview.Preview")
+            }
+        }
+    }
+}
