@@ -38,17 +38,21 @@ fun App() {
 
             val entryProvider = koinEntryProvider<NavKey>()
             val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
-            
-            val decorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
-                rememberViewModelStoreNavEntryDecorator<NavKey>()
-            )
+            val sceneStrategies = remember(listDetailStrategy) { listOf(listDetailStrategy) }
+
+            // Decorators must be created via their remember* composable calls, but the
+            // list wrapping them is remembered so it isn't reallocated on every recomposition.
+            val saveableStateDecorator = rememberSaveableStateHolderNavEntryDecorator<NavKey>()
+            val viewModelStoreDecorator = rememberViewModelStoreNavEntryDecorator<NavKey>()
+            val decorators = remember(saveableStateDecorator, viewModelStoreDecorator) {
+                listOf(saveableStateDecorator, viewModelStoreDecorator)
+            }
 
             CompositionLocalProvider(LocalNavigator provides navigator) {
                 NavDisplay(
                     backStack = backStack,
                     onBack = { navigator.goBack() },
-                    sceneStrategies = listOf(listDetailStrategy),
+                    sceneStrategies = sceneStrategies,
                     entryProvider = entryProvider,
                     entryDecorators = decorators
                 )
