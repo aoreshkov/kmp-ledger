@@ -33,20 +33,12 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
 
     @BeforeTest
     fun setUp() {
-        try {
-            Dispatchers.setMain(StandardTestDispatcher())
-        } catch (e: Exception) {
-            // Already set or not supported
-        }
+        Dispatchers.setMain(StandardTestDispatcher())
     }
 
     @AfterTest
     fun tearDown() {
-        try {
-            Dispatchers.resetMain()
-        } catch (e: Exception) {
-            // Not set
-        }
+        Dispatchers.resetMain()
     }
 
     @Test

@@ -1,5 +1,21 @@
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
 plugins {
     id("ledger.kotlin.multiplatform.koin.compose")
+}
+
+// The most logic-dense feature module (three ViewModels). Hold a line floor on par
+// with the pure-logic modules; the branch floor is tuned lower because Compose codegen
+// in the @Composable screens emits many synthetic branches that drag branch coverage down.
+kover {
+    reports {
+        verify {
+            rule("Feature posting impl coverage") {
+                minBound(90, CoverageUnit.LINE)
+                minBound(60, CoverageUnit.BRANCH)
+            }
+        }
+    }
 }
 
 kotlin {
