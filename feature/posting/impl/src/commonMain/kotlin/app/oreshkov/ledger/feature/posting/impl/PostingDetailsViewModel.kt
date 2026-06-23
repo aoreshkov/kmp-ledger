@@ -65,12 +65,17 @@ class PostingDetailsViewModel(
     private val _deletedEvent = Channel<Unit>(Channel.BUFFERED)
     val deletedEvent = _deletedEvent.receiveAsFlow()
 
+    private val _deleteFailedEvent = Channel<Unit>(Channel.BUFFERED)
+    val deleteFailedEvent = _deleteFailedEvent.receiveAsFlow()
+
     fun deletePosting() {
         val state = uiState.value
         if (state !is PostingDetailsUiState.Success) return
         viewModelScope.launch {
             deletePostingUseCase(state.posting.id).onSuccess {
                 _deletedEvent.send(Unit)
+            }.onFailure {
+                _deleteFailedEvent.send(Unit)
             }
         }
     }

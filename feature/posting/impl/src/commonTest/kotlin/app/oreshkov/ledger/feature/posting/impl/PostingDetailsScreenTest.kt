@@ -1,5 +1,6 @@
 package app.oreshkov.ledger.feature.posting.impl
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
@@ -23,6 +24,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.Error,
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = {},
@@ -40,6 +42,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.NotFound,
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = { backClicked = true },
                 onEditClick = {},
                 onDeleteClick = {},
@@ -56,6 +59,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.Success(posting()),
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = {},
@@ -71,6 +75,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.Success(posting()),
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = { deleteConfirmed = true },
@@ -96,6 +101,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.Success(posting()),
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = { deleteConfirmed = true },
@@ -119,6 +125,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.Success(posting(id = "42")),
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
                 onEditClick = { id -> editClickedId = id },
                 onDeleteClick = {},
@@ -136,6 +143,7 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         setContent {
             PostingDetailsContent(
                 uiState = PostingDetailsUiState.Loading,
+                snackbarHostState = SnackbarHostState(),
                 onNavigateBack = {},
                 onEditClick = {},
                 onDeleteClick = {},

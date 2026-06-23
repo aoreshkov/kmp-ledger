@@ -109,4 +109,32 @@ class PostingDetailsViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
         assertTrue(events.isEmpty())
     }
+
+    @Test
+    fun deletePosting_whenDeleteFails_emitsDeleteFailedEvent() = runTest {
+        // Success state, but the delete fails: the failure event fires for user feedback.
+        repo.seed(posting())
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        vm.uiState.first { it is PostingDetailsUiState.Success }
+        val failures = backgroundScope.collectToList(vm.deleteFailedEvent, testDispatcher)
+
+        repo.failNextWrite = true
+        vm.deletePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(1, failures.size)
+    }
+
+    @Test
+    fun deletePosting_onSuccess_doesNotEmitDeleteFailedEvent() = runTest {
+        repo.seed(posting())
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        vm.uiState.first { it is PostingDetailsUiState.Success }
+        val failures = backgroundScope.collectToList(vm.deleteFailedEvent, testDispatcher)
+
+        vm.deletePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue(failures.isEmpty())
+    }
 }

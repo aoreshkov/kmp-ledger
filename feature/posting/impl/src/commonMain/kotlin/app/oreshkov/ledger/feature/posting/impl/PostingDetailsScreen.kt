@@ -20,6 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -43,6 +45,7 @@ import ledger.feature.posting.impl.generated.resources.posting_details_delete_co
 import ledger.feature.posting.impl.generated.resources.posting_details_delete_content_description
 import ledger.feature.posting.impl.generated.resources.posting_details_delete_dialog_body
 import ledger.feature.posting.impl.generated.resources.posting_details_delete_dialog_title
+import ledger.feature.posting.impl.generated.resources.posting_details_delete_failed
 import ledger.feature.posting.impl.generated.resources.posting_details_edit_content_description
 import ledger.feature.posting.impl.generated.resources.posting_details_failed_to_load
 import ledger.feature.posting.impl.generated.resources.posting_details_field_narrative
@@ -60,13 +63,20 @@ fun PostingDetailsScreen(
     viewModel: PostingDetailsViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val deleteFailedMessage = stringResource(Res.string.posting_details_delete_failed)
 
     LaunchedEffect(viewModel) {
         viewModel.deletedEvent.collect { onDeleted() }
     }
 
+    LaunchedEffect(viewModel) {
+        viewModel.deleteFailedEvent.collect { snackbarHostState.showSnackbar(deleteFailedMessage) }
+    }
+
     PostingDetailsContent(
         uiState = uiState,
+        snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
         onEditClick = onEditClick,
         onDeleteClick = viewModel::deletePosting,
@@ -78,6 +88,7 @@ fun PostingDetailsScreen(
 @Composable
 internal fun PostingDetailsContent(
     uiState: PostingDetailsUiState,
+    snackbarHostState: SnackbarHostState,
     onNavigateBack: () -> Unit,
     onEditClick: (String) -> Unit,
     onDeleteClick: () -> Unit,
@@ -106,6 +117,7 @@ internal fun PostingDetailsContent(
         )
     }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(Res.string.posting_details_title)) },

@@ -19,6 +19,7 @@
     <string name="posting_details_delete_cancel">Cancel</string>
     <string name="posting_details_field_narrative">Narrative</string>
     <string name="posting_details_go_back">Go back</string>
+    <string name="posting_details_delete_failed">Failed to delete. Please try again.</string>
 
     <!-- Posting Edit -->
     <string name="posting_edit_title_add">Add Posting</string>

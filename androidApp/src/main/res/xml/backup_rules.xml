@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Pre-Android-12 (API < 31) counterpart to data_extraction_rules.xml. Excludes
+  every domain so the local ledger DB is never included in cloud or adb backups.
+  Backup is already off via android:allowBackup="false"; this keeps the rules
+  explicit and silences lint's DataExtractionRules check for minSdk 24.
+-->
+<full-backup-content>
+    <exclude domain="root" />
+    <exclude domain="file" />
+    <exclude domain="database" />
+    <exclude domain="sharedpref" />
+    <exclude domain="external" />
+</full-backup-content>

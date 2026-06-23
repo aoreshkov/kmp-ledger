@@ -39,13 +39,12 @@ class PostingEditViewModelTest {
     }
 
     @Test
-    fun initialState_isLoadingInEditMode() = runTest {
+    fun initialState_inEditMode_withMissingPosting_settlesOnNotFound() = runTest {
+        // In edit mode the VM seeds Loading, then loadPosting() runs eagerly under the
+        // UnconfinedTestDispatcher: the empty repo emits null synchronously, so by the time
+        // the constructor returns the state has deterministically settled on NotFound.
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "1")
-        // Initial state is Loading, but it might transition immediately with UnconfinedTestDispatcher
-        // if the repository is already seeded or if it emits synchronously.
-        // In this test, repo is empty, so it might transition to NotFound immediately.
-        val state = vm.uiState.value
-        assertTrue(state is PostingEditUiState.Loading || state is PostingEditUiState.NotFound)
+        assertIs<PostingEditUiState.NotFound>(vm.uiState.value)
     }
 
     @Test
