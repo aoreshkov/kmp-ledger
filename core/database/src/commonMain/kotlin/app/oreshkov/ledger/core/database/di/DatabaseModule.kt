@@ -19,6 +19,12 @@ class DatabaseModule {
         builder
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
+            // Pre-release migration posture: with no Migration objects defined, the first
+            // `version` bump would otherwise crash at open on every platform. While the app
+            // is pre-release and ships no data worth preserving, drop and recreate on any
+            // unrecognized schema. Before shipping real user data, replace this with explicit
+            // `Migration` objects (and a CI check that the exported schema changed on bump).
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
 
     @Single
