@@ -1,5 +1,6 @@
 package app.oreshkov.ledger.core.domain
 
+import app.oreshkov.ledger.core.common.result.runCatchingCancellable
 import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
@@ -13,7 +14,7 @@ class SavePostingUseCase(
     suspend operator fun invoke(
         id: String?,
         narrative: String
-    ): Result<Unit> = runCatching {
+    ): Result<Unit> = runCatchingCancellable {
         require(narrative.isNotBlank()) { "Narrative cannot be blank" }
 
         if (id == null) {

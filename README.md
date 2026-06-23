@@ -102,7 +102,7 @@ Supporting modules (no layer dependency):
 | `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. |
 | `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers. |
 | `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`). Each wraps a repository call with a single responsibility. |
-| `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension, plus `AppDispatchers` interface and `DispatcherModule` Koin binding. |
+| `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension, the `runCatchingCancellable` cancellation-safe result helper, plus `AppDispatchers` interface and `DispatcherModule` Koin binding. |
 | `core:compose` | Shared Compose components used across feature modules (e.g. `LabeledField`). |
 | `core:navigation` | `Navigator` (backstack wrapper) and `StartDestination` value class. Framework-agnostic. |
 | `core:ui` | Root `App` composable, Material 3 theme, `NavDisplay` wiring. |
@@ -121,7 +121,7 @@ Supporting modules (no layer dependency):
 Rather than duplicating Gradle configuration across modules, all shared setup lives in three composable convention plugins:
 
 ```
-ledger.kotlin.multiplatform          → KMP + Android library targets, JVM 17, kotlin-test
+ledger.kotlin.multiplatform          → KMP + Android library targets, JVM 21, kotlin-test
   └─ (applied automatically)          → + JetBrains Kover (code coverage)
   └─ ledger.kotlin.multiplatform.koin     → + Koin core, annotations, and compiler plugin
        └─ ledger.kotlin.multiplatform.koin.compose  → + Compose, resources, ui-test, core:test
@@ -318,7 +318,7 @@ A separate `instrumented-tests` job runs the Android smoke suite on a **Gradle M
 ### Prerequisites
 
 - Android Studio Meerkat or newer
-- JDK 17+
+- JDK 21+
 
 ### Run on Android
 

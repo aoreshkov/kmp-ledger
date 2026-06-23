@@ -2,6 +2,7 @@ package app.oreshkov.ledger.feature.posting.impl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.oreshkov.ledger.core.common.result.runCatchingCancellable
 import app.oreshkov.ledger.core.domain.GetPostingUseCase
 import app.oreshkov.ledger.core.domain.SavePostingUseCase
 import kotlinx.coroutines.channels.Channel
@@ -62,7 +63,7 @@ class PostingEditViewModel(
             // One-shot snapshot to seed the form. Using first() lets the underlying
             // Room flow complete so the coroutine ends — retry() can no longer stack
             // additional, never-completing collectors on top of each other.
-            _uiState.value = runCatching { getPostingUseCase(postingId).first() }.fold(
+            _uiState.value = runCatchingCancellable { getPostingUseCase(postingId).first() }.fold(
                 onSuccess = { posting ->
                     if (posting != null) {
                         PostingEditUiState.Editing(
