@@ -73,7 +73,7 @@ Uses Navigation 3 (`androidx.navigation3`). Screens are registered as Koin entri
 ### Convention Plugins (build-logic)
 
 Three composable Gradle plugins — modules declare one of these instead of configuring targets manually:
-- `ledger.kotlin.multiplatform` — base KMP, JVM 17, kotlin-test, Kover
+- `ledger.kotlin.multiplatform` — base KMP, JVM 21, kotlin-test, Kover
 - `ledger.kotlin.multiplatform.koin` — adds Koin core, annotations, compiler plugin
 - `ledger.kotlin.multiplatform.koin.compose` — adds Compose Multiplatform, resources, UI test, `core:test` dependency
 
