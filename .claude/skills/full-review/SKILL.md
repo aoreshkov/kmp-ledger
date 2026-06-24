@@ -1,6 +1,6 @@
 ---
 name: full-review
-description: Orchestrate a full exhaustive review of the entire project from 9 senior specialist subagents, dispatched in waves of 3, then synthesize one prioritized report. Read-only — makes no code changes. Do not invoke automatically.
+description: Orchestrate a full exhaustive review of the entire project from 9 senior specialist subagents, dispatched in three parallel waves, then synthesize one prioritized report. Makes no code changes (each subagent may persist notes to its own project memory). Do not invoke automatically.
 disable-model-invocation: true
 allowed-tools: Read, Grep, Glob, Bash, Agent
 ---
@@ -21,9 +21,12 @@ This skill makes **no code changes** — it reviews and reports only.
 9. `build-ci` — convention plugins, version catalog, Kover wiring, CI
 
 ## Why waves
-Official guidance: 3–5 concurrent reviewers is the sweet spot; beyond that you
-spend more time merging summaries than you save. So dispatch in **three waves
-of three**, each wave in parallel, and synthesize after all nine return.
+Dispatching all nine at once floods the synthesis step with summaries to merge.
+As a project convention we run **three waves of three**, each wave in parallel,
+and synthesize after all nine return — this keeps each merge tractable. The
+official docs recommend spawning multiple subagents for independent work but set
+no fixed concurrency limit, so this 3×3 split is our own tuning, not a documented
+rule.
 
 ## Steps
 
