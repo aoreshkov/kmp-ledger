@@ -23,5 +23,7 @@ kmp-ledger is a **local-first**, offline ledger app (Android/iOS/Desktop). No ne
 - Dependencies in `libs.versions.toml` are current/mainstream; some alphas/betas/rc (Room 3 rc01, material3 alpha07) — intentional, pinned, not abandoned.
 
 ## Open items
-- `androidApp/src/main/AndroidManifest.xml:5` `android:allowBackup="true"` (default). Lets the ledger DB be extracted via `adb backup` / cloud backup on a debuggable or rooted device. Low severity for a local ledger but the cheap fix is `allowBackup="false"` or a `dataExtractionRules`/`fullBackupContent` allowlist. Revisit if financial amounts/PII get added to the model.
 - Desktop `logback.xml` root level is `debug` — fine now (nothing sensitive logged), but if narrative/financial data ever gets logged, raise to `info` for release.
+
+## Resolved
+- Android backup (was open 2026-06-23): now `android:allowBackup="false"` + `dataExtractionRules`/`fullBackupContent` allowlists in `res/xml/data_extraction_rules.xml` + `backup_rules.xml`, both excluding all domains (cloud-backup + device-transfer). Ledger DB can no longer leave the sandbox via backup/transfer. Verified 2026-06-24.

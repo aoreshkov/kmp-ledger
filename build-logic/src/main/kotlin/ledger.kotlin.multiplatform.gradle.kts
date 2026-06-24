@@ -43,7 +43,6 @@ kover {
                     "*\$\$serializer",
                     "*.generated.resources.*",
                     "*.compose.resources.*",
-                    "*_HiltModules*",
                     "*.di.*",
                 )
                 annotatedBy("androidx.compose.ui.tooling.preview.Preview")

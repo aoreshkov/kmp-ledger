@@ -23,8 +23,14 @@ into feature logic — that would be a real leak. The clean alternative (a separ
 DI-only module that composes data+domain bindings) is an Optional refactor, not a
 correctness issue.
 
-Verified clean as of review on 2026-06-23: entities (`PostingEntity`) confined to
-core:database + core:data mappers; use cases each wrap one repository method;
-core:model is pure (no framework deps); core:ui reaches features only via runtime
-Koin `koinEntryProvider`, not a compile dependency; `postingNavigationModule` DSL
-wired only by platform apps + iosExport. See [[no-coauthored-by-trailer]] for commit conventions.
+Verified clean as of review on 2026-06-24 (re-confirmed; no change since 2026-06-23):
+entities (`PostingEntity`) confined to core:database + core:data mappers; use cases
+each wrap one repository method; core:model is pure (no framework deps); core:ui
+reaches features only via runtime Koin, not a compile dependency;
+`postingNavigationModule` DSL wired only by platform apps + iosExport. See
+[[no-coauthored-by-trailer]] for commit conventions.
+
+NOTE on `SavePostingUseCase`: it branches between `repository.insertPosting` and
+`repository.updatePosting` on null id. This is NOT a "one use case wraps one repo
+method" violation — its single primary action is "persist a posting"; insert-vs-update
+is the same logical operation keyed on id presence. Do not flag it.

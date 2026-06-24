@@ -96,5 +96,5 @@ Three composable Gradle plugins — modules declare one of these instead of conf
 - Database entities live in `core:database`, never elsewhere.
 - Room migration posture (pre-release): `DatabaseModule.provideDatabase` uses `.fallbackToDestructiveMigration(dropAllTables = true)`, so bumping the `@Database` `version` on `LedgerDatabase` **drops and recreates all data**. Before shipping real user data, replace this with explicit `Migration` objects plus a CI check that the exported schema dir changed on the version bump.
 - Use cases in `core:domain` each take exactly one repository method as their primary action.
-- Kover excludes generated classes automatically: `*ComposableSingletons*`, `*_Factory`, `*$serializer`, `*.generated.resources.*`, `@Preview`-annotated methods.
+- Kover excludes generated classes automatically: `*ComposableSingletons*`, `*_Factory`, `*$serializer`, `*.generated.resources.*`, `*.compose.resources.*`, `@Preview`-annotated methods. It also excludes `*.di.*` packages — DI wiring is validated by Koin `verify()`, not by execution, so it stays out of coverage.
 - iOS entry point (`iosExport`) uses Swift Export (experimental, direct Kotlin→Swift, no Objective-C bridging). Swift calls `initializeKoin()` before `MainViewController`.

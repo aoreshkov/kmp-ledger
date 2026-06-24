@@ -19,6 +19,8 @@ Navigation 3 wiring in this repo:
   judging whether a Channel-driven nav event could over-pop.
 
 **Why:** baseline so future reviews don't re-derive the topology each time.
-**How to apply:** check App.kt host first for per-recomposition allocations
-(entryProvider/decorators/sceneStrategies were allocated unremembered as of the
-2026-06 review — minor, NavDisplay tolerates it but remembering is cheaper).
+**How to apply:** check App.kt host first for per-recomposition allocations.
+As of the 2026-06-24 review the sceneStrategies and decorator lists ARE now
+remembered (commit 8a13107); the decorators/strategy are created via their
+`remember*` composables and the wrapping `listOf(...)` is `remember`-keyed on
+them. So the prior "unremembered" note is resolved — don't re-flag it.

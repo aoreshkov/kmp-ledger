@@ -37,7 +37,6 @@ kover {
                     "*\$\$serializer",
                     "*.generated.resources.*",
                     "*.compose.resources.*",
-                    "*_HiltModules*",
                     // DI wiring lives in *.di packages; validated by Koin verify(),
                     // not by execution — exclude so coverage reflects real logic.
                     "*.di.*"

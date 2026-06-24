@@ -34,4 +34,6 @@ Note: DomainModule is included by both DataModule and PostingModule. Koin annota
 - iosExport/MainViewController.kt `initializeKoin()` called from iosApp.swift.
 All three additionally load `postingNavigationModule`.
 
-**Compile-time validation:** Koin compiler plugin checks the annotated graph. `feature/posting/impl/src/jvmTest/.../KoinModuleTest.kt` runs `.verify()` on PostingModule and postingNavigationModule, declaring the String injected params.
+**Compile-time validation:** Koin compiler plugin checks the annotated graph. Two runtime `.verify()` tests back it:
+- `feature/posting/impl/src/jvmTest/.../KoinModuleTest.kt` — verifies `PostingModule().module()` and `postingNavigationModule`, declaring the String injected params.
+- `core/bootstrap/src/jvmTest/.../KoinModuleVerificationTest.kt` — verifies the full `BootstrapModule().module()` (whole root graph).

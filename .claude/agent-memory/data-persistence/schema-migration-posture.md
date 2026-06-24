@@ -1,6 +1,6 @@
 ---
 name: schema-migration-posture
-description: Room schema export is configured; database is at version 1 with no migrations and no destructive-migration fallback
+description: Room schema export is on; DB at version 1 with a documented destructive-migration fallback (no Migration objects yet)
 metadata:
   type: project
 ---
@@ -9,16 +9,19 @@ Room schema export is enabled in `core:database/build.gradle.kts` via
 `room3 { schemaDirectory("$projectDir/schemas") }`, and `schemas/.../1.json`
 is committed. The DB (`LedgerDatabase`) is at `version = 1`.
 
-There are NO `Migration` objects and NO `fallbackToDestructiveMigration*`
-call on any platform builder (Android/iOS/JVM all just
-`Room.databaseBuilder(...)` -> `DatabaseModule.provideDatabase` adds
-`BundledSQLiteDriver` + `setQueryCoroutineContext`).
+As of commit e227f08, `DatabaseModule.provideDatabase` calls
+`.fallbackToDestructiveMigration(dropAllTables = true)` with a comment
+documenting the pre-release rationale. There are still NO `Migration`
+objects. So a `version` bump no longer crashes at open — it DROPS AND
+RECREATES all tables (data loss), which is acceptable only pre-release.
 
-**Why:** Only one entity (`PostingEntity`: id, narrative), schema has never
-changed, so the gap is latent, not active.
+**Why:** Pre-release, single entity (`PostingEntity`: id, narrative), no
+real user data to preserve. Destructive fallback avoids a crash-on-open
+while migrations are deferred.
 
-**How to apply:** The first time `PostingEntity`/`LedgerDatabase` schema
-changes and `version` is bumped, a migration OR an explicit destructive
-fallback MUST be added, or the app crashes at runtime
-(`IllegalStateException: A migration from N to M was required but not found`).
-Flag this on any entity/schema change review. See [[insert-conflict-strategy]].
+**How to apply:** Before shipping real user data, the destructive fallback
+MUST be replaced with explicit `Migration` objects plus a CI check that the
+exported schema dir changed on the version bump (per CLAUDE.md "Module
+Conventions"). On any entity/schema change review, confirm the team still
+intends destructive behavior; flag it as data loss otherwise.
+See [[insert-conflict-strategy]].
