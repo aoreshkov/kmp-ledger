@@ -35,8 +35,8 @@ android {
         applicationId = "app.oreshkov.ledger"
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.target.get().toInt()
-        versionCode = project.property("ledger.version.code").toString().toInt()
-        versionName = project.property("ledger.version.name").toString()
+        versionCode = providers.gradleProperty("ledger.version.code").get().toInt()
+        versionName = providers.gradleProperty("ledger.version.name").get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {

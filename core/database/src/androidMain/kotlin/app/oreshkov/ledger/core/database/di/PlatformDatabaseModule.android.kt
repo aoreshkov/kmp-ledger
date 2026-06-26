@@ -13,9 +13,10 @@ actual class PlatformDatabaseModule {
 
     @Single
     fun provideRoomBuilder(@Provided context: Context): RoomDatabase.Builder<LedgerDatabase> {
-        val dbFile = context.getDatabasePath("ledger.db")
+        val appContext = context.applicationContext
+        val dbFile = appContext.getDatabasePath("ledger.db")
         return Room.databaseBuilder<LedgerDatabase>(
-            context = context,
+            context = appContext,
             name = dbFile.absolutePath
         )
     }

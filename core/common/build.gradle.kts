@@ -21,8 +21,7 @@ kotlin {
             implementation(libs.logback.classic)
         }
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
-            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.bundles.common.test)
         }
     }
 }

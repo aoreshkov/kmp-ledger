@@ -31,7 +31,7 @@ kotlinx-binary-compatibility-validator = "0.18.1"
 kermit = "2.1.0"
 slf4j = "2.0.18"
 slf4j-android = "2.0.17-0"
-logback = "1.5.35"
+logback = "1.5.36"
 
 # Test
 androidx-test-core = "1.7.0"
@@ -85,7 +85,7 @@ koin-gradle-plugin = { module = "io.insert-koin.compiler.plugin:io.insert-koin.c
 # Room & SQLite
 room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "androidx-room" }
 room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "androidx-room" }
-room3-sqlite-wrapper = { module = "androidx.room3:room3-sqlite-wrapper", version.ref = "androidx-sqlite" }
+room3-sqlite-wrapper = { module = "androidx.room3:room3-sqlite-wrapper", version.ref = "androidx-room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
 sqlite-bundled-jvm = { module = "androidx.sqlite:sqlite-bundled-jvm", version.ref = "androidx-sqlite" }
 
@@ -105,6 +105,10 @@ androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "a
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso-core" }
 junit = { module = "junit:junit", version.ref = "junit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+[bundles]
+# Paired in every commonTest source set across the base-KMP modules.
+common-test = ["kotlin-test", "kotlinx-coroutines-test"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

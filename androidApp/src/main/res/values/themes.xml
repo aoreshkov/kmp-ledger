@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Launch-window theme only (the brief window shown before Compose paints).
+        Light variant here; res/values-night/themes.xml supplies the dark variant
+        so the launch window follows the system setting and avoids a white flash
+        in dark mode. minSdk 24 + no AppCompat, so the framework DayNight theme
+        (API 29) is not usable — a values/values-night pair is used instead.
+        In-app theming is handled by Compose.
+    -->
+    <style name="Theme.Ledger" parent="@android:style/Theme.Material.Light.NoActionBar" />
+</resources>

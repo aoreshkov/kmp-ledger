@@ -34,8 +34,7 @@ kotlin {
             implementation(project(":core:database"))
         }
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
-            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.bundles.common.test)
             implementation(project(":core:test"))
         }
     }

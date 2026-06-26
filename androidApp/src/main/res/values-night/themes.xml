@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark variant of the launch-window theme. See res/values/themes.xml. -->
+    <style name="Theme.Ledger" parent="@android:style/Theme.Material.NoActionBar" />
+</resources>
