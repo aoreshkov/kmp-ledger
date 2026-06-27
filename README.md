@@ -410,7 +410,7 @@ To release a new version:
    ```
 6. The GitHub Release workflow will automatically build the binaries and create a GitHub Release with the changelog notes.
 
-> **Note:** The release workflow includes a `verify-version` job that fails immediately if the pushed tag does not match `ledger.version.name` in `gradle.properties`. It also generates a `SHA256SUMS` file attached to the release and publishes a [SLSA build provenance attestation](https://slsa.dev) via `actions/attest-build-provenance`.
+> **Note:** The release workflow includes a `verify-version` job that fails immediately if the pushed tag does not match `ledger.version.name` in `gradle.properties`. It also generates a `SHA256SUMS` file attached to the release and publishes a [SLSA build provenance attestation](https://slsa.dev) via `actions/attest`.
 
 ### Android release signing
 
