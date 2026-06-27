@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-06-27
+
+### Added
+- Added `runCatchingCancellable`, a cancellation-safe `Result` wrapper in `core:common` that rethrows `CancellationException`.
+- Added delete-failure feedback on the posting details screen via a `deleteFailedEvent` snackbar and the `posting_details_delete_failed` string.
+- Added a per-module Kover coverage rule for `feature:posting:impl` (line 90 / branch 60).
+- Added a `common-test` version-catalog bundle for shared test dependencies.
+
+### Changed
+- Migrated use cases and `PostingEditViewModel` from stdlib `runCatching` to `runCatchingCancellable` for cancellation safety.
+- Raised the Android and Desktop JVM/Java target from 17 to 21.
+- Memoized the Navigation decorator and scene-strategy lists in `App.kt` to avoid per-recomposition reallocation.
+- Switched the database to `fallbackToDestructiveMigration(dropAllTables = true)` to make the pre-release migration posture explicit.
+- Read the project version via `providers.gradleProperty(...)` instead of `project.property(...)` in build scripts.
+- Enabled Gradle parallel builds (`org.gradle.parallel=true`).
+- Upgraded Logback to 1.5.37.
+- Upgraded the Gradle wrapper to 9.6.1.
+- Set `persist-credentials: false` on all CI checkouts and switched provenance to `actions/attest` v4.1.1.
+
+### Fixed
+- Fixed the Android Room builder to use `applicationContext`, avoiding a potential Activity/Context leak.
+- Corrected `room3-sqlite-wrapper` to reference the `androidx-room` version instead of the wrong `androidx-sqlite` ref.
+
 ## [1.2.0] - 2026-06-21
 
 ### Added
@@ -71,7 +94,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.0.0...v1.1.0
