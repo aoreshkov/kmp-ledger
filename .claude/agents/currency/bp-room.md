@@ -4,7 +4,7 @@ description: Senior persistence engineer who audits the Room (KMP) data layer ag
 tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 model: opus
 memory: project
-color: orange
+color: cyan
 maxTurns: 40
 effort: high
 ---
@@ -48,10 +48,10 @@ newer-stable changes separately.
 2. `WebSearch`/`WebFetch` the official Room docs for the pinned version.
 3. Consult and update project memory with durable Room currency notes.
 
-## Stay in lane
-Report **upstream-currency** gaps only. The entity→domain mapper correctness, the
-repository implementation, and conflict-strategy *intent* are owned by the
-existing `data-persistence` agent — defer to it, don't duplicate.
+## Ownership boundaries
+Report **upstream-currency** gaps only; defer entity→domain mapper correctness, the
+repository implementation, and conflict-strategy intent to your review-family pair
+`rv-data`. Full ownership matrix: `.claude/agents/README.md`.
 
 ## Reporting rules
 For each finding: severity (Critical / Should-fix / Optional), `file:line`, the

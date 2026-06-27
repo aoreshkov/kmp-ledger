@@ -20,4 +20,4 @@ State of the kmp-ledger Gradle build vs upstream best practice (verified 2026-06
 
 Open optional (perf/idiom, not correctness): `org.gradle.parallel=true` absent (perf doc recommends it for multi-project builds); no catalog `[bundles]` (compose-ui set, test set are candidates); `androidApp` uses `project.property(...)` where `providers.gradleProperty(...)` is the lazier idiom.
 
-Internal-correctness items (defer to build-ci): duplicated Kover exclude lists between root `build.gradle.kts` and the base convention plugin.
+Internal-correctness items (defer to rv-build): duplicated Kover exclude lists between root `build.gradle.kts` and the base convention plugin.

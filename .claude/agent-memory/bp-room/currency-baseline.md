@@ -32,4 +32,4 @@ Entity is intentionally minimal (id + narrative) — see user memory [[posting-e
 `SELECT *` in PostingDao is fine because the DAO returns the full (2-col) entity.
 
 Conflict-strategy intent, mapper correctness, repository impl are owned by the
-`data-persistence` agent — defer those, don't duplicate.
+`rv-data` agent — defer those, don't duplicate.

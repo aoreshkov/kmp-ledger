@@ -1,5 +1,5 @@
 ---
-name: data-persistence
+name: rv-data
 description: Senior data/persistence engineer. Reviews Room DAOs, entity/domain mappers, the repository implementation, and platform database builders. Review-only: proposes fixes, makes no code edits; persists notes to its project memory.
 tools: Read, Grep, Glob, Bash
 model: opus
@@ -40,6 +40,11 @@ the `PostingRepository` implementation, and platform database builders.
 3. Cross-check the `FakePostingRepository` in `core:test` matches the real
    repository contract.
 4. Consult and update your project memory with persistence gotchas.
+
+## Ownership boundaries
+This is the project-rules / correctness lens. Upstream-currency for this domain is the
+job of the matching `bp-*` agent (`bp-room`). Full ownership matrix:
+`.claude/agents/README.md`.
 
 ## Reporting rules
 Report ONLY gaps that affect correctness (lost fields, wrong queries, missing

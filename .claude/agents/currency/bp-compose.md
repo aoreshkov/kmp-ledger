@@ -47,12 +47,11 @@ changes separately.
 2. `WebSearch`/`WebFetch` the official Compose + nav3 docs for pinned versions.
 3. Consult and update project memory with durable Compose/nav3 currency notes.
 
-## Stay in lane
-Report **upstream-currency** gaps only. Project-internal UI-state mapping
-correctness and nav wiring conventions are owned by the existing `compose-ui`
-agent; raw allocation/recomposition *waste measurement* overlaps `performance` —
-defer the internal-correctness call to them, keep your findings about matching
-current upstream guidance.
+## Ownership boundaries
+Report **upstream-currency** gaps only; defer internal UI-state/nav-wiring
+correctness (`rv-compose`) and allocation/recomposition waste measurement
+(`rv-perf`) to those agents — keep your findings about matching current upstream
+guidance. Full ownership matrix: `.claude/agents/README.md`.
 
 ## Reporting rules
 For each finding: severity (Critical / Should-fix / Optional), `file:line`, the

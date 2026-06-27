@@ -3,7 +3,7 @@ name: audit-claude-config
 description: Audit this project's `.claude/` subagents, skills, and hooks against the LATEST official Claude Code docs, then present a dated best-practices report inline. Researches current guidance live (does not rely on memory). Read-then-offer — proposes fixes but does not apply them without confirmation. Do not invoke automatically.
 disable-model-invocation: true
 argument-hint: "[optional: extra focus, e.g. 'skills only' or 'check new fields']"
-allowed-tools: Read, Grep, Glob, Bash, Agent, Write, Edit
+allowed-tools: Read, Grep, Glob, Bash(git ls-files*), Bash(git status*), Agent, Write, Edit
 ---
 
 ## Today
@@ -24,8 +24,9 @@ user explicitly asks where to save it.
 ### 1. Inventory the local config
 
 Enumerate and read what exists today:
-- `git ls-files '.claude/agents/*.md' '.claude/skills/*/SKILL.md'` (plus untracked:
-  `Glob .claude/agents/** ` and `.claude/skills/**`).
+- `git ls-files '.claude/agents/**/*.md' '.claude/skills/*/SKILL.md'` (agents live in
+  family subfolders `agents/review/` and `agents/currency/`, so recurse; plus untracked:
+  `Glob .claude/agents/**` and `.claude/skills/**`).
 - Read every agent and skill file. Record each one's frontmatter fields and values
   (`name`, `description`, `tools`, `model`, `memory`, `color`, `maxTurns`, `effort`,
   `allowed-tools`, `disable-model-invocation`, `context`, `argument-hint`,

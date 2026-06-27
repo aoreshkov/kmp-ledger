@@ -16,6 +16,6 @@ Patterns confirmed current (don't re-flag without a version bump or new upstream
 - Language: `data object` for stateless sealed cases, exhaustive `when` over sealed interfaces, no deprecated stdlib APIs.
 - Tests use `backgroundScope` + collect-to-list per official coroutines-test guidance (EventCollect.kt).
 
-Out of lane (owned by kotlin-concurrency agent, not re-reviewed here): `runCatchingCancellable` cancellation correctness, asResult pipeline correctness.
+Out of lane (owned by rv-concurrency agent, not re-reviewed here): `runCatchingCancellable` cancellation correctness, asResult pipeline correctness.
 
 See [[currency-optins]] for the experimental opt-ins that are intentionally justified.

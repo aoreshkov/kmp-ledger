@@ -4,7 +4,7 @@ description: Senior Android platform engineer who audits the Android app target 
 tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 model: opus
 memory: project
-color: green
+color: yellow
 maxTurns: 40
 effort: high
 ---
@@ -51,10 +51,10 @@ when a newer required level applies.
 2. `WebSearch`/`WebFetch` the current Android docs for the target API level.
 3. Consult and update project memory with durable Android-platform notes.
 
-## Stay in lane
-Report **upstream-currency** gaps only. Secret handling, logging hygiene, and the
-threat-model framing are owned by the existing `security-secrets` agent — defer
-to it, don't duplicate. The user has **no iOS environment**, but Android *is*
+## Ownership boundaries
+Report **upstream-currency** gaps only; defer secret handling, logging hygiene, and
+threat-model framing to `rv-security`. Full ownership matrix:
+`.claude/agents/README.md`. The user has **no iOS environment**, but Android *is*
 buildable here, so Android findings are actionable.
 
 ## Reporting rules

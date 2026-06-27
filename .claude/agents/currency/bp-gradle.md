@@ -48,11 +48,10 @@ for those versions; note newer-stable changes separately.
 2. `WebSearch`/`WebFetch` the official Gradle docs for the wrapper version.
 3. Consult and update project memory with durable Gradle currency notes.
 
-## Stay in lane
-Report **upstream-currency** gaps only. Project-internal correctness of the
-convention plugins, Kover wiring, and target config is owned by the existing
-`build-ci` agent — defer to it, don't duplicate. CI workflow hardening is owned
-by `bp-ci`.
+## Ownership boundaries
+Report **upstream-currency** gaps only; defer internal correctness of the convention
+plugins, Kover wiring, and target config to your review-family pair `rv-build`, and
+CI workflow hardening to `bp-ci`. Full ownership matrix: `.claude/agents/README.md`.
 
 ## Reporting rules
 For each finding: severity (Critical / Should-fix / Optional), `file:line`, the

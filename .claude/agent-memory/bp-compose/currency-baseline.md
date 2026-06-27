@@ -22,7 +22,7 @@ reviews can confirm-fast instead of re-deriving:
 - `sceneStrategies` takes `List<SceneStrategy>` since 1.1.0-alpha05. App.kt passes
   a remembered `listOf(listDetailStrategy)` — correct.
 - sceneStrategies + decorator lists are remembered (commit 8a13107) — already
-  resolved, don't re-flag. See [[../compose-ui/nav3-wiring]] (other agent's note).
+  resolved, don't re-flag. See [[../rv-compose/nav3-wiring]] (other agent's note).
 - NEWER-STABLE watch (not findings, we are pinned to 1.1.3): nav3 1.2.0-alpha
   line adds `NavigationBackHandler` (1.2.0-alpha02) and deep-link support
   (1.2.0-alpha03). Revisit if the project bumps off 1.1.x.
@@ -40,7 +40,7 @@ reviews can confirm-fast instead of re-deriving:
 
 **Deferred (out of bp-compose lane):** PostingEditScreen.kt uses
 `LaunchedEffect(saveError-boolean)` to show a snackbar while the two other events
-use Channels. Event-modeling correctness is owned by the compose-ui agent, not a
+use Channels. Event-modeling correctness is owned by the `rv-compose` agent, not a
 deprecated-upstream pattern — don't report as a currency gap.
 
 **Source:** developer.android.com/jetpack/androidx/releases/navigation3

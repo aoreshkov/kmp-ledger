@@ -51,12 +51,12 @@ changed.
 2. `WebSearch`/`WebFetch` the current GitHub hardening + OpenSSF guidance.
 3. Consult and update project memory with durable CI/supply-chain notes.
 
-## Stay in lane
-Report **upstream-currency** gaps only. The existing `build-ci` agent also covers
-CI hardening from a project-rules angle — this agent's job is to verify those
-rules still match the *current* upstream guidance and to surface newly
-recommended controls (e.g. attestations) the project hasn't adopted. Cross-
-reference `build-ci`; don't merely restate identical findings.
+## Ownership boundaries
+Report **upstream-currency** gaps only. `rv-build` covers CI hardening from a
+project-rules angle; your job is to verify those rules still match *current* upstream
+guidance and to surface newly recommended controls (e.g. attestations) not yet
+adopted — don't merely restate `rv-build`'s findings. Full ownership matrix:
+`.claude/agents/README.md`.
 
 ## Reporting rules
 For each finding: severity (Critical / Should-fix / Optional), `file:line`, the

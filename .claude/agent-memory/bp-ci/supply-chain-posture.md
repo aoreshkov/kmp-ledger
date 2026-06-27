@@ -19,6 +19,6 @@ Snapshot of `.github/workflows/` CI/supply-chain posture as audited 2026-06-26 a
 - `persist-credentials: false` is set on every checkout in release.yml but NOT in build.yml or dependency-review.yml. Recommended by actions/checkout README. Low risk (token is contents:read there).
 - No SBOM attestation (`actions/attest-sbom`) to complement build-provenance for fuller SLSA coverage.
 
-**Why:** This agent (bp-ci currency lens) verifies the project's CI rules still match *current* upstream guidance and surfaces newly-recommended controls. Cross-references the `build-ci` agent which covers the same files from a project-rules angle.
+**Why:** This agent (bp-ci currency lens) verifies the project's CI rules still match *current* upstream guidance and surfaces newly-recommended controls. Cross-references the `rv-build` agent which covers the same files from a project-rules angle.
 
 **How to apply:** When re-auditing, re-verify action major versions are still current (checkout v7, setup-java v5, upload-artifact v7, download-artifact v8, dependency-review v5, attest-build-provenance v4 as of this snapshot) and that no new mandatory control has shipped. Trust current file state over this snapshot if they diverge.

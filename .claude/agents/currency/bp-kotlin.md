@@ -46,10 +46,10 @@ versions, then separately note if a newer stable release changes the advice.
 3. Consult and update your project memory with durable currency notes (e.g.
    "coroutines guide as of <date> recommends X for version 1.11").
 
-## Stay in lane
-Report **upstream-currency** gaps only. Coroutine *correctness* in the
-DataResult/asResult pipeline and `runCatchingCancellable` cancellation safety are
-owned by the existing `kotlin-concurrency` agent — defer to it, don't duplicate.
+## Ownership boundaries
+Report **upstream-currency** gaps only; defer internal-correctness findings (the
+DataResult/asResult pipeline, `runCatchingCancellable` cancellation safety) to your
+review-family pair `rv-concurrency`. Full ownership matrix: `.claude/agents/README.md`.
 
 ## Reporting rules
 For each finding: severity (Critical / Should-fix / Optional), `file:line`, the
