@@ -11,9 +11,6 @@ runs:
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
-      with:
-        # Allow the new-version cache to be written even when a stale-version
-        # entry was restored (e.g. right after a Gradle wrapper bump). Without
-        # this, Windows save fails with "Path Validation Error" and never seeds
-        # the new cache, so the failure recurs every run.
-        cache-overwrite-existing: true
+      # The Windows "Path Validation Error" on cache save is fixed by pinning
+      # GRADLE_USER_HOME in the workflow env (build and cache action now share
+      # one same-drive path), not by cache-overwrite-existing.

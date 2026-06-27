@@ -17,6 +17,12 @@ concurrency:
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096M -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # Pin the Gradle user home to a workspace-relative path so the build and
+  # gradle/actions cache agree on one location. On Windows runners the default
+  # ~/.gradle lives on C: while the workspace is on D:, so setup-gradle looked
+  # for caches under D:\a\.gradle that the build never wrote there — every save
+  # failed with "Path Validation Error". A shared, same-drive path fixes it.
+  GRADLE_USER_HOME: ${{ github.workspace }}/.gradle
 
 jobs:
   changes:
