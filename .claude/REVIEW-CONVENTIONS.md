@@ -10,11 +10,11 @@ for the full agent roster and ownership matrix.
 
 ## Why waves
 Dispatching every specialist at once floods the synthesis step with summaries to
-merge. As a project convention we dispatch in **waves of three** (the final wave may
-be smaller), each wave in parallel, and synthesize only after all specialists
-return — this keeps each merge tractable. The official docs recommend spawning
-multiple subagents for independent work but set no fixed concurrency limit, so this
-split is our own tuning, not a documented rule.
+merge. As a project convention we dispatch in **small parallel waves (three to four)**
+each wave in parallel, and synthesize only after all specialists return — this keeps
+each merge tractable. The official docs recommend spawning multiple subagents for
+independent work but set no fixed concurrency limit, so this split is our own tuning,
+not a documented rule.
 
 ## Establish scope
 If the user passed arguments (a module path, "since last release", or a single
@@ -38,7 +38,19 @@ For each item keep: the owning specialist, `file:line`, the problem, the fix.
 De-duplicate overlapping findings (merge when two specialists flag the same thing).
 End with a short health/currency summary and the top 3 things to address first.
 
+### Cross-skill de-duplication
+When both lenses have run — either back-to-back or together under `/review-all` — a
+paired domain (see the matrix in `.claude/agents/README.md`) will often surface the
+same line twice: once from the `rv-*` agent and once from its `bp-*` pair. Merge these
+into a single entry. The lane split decides who owns the call:
+- the **`rv-*`** agent owns the **correctness / project-rules** verdict;
+- the **`bp-*`** agent owns the **currency** verdict and carries the **source URL +
+  version/date**.
+
+Keep both attributions on the merged item but state the issue once. Never list the same
+`file:line` problem as two separate findings.
+
 ## Offer next steps — do not edit
 Do not edit anything. Ask the user whether they want you to fix the Critical items,
-run the sibling review skill, run the bundled `/code-review` on a specific diff, or
-stop here.
+run the sibling review skill (`/review-house` ↔ `/review-currency`), run both at once
+with `/review-all`, run the bundled `/code-review` on a specific diff, or stop here.

@@ -24,31 +24,33 @@ defers the internal-correctness call to its review pair.
 |---|---|---|---|
 | Architecture / layering | `rv-arch` | — | yellow |
 | Kotlin + coroutines | `rv-concurrency` | `bp-kotlin` | purple |
-| KMP structure / Swift export | — | `bp-kmp` | pink |
+| KMP structure / Swift export | `rv-kmp` | `bp-kmp` | pink |
 | Compose + Navigation 3 | `rv-compose` | `bp-compose` | green |
 | Room / data layer | `rv-data` | `bp-room` | cyan |
 | Koin / DI | `rv-di` | `bp-koin` | orange |
 | Gradle / build | `rv-build` | `bp-gradle` | blue |
-| CI / supply chain | `rv-build` (CI part) | `bp-ci` | — |
+| CI / supply chain | `rv-ci` | `bp-ci` | red |
 | Android platform | — | `bp-android` | — |
-| Testing | `rv-testing` | — | — |
+| Testing | `rv-testing` | `bp-testing` | yellow |
 | Security | `rv-security` | — | — |
 | Performance | `rv-perf` | — | — |
 
 ## Color scheme
-A **paired domain shares one hue** (purple/green/cyan/orange/blue) so the pairing is
-visible at a glance in `/agents`. Single-family lenses use the remaining hues
-(red/yellow/pink) and may repeat among themselves — only the five pair hues signal a
-review↔currency pairing.
+A **paired domain shares one hue** so the pairing reads at a glance in `/agents`:
+purple (Kotlin), green (Compose), cyan (Room), orange (Koin), blue (Gradle), red (CI),
+pink (KMP), yellow (Testing). With eight paired domains the eight available hues are
+now fully consumed by pairs, so hue is **no longer a unique pairing signal** — the four
+remaining single-family agents (`rv-arch`, `rv-security`, `rv-perf`, `bp-android`)
+reuse hues, and **the matrix above is the authoritative source of pairing**, not the
+color. Treat the shared hue as a convenience, not a guarantee.
 
 ## Coverage asymmetry (deliberate — do not "fill the gaps" blindly)
-Some domains are single-family on purpose:
-- **`rv-`only** (`rv-arch`, `rv-testing`, `rv-security`, `rv-perf`): house-judgment /
-  correctness lenses with little fast-moving upstream "currency" to track. Android
-  privacy currency is covered by `bp-android`; Kotlin/coroutine currency by
-  `bp-kotlin`.
-- **`bp-`only** (`bp-kmp`, `bp-android`): structural-currency lenses whose
-  project-rules angle is already folded into `rv-arch` / `rv-build`.
+A few domains are single-family on purpose:
+- **`rv-`only** (`rv-arch`, `rv-security`, `rv-perf`): house-judgment / correctness
+  lenses with little fast-moving upstream "currency" to track. Android privacy
+  currency is covered by `bp-android`; Kotlin/coroutine currency by `bp-kotlin`.
+- **`bp-`only** (`bp-android`): a platform-currency lens whose project-rules angle is
+  already covered by `rv-arch` / `rv-ci`.
 
 Add a new agent only when a domain genuinely needs the *other* lens — not for symmetry
 alone.
