@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Concurrency layout as of 2026-06-23 review.
+Concurrency layout as of 2026-06-23 review; full re-verification 2026-06-28 found no drift (only kt commits since were Room-pin, delete-failure surfacing, and NavDisplay perf — none touched the async wiring below).
 
 - Dispatcher seam: `AppDispatchers` interface (io/default) in `core:common`, prod impl `DefaultAppDispatchers` wraps `Dispatchers.IO`/`Default`. Injected via Koin. Only legitimate `Dispatchers.` references in production are this seam plus `DatabaseModule.setQueryCoroutineContext(Dispatchers.IO)`.
 - Repository `OfflineFirstPostingRepository`: suspend writes wrapped in `withContext(dispatchers.io)`; read Flows use `.map {}.flowOn(dispatchers.io)`. This is the correct pattern — keep new repo methods consistent.

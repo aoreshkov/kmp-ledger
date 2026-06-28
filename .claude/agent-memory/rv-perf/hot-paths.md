@@ -14,7 +14,7 @@ kmp-ledger is a single-table (`postings`) local Room ledger. The only list query
 - `PostingListViewModel.uiState` — `flatMapLatest` + `asResult` + `map`, `stateIn(WhileSubscribed(5000))`. Sound.
 - `PostingListScreen` LazyColumn — uses `key = { it.id }`, `Posting` is a stable data class. Sound.
 
-**State as of 2026-06-23 review:** No N+1 (single table, no relations). Work placement
+**State as of 2026-06-28 review (re-verified, unchanged since 2026-06-23):** No N+1 (single table, no relations). Work placement
 correct (`flowOn`/`withContext(io)`). Flow sharing correct. The only scaling concern is the
 unbounded `getAllPostings()` query — fine for a personal local ledger, would need pagination
 (PagingSource) only if a user accumulates very large numbers of postings.

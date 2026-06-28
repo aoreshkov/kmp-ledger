@@ -23,7 +23,11 @@ kmp-ledger is a **local-first**, offline ledger app (Android/iOS/Desktop). No ne
 - Dependencies in `libs.versions.toml` are current/mainstream; some alphas/betas/rc (Room 3 rc01, material3 alpha07) — intentional, pinned, not abandoned.
 
 ## Open items
-- Desktop `logback.xml` root level is `debug` — fine now (nothing sensitive logged), but if narrative/financial data ever gets logged, raise to `info` for release.
+- None. Posture sound for a local-first ledger as of 2026-06-28.
 
 ## Resolved
 - Android backup (was open 2026-06-23): now `android:allowBackup="false"` + `dataExtractionRules`/`fullBackupContent` allowlists in `res/xml/data_extraction_rules.xml` + `backup_rules.xml`, both excluding all domains (cloud-backup + device-transfer). Ledger DB can no longer leave the sandbox via backup/transfer. Verified 2026-06-24.
+- Desktop `logback.xml` root level (was open 2026-06-23 at `debug`): now `<root level="info">` in `desktopApp/src/main/resources/logback.xml`. Verified 2026-06-28.
+
+## Re-verified 2026-06-28
+No source changes since baseline — commits since 2026-06-23 are CI/`.claude`/version-bump (1.3.0)/dep-bumps (logback 1.5.37, gradle wrapper 9.6.1) only. Data model still `Posting(id, narrative)`. `SavePostingUseCase` still `require(narrative.isNotBlank())`. No iOS `.entitlements` file exists (none needed — no capabilities requested). All findings re-confirmed against current files, not just memory.

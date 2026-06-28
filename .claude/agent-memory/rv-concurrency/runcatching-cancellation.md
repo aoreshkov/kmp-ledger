@@ -11,7 +11,7 @@ Resolution status (verified 2026-06-24): the codebase now has `runCatchingCancel
 - `SavePostingUseCase`, `DeletePostingUseCase` — use `runCatchingCancellable`.
 - `PostingEditViewModel.loadPosting()` — uses `runCatchingCancellable { getPostingUseCase(id).first() }`.
 
-No stdlib `runCatching` remains in suspend/coroutine code as of 2026-06-24.
+No stdlib `runCatching` remains in suspend/coroutine code as of 2026-06-24 (re-verified 2026-06-28; only remaining `runCatching` text is a doc comment in RunCatchingCancellable.kt and a comment in PostingEditViewModelTest).
 
 **Why:** structured concurrency relies on CancellationException propagating; swallowing it leaks work past viewModelScope cancellation and emits spurious Error states.
 **How to apply:** when reviewing NEW suspend code, flag any stdlib `runCatching` (Critical if around long-lived work, Should-fix otherwise) and point to `runCatchingCancellable`. The asResult Flow path is already cancellation-safe because `.catch` is a Flow operator (CancellationException is not delivered to it).
