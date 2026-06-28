@@ -65,10 +65,11 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
-      - name: Run tests and coverage
+      - name: Run tests, lint and coverage
+        # `check` aggregates the test tasks plus Android lint, so lint actually gates here.
         # koverVerify enforces the coverage floors defined in the root build.gradle.kts
         # (line/branch/instruction); a regression below them fails the build.
-        run: ./gradlew allTests koverXmlReport koverVerify
+        run: ./gradlew check koverXmlReport koverVerify
 
       - name: Publish test results
         if: always()

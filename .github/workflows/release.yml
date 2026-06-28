@@ -89,6 +89,9 @@ jobs:
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
+        with:
+          # Windows cache save fails with a Path Validation Error; disable to avoid noise.
+          cache-disabled: ${{ matrix.os == 'windows-latest' }}
 
       - name: Package Desktop App
         run: ./gradlew :desktopApp:packageDistributionForCurrentOS --no-configuration-cache
