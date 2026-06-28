@@ -1,0 +1,29 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:data>
+final class app.oreshkov.ledger.core.data.di/DataModule { // app.oreshkov.ledger.core.data.di/DataModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.data.di/DataModule.<init>|<init>(){}[0]
+
+    final fun providePostingRepository(app.oreshkov.ledger.core.database.dao/PostingDao, app.oreshkov.ledger.core.common.dispatcher/AppDispatchers): app.oreshkov.ledger.core.domain.repository/PostingRepository // app.oreshkov.ledger.core.data.di/DataModule.providePostingRepository|providePostingRepository(app.oreshkov.ledger.core.database.dao.PostingDao;app.oreshkov.ledger.core.common.dispatcher.AppDispatchers){}[0]
+}
+
+final class app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository : app.oreshkov.ledger.core.domain.repository/PostingRepository { // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository|null[0]
+    constructor <init>(app.oreshkov.ledger.core.database.dao/PostingDao, app.oreshkov.ledger.core.common.dispatcher/AppDispatchers) // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.<init>|<init>(app.oreshkov.ledger.core.database.dao.PostingDao;app.oreshkov.ledger.core.common.dispatcher.AppDispatchers){}[0]
+
+    final fun getAllPostings(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting>> // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.getAllPostings|getAllPostings(){}[0]
+    final fun getPostingById(kotlin/String): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.data/Posting?> // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.getPostingById|getPostingById(kotlin.String){}[0]
+    final suspend fun deletePosting(kotlin/String) // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.deletePosting|deletePosting(kotlin.String){}[0]
+    final suspend fun insertPosting(app.oreshkov.ledger.core.model.data/NewPosting) // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.insertPosting|insertPosting(app.oreshkov.ledger.core.model.data.NewPosting){}[0]
+    final suspend fun updatePosting(app.oreshkov.ledger.core.model.data/Posting) // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.updatePosting|updatePosting(app.oreshkov.ledger.core.model.data.Posting){}[0]
+}
+
+final fun (app.oreshkov.ledger.core.data.di/DataModule).app.oreshkov.ledger.core.data.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.data.di/module|module@app.oreshkov.ledger.core.data.di.DataModule(){}[0]
+final fun (app.oreshkov.ledger.core.database.model/PostingEntity).app.oreshkov.ledger.core.data.model/asExternalModel(): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.core.data.model/asExternalModel|asExternalModel@app.oreshkov.ledger.core.database.model.PostingEntity(){}[0]
+final fun (app.oreshkov.ledger.core.model.data/NewPosting).app.oreshkov.ledger.core.data.model/asEntity(): app.oreshkov.ledger.core.database.model/PostingEntity // app.oreshkov.ledger.core.data.model/asEntity|asEntity@app.oreshkov.ledger.core.model.data.NewPosting(){}[0]
+final fun (app.oreshkov.ledger.core.model.data/Posting).app.oreshkov.ledger.core.data.model/asEntity(): app.oreshkov.ledger.core.database.model/PostingEntity // app.oreshkov.ledger.core.data.model/asEntity|asEntity@app.oreshkov.ledger.core.model.data.Posting(){}[0]
+final fun org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_data_di_DataModule__providePostingRepository(app.oreshkov.ledger.core.domain.repository/PostingRepository) // org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_data_di_DataModule__providePostingRepository|moduledef_app_oreshkov_ledger_core_data_di_DataModule__providePostingRepository(app.oreshkov.ledger.core.domain.repository.PostingRepository){}[0]

@@ -1,0 +1,77 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:common>
+abstract interface app.oreshkov.ledger.core.common.dispatcher/AppDispatchers { // app.oreshkov.ledger.core.common.dispatcher/AppDispatchers|null[0]
+    abstract val default // app.oreshkov.ledger.core.common.dispatcher/AppDispatchers.default|{}default[0]
+        abstract fun <get-default>(): kotlinx.coroutines/CoroutineDispatcher // app.oreshkov.ledger.core.common.dispatcher/AppDispatchers.default.<get-default>|<get-default>(){}[0]
+    abstract val io // app.oreshkov.ledger.core.common.dispatcher/AppDispatchers.io|{}io[0]
+        abstract fun <get-io>(): kotlinx.coroutines/CoroutineDispatcher // app.oreshkov.ledger.core.common.dispatcher/AppDispatchers.io.<get-io>|<get-io>(){}[0]
+}
+
+sealed interface <#A: out kotlin/Any?> app.oreshkov.ledger.core.common.result/DataResult { // app.oreshkov.ledger.core.common.result/DataResult|null[0]
+    final class <#A1: kotlin/Any?> Success : app.oreshkov.ledger.core.common.result/DataResult<#A1> { // app.oreshkov.ledger.core.common.result/DataResult.Success|null[0]
+        constructor <init>(#A1) // app.oreshkov.ledger.core.common.result/DataResult.Success.<init>|<init>(1:0){}[0]
+
+        final val data // app.oreshkov.ledger.core.common.result/DataResult.Success.data|{}data[0]
+            final fun <get-data>(): #A1 // app.oreshkov.ledger.core.common.result/DataResult.Success.data.<get-data>|<get-data>(){}[0]
+
+        final fun component1(): #A1 // app.oreshkov.ledger.core.common.result/DataResult.Success.component1|component1(){}[0]
+        final fun copy(#A1 = ...): app.oreshkov.ledger.core.common.result/DataResult.Success<#A1> // app.oreshkov.ledger.core.common.result/DataResult.Success.copy|copy(1:0){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.common.result/DataResult.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.common.result/DataResult.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.core.common.result/DataResult.Success.toString|toString(){}[0]
+    }
+
+    final class Error : app.oreshkov.ledger.core.common.result/DataResult<kotlin/Nothing> { // app.oreshkov.ledger.core.common.result/DataResult.Error|null[0]
+        constructor <init>(kotlin/Throwable) // app.oreshkov.ledger.core.common.result/DataResult.Error.<init>|<init>(kotlin.Throwable){}[0]
+
+        final val exception // app.oreshkov.ledger.core.common.result/DataResult.Error.exception|{}exception[0]
+            final fun <get-exception>(): kotlin/Throwable // app.oreshkov.ledger.core.common.result/DataResult.Error.exception.<get-exception>|<get-exception>(){}[0]
+
+        final fun component1(): kotlin/Throwable // app.oreshkov.ledger.core.common.result/DataResult.Error.component1|component1(){}[0]
+        final fun copy(kotlin/Throwable = ...): app.oreshkov.ledger.core.common.result/DataResult.Error // app.oreshkov.ledger.core.common.result/DataResult.Error.copy|copy(kotlin.Throwable){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.common.result/DataResult.Error.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.common.result/DataResult.Error.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.core.common.result/DataResult.Error.toString|toString(){}[0]
+    }
+
+    final object Loading : app.oreshkov.ledger.core.common.result/DataResult<kotlin/Nothing> { // app.oreshkov.ledger.core.common.result/DataResult.Loading|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.common.result/DataResult.Loading.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.common.result/DataResult.Loading.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.core.common.result/DataResult.Loading.toString|toString(){}[0]
+    }
+}
+
+final class app.oreshkov.ledger.core.common.di/DispatcherModule { // app.oreshkov.ledger.core.common.di/DispatcherModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.common.di/DispatcherModule.<init>|<init>(){}[0]
+
+    final fun provideAppDispatchers(): app.oreshkov.ledger.core.common.dispatcher/AppDispatchers // app.oreshkov.ledger.core.common.di/DispatcherModule.provideAppDispatchers|provideAppDispatchers(){}[0]
+}
+
+final class app.oreshkov.ledger.core.common.di/LoggingModule { // app.oreshkov.ledger.core.common.di/LoggingModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.common.di/LoggingModule.<init>|<init>(){}[0]
+
+    final fun logger(): co.touchlab.kermit/Logger // app.oreshkov.ledger.core.common.di/LoggingModule.logger|logger(){}[0]
+}
+
+final class app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers : app.oreshkov.ledger.core.common.dispatcher/AppDispatchers { // app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers.<init>|<init>(){}[0]
+
+    final val default // app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers.default|{}default[0]
+        final fun <get-default>(): kotlinx.coroutines/CoroutineDispatcher // app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers.default.<get-default>|<get-default>(){}[0]
+    final val io // app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers.io|{}io[0]
+        final fun <get-io>(): kotlinx.coroutines/CoroutineDispatcher // app.oreshkov.ledger.core.common.dispatcher/DefaultAppDispatchers.io.<get-io>|<get-io>(){}[0]
+}
+
+final fun (app.oreshkov.ledger.core.common.di/DispatcherModule).app.oreshkov.ledger.core.common.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.common.di/module|module@app.oreshkov.ledger.core.common.di.DispatcherModule(){}[0]
+final fun (app.oreshkov.ledger.core.common.di/LoggingModule).app.oreshkov.ledger.core.common.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.common.di/module|module@app.oreshkov.ledger.core.common.di.LoggingModule(){}[0]
+final fun <#A: kotlin/Any?> (kotlinx.coroutines.flow/Flow<#A>).app.oreshkov.ledger.core.common.result/asResult(): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.common.result/DataResult<#A>> // app.oreshkov.ledger.core.common.result/asResult|asResult@kotlinx.coroutines.flow.Flow<0:0>(){0§<kotlin.Any?>}[0]
+final fun app.oreshkov.ledger.core.common.util/getPlatformLogWriters(): kotlin.collections/List<co.touchlab.kermit/LogWriter> // app.oreshkov.ledger.core.common.util/getPlatformLogWriters|getPlatformLogWriters(){}[0]
+final fun app.oreshkov.ledger.core.common.util/randomUuidString(): kotlin/String // app.oreshkov.ledger.core.common.util/randomUuidString|randomUuidString(){}[0]
+final fun org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_common_di_DispatcherModule__provideAppDispatchers(app.oreshkov.ledger.core.common.dispatcher/AppDispatchers) // org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_common_di_DispatcherModule__provideAppDispatchers|moduledef_app_oreshkov_ledger_core_common_di_DispatcherModule__provideAppDispatchers(app.oreshkov.ledger.core.common.dispatcher.AppDispatchers){}[0]
+final suspend inline fun <#A: kotlin/Any?> app.oreshkov.ledger.core.common.result/runCatchingCancellable(kotlin/Function0<#A>): kotlin/Result<#A> // app.oreshkov.ledger.core.common.result/runCatchingCancellable|runCatchingCancellable(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]

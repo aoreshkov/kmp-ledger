@@ -1,0 +1,45 @@
+public final class app/oreshkov/ledger/core/ui/AppKt {
+	public static final fun App (Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class app/oreshkov/ledger/core/ui/ComposableSingletons$AppKt {
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/ui/ComposableSingletons$AppKt;
+	public fun <init> ()V
+	public final fun getLambda$-2143290179$Ledger_core_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1212473848$Ledger_core_ui ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class app/oreshkov/ledger/core/ui/di/AppModule {
+	public static final field $stable I
+	public fun <init> ()V
+}
+
+public final class app/oreshkov/ledger/core/ui/di/AppOreshkovLedgerCoreUiDiAppModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/core/ui/di/AppModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/core/ui/theme/ColorKt {
+	public static final fun getPink40 ()J
+	public static final fun getPink80 ()J
+	public static final fun getPurple40 ()J
+	public static final fun getPurple80 ()J
+	public static final fun getPurpleGrey40 ()J
+	public static final fun getPurpleGrey80 ()J
+}
+
+public final class app/oreshkov/ledger/core/ui/theme/ThemeKt {
+	public static final fun LedgerTheme (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class app/oreshkov/ledger/core/ui/theme/TypeKt {
+	public static final fun getTypography ()Landroidx/compose/material3/Typography;
+}
+
+public final class org/koin/plugin/hints/Core_ui_Ledger_core_ui__androidxSavedstateSerializationSavedStateConfiguration_callsiteKt {
+	public static final synthetic fun callsite (Landroidx/savedstate/serialization/SavedStateConfiguration;)V
+}
+
+public final class org/koin/plugin/hints/Core_ui_Ledger_core_ui__appOreshkovLedgerCoreNavigationStartDestination_callsiteKt {
+	public static final synthetic fun callsite-KDQ7_7g (Landroidx/navigation3/runtime/NavKey;)V
+}
+

@@ -1,0 +1,45 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:navigation>
+final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledger.core.navigation/Navigator|null[0]
+    constructor <init>(kotlin.collections/MutableList<androidx.navigation3.runtime/NavKey>) // app.oreshkov.ledger.core.navigation/Navigator.<init>|<init>(kotlin.collections.MutableList<androidx.navigation3.runtime.NavKey>){}[0]
+
+    final val entries // app.oreshkov.ledger.core.navigation/Navigator.entries|{}entries[0]
+        final fun <get-entries>(): kotlin.collections/List<androidx.navigation3.runtime/NavKey> // app.oreshkov.ledger.core.navigation/Navigator.entries.<get-entries>|<get-entries>(){}[0]
+
+    final fun canGoBack(): kotlin/Boolean // app.oreshkov.ledger.core.navigation/Navigator.canGoBack|canGoBack(){}[0]
+    final fun goBack() // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(){}[0]
+    final fun goTo(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.goTo|goTo(androidx.navigation3.runtime.NavKey){}[0]
+}
+
+final value class app.oreshkov.ledger.core.navigation/StartDestination { // app.oreshkov.ledger.core.navigation/StartDestination|null[0]
+    constructor <init>(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/StartDestination.<init>|<init>(androidx.navigation3.runtime.NavKey){}[0]
+
+    final val key // app.oreshkov.ledger.core.navigation/StartDestination.key|{}key[0]
+        final fun <get-key>(): androidx.navigation3.runtime/NavKey // app.oreshkov.ledger.core.navigation/StartDestination.key.<get-key>|<get-key>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.navigation/StartDestination.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.navigation/StartDestination.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.core.navigation/StartDestination.toString|toString(){}[0]
+}
+
+final val app.oreshkov.ledger.core.navigation/LocalNavigator // app.oreshkov.ledger.core.navigation/LocalNavigator|{}LocalNavigator[0]
+    final fun <get-LocalNavigator>(): androidx.compose.runtime/ProvidableCompositionLocal<app.oreshkov.ledger.core.navigation/Navigator> // app.oreshkov.ledger.core.navigation/LocalNavigator.<get-LocalNavigator>|<get-LocalNavigator>(){}[0]
+final val app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop|#static{}app_oreshkov_ledger_core_navigation_Navigator$stableprop[0]
+final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop|#static{}ledger_core_navigation_generated_resources_Res_array$stableprop[0]
+final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop|#static{}ledger_core_navigation_generated_resources_Res_drawable$stableprop[0]
+final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop|#static{}ledger_core_navigation_generated_resources_Res_font$stableprop[0]
+final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_plurals$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_plurals$stableprop|#static{}ledger_core_navigation_generated_resources_Res_plurals$stableprop[0]
+final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_string$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_string$stableprop|#static{}ledger_core_navigation_generated_resources_Res_string$stableprop[0]
+
+final fun app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter|app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter(){}[0]
+final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop_getter|ledger_core_navigation_generated_resources_Res_array$stableprop_getter(){}[0]
+final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop_getter|ledger_core_navigation_generated_resources_Res_drawable$stableprop_getter(){}[0]
+final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop_getter|ledger_core_navigation_generated_resources_Res_font$stableprop_getter(){}[0]
+final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_plurals$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_plurals$stableprop_getter|ledger_core_navigation_generated_resources_Res_plurals$stableprop_getter(){}[0]
+final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_string$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_string$stableprop_getter|ledger_core_navigation_generated_resources_Res_string$stableprop_getter(){}[0]

@@ -1,0 +1,28 @@
+public final class app/oreshkov/ledger/core/data/di/AppOreshkovLedgerCoreDataDiDataModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/core/data/di/DataModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/core/data/di/DataModule {
+	public fun <init> ()V
+	public final fun providePostingRepository (Lapp/oreshkov/ledger/core/database/dao/PostingDao;Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;)Lapp/oreshkov/ledger/core/domain/repository/PostingRepository;
+}
+
+public final class app/oreshkov/ledger/core/data/model/PostingMappersKt {
+	public static final fun asEntity (Lapp/oreshkov/ledger/core/model/data/NewPosting;)Lapp/oreshkov/ledger/core/database/model/PostingEntity;
+	public static final fun asEntity (Lapp/oreshkov/ledger/core/model/data/Posting;)Lapp/oreshkov/ledger/core/database/model/PostingEntity;
+	public static final fun asExternalModel (Lapp/oreshkov/ledger/core/database/model/PostingEntity;)Lapp/oreshkov/ledger/core/model/data/Posting;
+}
+
+public final class app/oreshkov/ledger/core/data/repository/OfflineFirstPostingRepository : app/oreshkov/ledger/core/domain/repository/PostingRepository {
+	public fun <init> (Lapp/oreshkov/ledger/core/database/dao/PostingDao;Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;)V
+	public fun deletePosting (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getAllPostings ()Lkotlinx/coroutines/flow/Flow;
+	public fun getPostingById (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public fun insertPosting (Lapp/oreshkov/ledger/core/model/data/NewPosting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun updatePosting (Lapp/oreshkov/ledger/core/model/data/Posting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDataDiDataModuleModuleKt {
+	public static final synthetic fun moduledef_app_oreshkov_ledger_core_data_di_DataModule__providePostingRepository (Lapp/oreshkov/ledger/core/domain/repository/PostingRepository;)V
+}
+

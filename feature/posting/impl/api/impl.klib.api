@@ -1,0 +1,209 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.feature.posting:impl>
+sealed interface app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState|null[0]
+    final class Success : app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success|null[0]
+        constructor <init>(app.oreshkov.ledger.core.model.data/Posting) // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.<init>|<init>(app.oreshkov.ledger.core.model.data.Posting){}[0]
+
+        final val posting // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.posting|{}posting[0]
+            final fun <get-posting>(): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.posting.<get-posting>|<get-posting>(){}[0]
+
+        final fun component1(): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.component1|component1(){}[0]
+        final fun copy(app.oreshkov.ledger.core.model.data/Posting = ...): app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.copy|copy(app.oreshkov.ledger.core.model.data.Posting){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.toString|toString(){}[0]
+    }
+
+    final object Error : app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Error|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Error.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Error.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Error.toString|toString(){}[0]
+    }
+
+    final object Loading : app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Loading|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Loading.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Loading.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Loading.toString|toString(){}[0]
+    }
+
+    final object NotFound : app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.NotFound.toString|toString(){}[0]
+    }
+}
+
+sealed interface app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState|null[0]
+    final class Editing : app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing|null[0]
+        constructor <init>(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.<init>|<init>(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean){}[0]
+
+        final val isEditMode // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isEditMode|{}isEditMode[0]
+            final fun <get-isEditMode>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isEditMode.<get-isEditMode>|<get-isEditMode>(){}[0]
+        final val isValid // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isValid|{}isValid[0]
+            final fun <get-isValid>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isValid.<get-isValid>|<get-isValid>(){}[0]
+        final val narrative // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrative|{}narrative[0]
+            final fun <get-narrative>(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrative.<get-narrative>|<get-narrative>(){}[0]
+        final val narrativeError // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrativeError|{}narrativeError[0]
+            final fun <get-narrativeError>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrativeError.<get-narrativeError>|<get-narrativeError>(){}[0]
+        final val narrativeTouched // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrativeTouched|{}narrativeTouched[0]
+            final fun <get-narrativeTouched>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrativeTouched.<get-narrativeTouched>|<get-narrativeTouched>(){}[0]
+        final val saveError // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.saveError|{}saveError[0]
+            final fun <get-saveError>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.saveError.<get-saveError>|<get-saveError>(){}[0]
+
+        final fun component1(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component1|component1(){}[0]
+        final fun component2(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component2|component2(){}[0]
+        final fun component3(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component3|component3(){}[0]
+        final fun component4(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component4|component4(){}[0]
+        final fun copy(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.copy|copy(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.toString|toString(){}[0]
+    }
+
+    final object Error : app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Error|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Error.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Error.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Error.toString|toString(){}[0]
+    }
+
+    final object Loading : app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Loading|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Loading.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Loading.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Loading.toString|toString(){}[0]
+    }
+
+    final object NotFound : app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.NotFound.toString|toString(){}[0]
+    }
+}
+
+sealed interface app.oreshkov.ledger.feature.posting.impl/PostingListUiState { // app.oreshkov.ledger.feature.posting.impl/PostingListUiState|null[0]
+    final class Success : app.oreshkov.ledger.feature.posting.impl/PostingListUiState { // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success|null[0]
+        constructor <init>(kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting>) // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.<init>|<init>(kotlin.collections.List<app.oreshkov.ledger.core.model.data.Posting>){}[0]
+
+        final val postings // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.postings|{}postings[0]
+            final fun <get-postings>(): kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting> // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.postings.<get-postings>|<get-postings>(){}[0]
+
+        final fun component1(): kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting> // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting> = ...): app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.copy|copy(kotlin.collections.List<app.oreshkov.ledger.core.model.data.Posting>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Success.toString|toString(){}[0]
+    }
+
+    final object Empty : app.oreshkov.ledger.feature.posting.impl/PostingListUiState { // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Empty|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Empty.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Empty.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Empty.toString|toString(){}[0]
+    }
+
+    final object Error : app.oreshkov.ledger.feature.posting.impl/PostingListUiState { // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Error|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Error.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Error.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Error.toString|toString(){}[0]
+    }
+
+    final object Loading : app.oreshkov.ledger.feature.posting.impl/PostingListUiState { // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Loading|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Loading.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Loading.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingListUiState.Loading.toString|toString(){}[0]
+    }
+}
+
+final class app.oreshkov.ledger.feature.posting.impl.di/PostingModule { // app.oreshkov.ledger.feature.posting.impl.di/PostingModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.feature.posting.impl.di/PostingModule.<init>|<init>(){}[0]
+}
+
+final class app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel : androidx.lifecycle/ViewModel { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel|null[0]
+    constructor <init>(app.oreshkov.ledger.core.domain/GetPostingUseCase, app.oreshkov.ledger.core.domain/DeletePostingUseCase, kotlin/String) // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.<init>|<init>(app.oreshkov.ledger.core.domain.GetPostingUseCase;app.oreshkov.ledger.core.domain.DeletePostingUseCase;kotlin.String){}[0]
+
+    final val deleteFailedEvent // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deleteFailedEvent|{}deleteFailedEvent[0]
+        final fun <get-deleteFailedEvent>(): kotlinx.coroutines.flow/Flow<kotlin/Unit> // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deleteFailedEvent.<get-deleteFailedEvent>|<get-deleteFailedEvent>(){}[0]
+    final val deletedEvent // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deletedEvent|{}deletedEvent[0]
+        final fun <get-deletedEvent>(): kotlinx.coroutines.flow/Flow<kotlin/Unit> // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deletedEvent.<get-deletedEvent>|<get-deletedEvent>(){}[0]
+    final val uiState // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.uiState|{}uiState[0]
+        final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState> // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
+
+    final fun deletePosting() // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deletePosting|deletePosting(){}[0]
+    final fun retry() // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.retry|retry(){}[0]
+}
+
+final class app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel : androidx.lifecycle/ViewModel { // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel|null[0]
+    constructor <init>(app.oreshkov.ledger.core.domain/GetPostingUseCase, app.oreshkov.ledger.core.domain/SavePostingUseCase, kotlin/String?) // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.<init>|<init>(app.oreshkov.ledger.core.domain.GetPostingUseCase;app.oreshkov.ledger.core.domain.SavePostingUseCase;kotlin.String?){}[0]
+
+    final val navigationEvent // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.navigationEvent|{}navigationEvent[0]
+        final fun <get-navigationEvent>(): kotlinx.coroutines.flow/Flow<kotlin/Unit> // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.navigationEvent.<get-navigationEvent>|<get-navigationEvent>(){}[0]
+    final val uiState // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.uiState|{}uiState[0]
+        final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.posting.impl/PostingEditUiState> // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
+
+    final fun onNarrativeChange(kotlin/String) // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.onNarrativeChange|onNarrativeChange(kotlin.String){}[0]
+    final fun retry() // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.retry|retry(){}[0]
+    final fun savePosting() // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.savePosting|savePosting(){}[0]
+}
+
+final class app.oreshkov.ledger.feature.posting.impl/PostingListViewModel : androidx.lifecycle/ViewModel { // app.oreshkov.ledger.feature.posting.impl/PostingListViewModel|null[0]
+    constructor <init>(app.oreshkov.ledger.core.domain/GetPostingsUseCase) // app.oreshkov.ledger.feature.posting.impl/PostingListViewModel.<init>|<init>(app.oreshkov.ledger.core.domain.GetPostingsUseCase){}[0]
+
+    final val uiState // app.oreshkov.ledger.feature.posting.impl/PostingListViewModel.uiState|{}uiState[0]
+        final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.posting.impl/PostingListUiState> // app.oreshkov.ledger.feature.posting.impl/PostingListViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
+
+    final fun retry() // app.oreshkov.ledger.feature.posting.impl/PostingListViewModel.retry|retry(){}[0]
+}
+
+final val app.oreshkov.ledger.feature.posting.impl.di/app_oreshkov_ledger_feature_posting_impl_di_PostingModule$stableprop // app.oreshkov.ledger.feature.posting.impl.di/app_oreshkov_ledger_feature_posting_impl_di_PostingModule$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_di_PostingModule$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl.di/postingNavigationModule // app.oreshkov.ledger.feature.posting.impl.di/postingNavigationModule|{}postingNavigationModule[0]
+    final fun <get-postingNavigationModule>(): org.koin.core.module/Module // app.oreshkov.ledger.feature.posting.impl.di/postingNavigationModule.<get-postingNavigationModule>|<get-postingNavigationModule>(){}[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Error$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Error$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Error$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Loading$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Loading$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Loading$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_NotFound$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_NotFound$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_NotFound$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Success$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Success$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Success$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Editing$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Editing$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Editing$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Error$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Error$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Error$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Loading$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Loading$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Loading$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_NotFound$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_NotFound$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_NotFound$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Empty$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Empty$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Empty$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Error$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Error$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Error$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Loading$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Loading$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Loading$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Success$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Success$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Success$stableprop[0]
+final val app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListViewModel$stableprop // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListViewModel$stableprop|#static{}app_oreshkov_ledger_feature_posting_impl_PostingListViewModel$stableprop[0]
+final val ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_array$stableprop // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_array$stableprop|#static{}ledger_feature_posting_impl_generated_resources_Res_array$stableprop[0]
+final val ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_drawable$stableprop // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_drawable$stableprop|#static{}ledger_feature_posting_impl_generated_resources_Res_drawable$stableprop[0]
+final val ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_font$stableprop // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_font$stableprop|#static{}ledger_feature_posting_impl_generated_resources_Res_font$stableprop[0]
+final val ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_plurals$stableprop // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_plurals$stableprop|#static{}ledger_feature_posting_impl_generated_resources_Res_plurals$stableprop[0]
+final val ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_string$stableprop // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_string$stableprop|#static{}ledger_feature_posting_impl_generated_resources_Res_string$stableprop[0]
+
+final fun (app.oreshkov.ledger.feature.posting.impl.di/PostingModule).app.oreshkov.ledger.feature.posting.impl.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.feature.posting.impl.di/module|module@app.oreshkov.ledger.feature.posting.impl.di.PostingModule(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl.di/app_oreshkov_ledger_feature_posting_impl_di_PostingModule$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl.di/app_oreshkov_ledger_feature_posting_impl_di_PostingModule$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_di_PostingModule$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/PostingDetailsScreen(kotlin/Function0<kotlin/Unit>, kotlin/Function1<kotlin/String, kotlin/Unit>, kotlin/Function0<kotlin/Unit>, app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel, androidx.compose.runtime/Composer?, kotlin/Int) // app.oreshkov.ledger.feature.posting.impl/PostingDetailsScreen|PostingDetailsScreen(kotlin.Function0<kotlin.Unit>;kotlin.Function1<kotlin.String,kotlin.Unit>;kotlin.Function0<kotlin.Unit>;app.oreshkov.ledger.feature.posting.impl.PostingDetailsViewModel;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/PostingEditScreen(kotlin/Function0<kotlin/Unit>, app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel, androidx.compose.runtime/Composer?, kotlin/Int) // app.oreshkov.ledger.feature.posting.impl/PostingEditScreen|PostingEditScreen(kotlin.Function0<kotlin.Unit>;app.oreshkov.ledger.feature.posting.impl.PostingEditViewModel;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/PostingListScreen(kotlin/Function1<kotlin/String?, kotlin/Unit>, kotlin/Function1<kotlin/String, kotlin/Unit>, app.oreshkov.ledger.feature.posting.impl/PostingListViewModel, androidx.compose.runtime/Composer?, kotlin/Int) // app.oreshkov.ledger.feature.posting.impl/PostingListScreen|PostingListScreen(kotlin.Function1<kotlin.String?,kotlin.Unit>;kotlin.Function1<kotlin.String,kotlin.Unit>;app.oreshkov.ledger.feature.posting.impl.PostingListViewModel;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Error$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Error$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Error$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Loading$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Loading$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Loading$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_NotFound$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_NotFound$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_NotFound$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Success$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Success$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingDetailsUiState_Success$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Editing$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Editing$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Editing$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Error$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Error$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Error$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Loading$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Loading$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_Loading$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_NotFound$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_NotFound$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingEditUiState_NotFound$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Empty$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Empty$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Empty$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Error$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Error$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Error$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Loading$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Loading$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Loading$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Success$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Success$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingListUiState_Success$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListViewModel$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/app_oreshkov_ledger_feature_posting_impl_PostingListViewModel$stableprop_getter|app_oreshkov_ledger_feature_posting_impl_PostingListViewModel$stableprop_getter(){}[0]
+final fun ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_array$stableprop_getter(): kotlin/Int // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_array$stableprop_getter|ledger_feature_posting_impl_generated_resources_Res_array$stableprop_getter(){}[0]
+final fun ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_drawable$stableprop_getter(): kotlin/Int // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_drawable$stableprop_getter|ledger_feature_posting_impl_generated_resources_Res_drawable$stableprop_getter(){}[0]
+final fun ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_font$stableprop_getter(): kotlin/Int // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_font$stableprop_getter|ledger_feature_posting_impl_generated_resources_Res_font$stableprop_getter(){}[0]
+final fun ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_plurals$stableprop_getter(): kotlin/Int // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_plurals$stableprop_getter|ledger_feature_posting_impl_generated_resources_Res_plurals$stableprop_getter(){}[0]
+final fun ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_string$stableprop_getter(): kotlin/Int // ledger.feature.posting.impl.generated.resources/ledger_feature_posting_impl_generated_resources_Res_string$stableprop_getter|ledger_feature_posting_impl_generated_resources_Res_string$stableprop_getter(){}[0]

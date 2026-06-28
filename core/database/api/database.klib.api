@@ -1,0 +1,60 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:database>
+abstract interface app.oreshkov.ledger.core.database.dao/PostingDao { // app.oreshkov.ledger.core.database.dao/PostingDao|null[0]
+    abstract fun getAllPostings(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.database.model/PostingEntity>> // app.oreshkov.ledger.core.database.dao/PostingDao.getAllPostings|getAllPostings(){}[0]
+    abstract fun getPostingById(kotlin/String): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.database.model/PostingEntity?> // app.oreshkov.ledger.core.database.dao/PostingDao.getPostingById|getPostingById(kotlin.String){}[0]
+    abstract suspend fun deleteById(kotlin/String) // app.oreshkov.ledger.core.database.dao/PostingDao.deleteById|deleteById(kotlin.String){}[0]
+    abstract suspend fun insert(app.oreshkov.ledger.core.database.model/PostingEntity) // app.oreshkov.ledger.core.database.dao/PostingDao.insert|insert(app.oreshkov.ledger.core.database.model.PostingEntity){}[0]
+    abstract suspend fun update(app.oreshkov.ledger.core.database.model/PostingEntity) // app.oreshkov.ledger.core.database.dao/PostingDao.update|update(app.oreshkov.ledger.core.database.model.PostingEntity){}[0]
+}
+
+abstract class app.oreshkov.ledger.core.database/LedgerDatabase : androidx.room3/RoomDatabase { // app.oreshkov.ledger.core.database/LedgerDatabase|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.database/LedgerDatabase.<init>|<init>(){}[0]
+
+    abstract fun postingDao(): app.oreshkov.ledger.core.database.dao/PostingDao // app.oreshkov.ledger.core.database/LedgerDatabase.postingDao|postingDao(){}[0]
+}
+
+final class app.oreshkov.ledger.core.database.di/DatabaseModule { // app.oreshkov.ledger.core.database.di/DatabaseModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.database.di/DatabaseModule.<init>|<init>(){}[0]
+
+    final fun provideDatabase(androidx.room3/RoomDatabase.Builder<app.oreshkov.ledger.core.database/LedgerDatabase>): app.oreshkov.ledger.core.database/LedgerDatabase // app.oreshkov.ledger.core.database.di/DatabaseModule.provideDatabase|provideDatabase(androidx.room3.RoomDatabase.Builder<app.oreshkov.ledger.core.database.LedgerDatabase>){}[0]
+    final fun providePostingDao(app.oreshkov.ledger.core.database/LedgerDatabase): app.oreshkov.ledger.core.database.dao/PostingDao // app.oreshkov.ledger.core.database.di/DatabaseModule.providePostingDao|providePostingDao(app.oreshkov.ledger.core.database.LedgerDatabase){}[0]
+}
+
+final class app.oreshkov.ledger.core.database.di/PlatformDatabaseModule { // app.oreshkov.ledger.core.database.di/PlatformDatabaseModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.database.di/PlatformDatabaseModule.<init>|<init>(){}[0]
+
+    final fun provideRoomBuilder(): androidx.room3/RoomDatabase.Builder<app.oreshkov.ledger.core.database/LedgerDatabase> // app.oreshkov.ledger.core.database.di/PlatformDatabaseModule.provideRoomBuilder|provideRoomBuilder(){}[0]
+}
+
+final class app.oreshkov.ledger.core.database.model/PostingEntity { // app.oreshkov.ledger.core.database.model/PostingEntity|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // app.oreshkov.ledger.core.database.model/PostingEntity.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val id // app.oreshkov.ledger.core.database.model/PostingEntity.id|{}id[0]
+        final fun <get-id>(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.id.<get-id>|<get-id>(){}[0]
+    final val narrative // app.oreshkov.ledger.core.database.model/PostingEntity.narrative|{}narrative[0]
+        final fun <get-narrative>(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.narrative.<get-narrative>|<get-narrative>(){}[0]
+
+    final fun component1(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.component1|component1(){}[0]
+    final fun component2(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): app.oreshkov.ledger.core.database.model/PostingEntity // app.oreshkov.ledger.core.database.model/PostingEntity.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.database.model/PostingEntity.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.database.model/PostingEntity.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.toString|toString(){}[0]
+}
+
+final object app.oreshkov.ledger.core.database/LedgerDatabaseConstructor : androidx.room3/RoomDatabaseConstructor<app.oreshkov.ledger.core.database/LedgerDatabase> { // app.oreshkov.ledger.core.database/LedgerDatabaseConstructor|null[0]
+    final fun initialize(): app.oreshkov.ledger.core.database/LedgerDatabase // app.oreshkov.ledger.core.database/LedgerDatabaseConstructor.initialize|initialize(){}[0]
+}
+
+final fun (app.oreshkov.ledger.core.database.di/DatabaseModule).app.oreshkov.ledger.core.database.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.database.di/module|module@app.oreshkov.ledger.core.database.di.DatabaseModule(){}[0]
+final fun (app.oreshkov.ledger.core.database.di/PlatformDatabaseModule).app.oreshkov.ledger.core.database.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.database.di/module|module@app.oreshkov.ledger.core.database.di.PlatformDatabaseModule(){}[0]
+final fun org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__provideDatabase(app.oreshkov.ledger.core.database/LedgerDatabase, androidx.room3/RoomDatabase) // org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__provideDatabase|moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__provideDatabase(app.oreshkov.ledger.core.database.LedgerDatabase;androidx.room3.RoomDatabase){}[0]
+final fun org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__providePostingDao(app.oreshkov.ledger.core.database.dao/PostingDao) // org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__providePostingDao|moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__providePostingDao(app.oreshkov.ledger.core.database.dao.PostingDao){}[0]
+final fun org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_database_di_PlatformDatabaseModule__provideRoomBuilder(androidx.room3/RoomDatabase.Builder) // org.koin.plugin.hints/moduledef_app_oreshkov_ledger_core_database_di_PlatformDatabaseModule__provideRoomBuilder|moduledef_app_oreshkov_ledger_core_database_di_PlatformDatabaseModule__provideRoomBuilder(androidx.room3.RoomDatabase.Builder){}[0]

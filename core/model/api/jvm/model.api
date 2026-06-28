@@ -1,0 +1,24 @@
+public final class app/oreshkov/ledger/core/model/data/NewPosting {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lapp/oreshkov/ledger/core/model/data/NewPosting;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/core/model/data/NewPosting;Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/model/data/NewPosting;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNarrative ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/core/model/data/Posting {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lapp/oreshkov/ledger/core/model/data/Posting;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/core/model/data/Posting;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/model/data/Posting;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getNarrative ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+

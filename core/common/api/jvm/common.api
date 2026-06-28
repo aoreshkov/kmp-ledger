@@ -1,0 +1,81 @@
+public final class app/oreshkov/ledger/core/common/di/AppOreshkovLedgerCoreCommonDiDispatcherModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/core/common/di/DispatcherModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/core/common/di/AppOreshkovLedgerCoreCommonDiLoggingModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/core/common/di/LoggingModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/core/common/di/DispatcherModule {
+	public fun <init> ()V
+	public final fun provideAppDispatchers ()Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;
+}
+
+public final class app/oreshkov/ledger/core/common/di/LoggingModule {
+	public fun <init> ()V
+	public final fun logger ()Lco/touchlab/kermit/Logger;
+}
+
+public abstract interface class app/oreshkov/ledger/core/common/dispatcher/AppDispatchers {
+	public abstract fun getDefault ()Lkotlinx/coroutines/CoroutineDispatcher;
+	public abstract fun getIo ()Lkotlinx/coroutines/CoroutineDispatcher;
+}
+
+public final class app/oreshkov/ledger/core/common/dispatcher/DefaultAppDispatchers : app/oreshkov/ledger/core/common/dispatcher/AppDispatchers {
+	public fun <init> ()V
+	public fun getDefault ()Lkotlinx/coroutines/CoroutineDispatcher;
+	public fun getIo ()Lkotlinx/coroutines/CoroutineDispatcher;
+}
+
+public abstract interface class app/oreshkov/ledger/core/common/result/DataResult {
+}
+
+public final class app/oreshkov/ledger/core/common/result/DataResult$Error : app/oreshkov/ledger/core/common/result/DataResult {
+	public fun <init> (Ljava/lang/Throwable;)V
+	public final fun component1 ()Ljava/lang/Throwable;
+	public final fun copy (Ljava/lang/Throwable;)Lapp/oreshkov/ledger/core/common/result/DataResult$Error;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/core/common/result/DataResult$Error;Ljava/lang/Throwable;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/common/result/DataResult$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getException ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/core/common/result/DataResult$Loading : app/oreshkov/ledger/core/common/result/DataResult {
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/common/result/DataResult$Loading;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/core/common/result/DataResult$Success : app/oreshkov/ledger/core/common/result/DataResult {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lapp/oreshkov/ledger/core/common/result/DataResult$Success;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/core/common/result/DataResult$Success;Ljava/lang/Object;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/common/result/DataResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/core/common/result/DataResultKt {
+	public static final fun asResult (Lkotlinx/coroutines/flow/Flow;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class app/oreshkov/ledger/core/common/result/RunCatchingCancellableKt {
+	public static final fun runCatchingCancellable (Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class app/oreshkov/ledger/core/common/util/PlatformLogWriter_jvmKt {
+	public static final fun getPlatformLogWriters ()Ljava/util/List;
+}
+
+public final class app/oreshkov/ledger/core/common/util/UuidKt {
+	public static final fun randomUuidString ()Ljava/lang/String;
+}
+
+public final class org/koin/plugin/hints/AppOreshkovLedgerCoreCommonDiDispatcherModuleModuleKt {
+	public static final synthetic fun moduledef_app_oreshkov_ledger_core_common_di_DispatcherModule__provideAppDispatchers (Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;)V
+}
+

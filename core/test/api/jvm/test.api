@@ -1,0 +1,34 @@
+public final class app/oreshkov/ledger/core/test/FakePostingRepository : app/oreshkov/ledger/core/domain/repository/PostingRepository {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun deletePosting (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getAllPostings ()Lkotlinx/coroutines/flow/Flow;
+	public final fun getDeletedPostings ()Ljava/util/List;
+	public final fun getFailNextWrite ()Z
+	public final fun getInsertedPostings ()Ljava/util/List;
+	public fun getPostingById (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public final fun getShouldThrowOnGetAll ()Z
+	public final fun getShouldThrowOnGetById ()Z
+	public final fun getUpdatedPostings ()Ljava/util/List;
+	public fun insertPosting (Lapp/oreshkov/ledger/core/model/data/NewPosting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun seed ([Lapp/oreshkov/ledger/core/model/data/Posting;)V
+	public final fun setFailNextWrite (Z)V
+	public final fun setShouldThrowOnGetAll (Z)V
+	public final fun setShouldThrowOnGetById (Z)V
+	public fun updatePosting (Lapp/oreshkov/ledger/core/model/data/Posting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class app/oreshkov/ledger/core/test/FixturesKt {
+	public static final fun newPosting (Ljava/lang/String;)Lapp/oreshkov/ledger/core/model/data/NewPosting;
+	public static synthetic fun newPosting$default (Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/model/data/NewPosting;
+	public static final fun posting (Ljava/lang/String;Ljava/lang/String;)Lapp/oreshkov/ledger/core/model/data/Posting;
+	public static synthetic fun posting$default (Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/model/data/Posting;
+	public static final fun postings (I)Ljava/util/List;
+	public static final fun postings ([Ljava/lang/String;)Ljava/util/List;
+}
+
+public abstract class app/oreshkov/ledger/core/test/PlatformComposeUiTest {
+	public static final field $stable I
+	public fun <init> ()V
+}
+

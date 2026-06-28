@@ -1,0 +1,48 @@
+public final class app/oreshkov/ledger/core/compose/LabeledFieldKt {
+	public static final fun LabeledField (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/ActualResourceCollectorsKt {
+	public static final fun getAllDrawableResources (Lapp/oreshkov/ledger/core/compose/resources/Res;)Ljava/util/Map;
+	public static final fun getAllFontResources (Lapp/oreshkov/ledger/core/compose/resources/Res;)Ljava/util/Map;
+	public static final fun getAllPluralStringResources (Lapp/oreshkov/ledger/core/compose/resources/Res;)Ljava/util/Map;
+	public static final fun getAllStringArrayResources (Lapp/oreshkov/ledger/core/compose/resources/Res;)Ljava/util/Map;
+	public static final fun getAllStringResources (Lapp/oreshkov/ledger/core/compose/resources/Res;)Ljava/util/Map;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/Res {
+	public static final field $stable I
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/compose/resources/Res;
+	public final fun getUri (Ljava/lang/String;)Ljava/lang/String;
+	public final fun readBytes (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/Res$array {
+	public static final field $stable I
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/compose/resources/Res$array;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/Res$drawable {
+	public static final field $stable I
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/compose/resources/Res$drawable;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/Res$font {
+	public static final field $stable I
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/compose/resources/Res$font;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/Res$plurals {
+	public static final field $stable I
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/compose/resources/Res$plurals;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/Res$string {
+	public static final field $stable I
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/compose/resources/Res$string;
+}
+
+public final class app/oreshkov/ledger/core/compose/resources/String0_commonMainKt {
+	public static final fun getBack_content_description (Lapp/oreshkov/ledger/core/compose/resources/Res$string;)Lorg/jetbrains/compose/resources/StringResource;
+}
+

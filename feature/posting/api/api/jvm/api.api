@@ -1,0 +1,74 @@
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingDetail : app/oreshkov/ledger/feature/posting/api/navigation/PostingRoute {
+	public static final field Companion Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail;Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class app/oreshkov/ledger/feature/posting/api/navigation/PostingDetail$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingDetail$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingEdit : app/oreshkov/ledger/feature/posting/api/navigation/PostingRoute {
+	public static final field Companion Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit;Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class app/oreshkov/ledger/feature/posting/api/navigation/PostingEdit$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingEdit;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingEdit$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingList : app/oreshkov/ledger/feature/posting/api/navigation/PostingRoute {
+	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingList;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingNavKeysKt {
+	public static final fun getSerializerPostings ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public abstract interface class app/oreshkov/ledger/feature/posting/api/navigation/PostingRoute : androidx/navigation3/runtime/NavKey {
+	public static final field Companion Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingRoute$Companion;
+}
+
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingRoute$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

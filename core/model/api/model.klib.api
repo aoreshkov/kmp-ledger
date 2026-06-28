@@ -1,0 +1,36 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:model>
+final class app.oreshkov.ledger.core.model.data/NewPosting { // app.oreshkov.ledger.core.model.data/NewPosting|null[0]
+    constructor <init>(kotlin/String) // app.oreshkov.ledger.core.model.data/NewPosting.<init>|<init>(kotlin.String){}[0]
+
+    final val narrative // app.oreshkov.ledger.core.model.data/NewPosting.narrative|{}narrative[0]
+        final fun <get-narrative>(): kotlin/String // app.oreshkov.ledger.core.model.data/NewPosting.narrative.<get-narrative>|<get-narrative>(){}[0]
+
+    final fun component1(): kotlin/String // app.oreshkov.ledger.core.model.data/NewPosting.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): app.oreshkov.ledger.core.model.data/NewPosting // app.oreshkov.ledger.core.model.data/NewPosting.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.model.data/NewPosting.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.model.data/NewPosting.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.core.model.data/NewPosting.toString|toString(){}[0]
+}
+
+final class app.oreshkov.ledger.core.model.data/Posting { // app.oreshkov.ledger.core.model.data/Posting|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // app.oreshkov.ledger.core.model.data/Posting.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val id // app.oreshkov.ledger.core.model.data/Posting.id|{}id[0]
+        final fun <get-id>(): kotlin/String // app.oreshkov.ledger.core.model.data/Posting.id.<get-id>|<get-id>(){}[0]
+    final val narrative // app.oreshkov.ledger.core.model.data/Posting.narrative|{}narrative[0]
+        final fun <get-narrative>(): kotlin/String // app.oreshkov.ledger.core.model.data/Posting.narrative.<get-narrative>|<get-narrative>(){}[0]
+
+    final fun component1(): kotlin/String // app.oreshkov.ledger.core.model.data/Posting.component1|component1(){}[0]
+    final fun component2(): kotlin/String // app.oreshkov.ledger.core.model.data/Posting.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.core.model.data/Posting.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.model.data/Posting.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.model.data/Posting.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.core.model.data/Posting.toString|toString(){}[0]
+}

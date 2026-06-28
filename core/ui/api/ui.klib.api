@@ -1,0 +1,42 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:ui>
+final class app.oreshkov.ledger.core.ui.di/AppModule { // app.oreshkov.ledger.core.ui.di/AppModule|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.ui.di/AppModule.<init>|<init>(){}[0]
+}
+
+final val app.oreshkov.ledger.core.ui.di/app_oreshkov_ledger_core_ui_di_AppModule$stableprop // app.oreshkov.ledger.core.ui.di/app_oreshkov_ledger_core_ui_di_AppModule$stableprop|#static{}app_oreshkov_ledger_core_ui_di_AppModule$stableprop[0]
+final val app.oreshkov.ledger.core.ui.theme/Pink40 // app.oreshkov.ledger.core.ui.theme/Pink40|{}Pink40[0]
+    final fun <get-Pink40>(): androidx.compose.ui.graphics/Color // app.oreshkov.ledger.core.ui.theme/Pink40.<get-Pink40>|<get-Pink40>(){}[0]
+final val app.oreshkov.ledger.core.ui.theme/Pink80 // app.oreshkov.ledger.core.ui.theme/Pink80|{}Pink80[0]
+    final fun <get-Pink80>(): androidx.compose.ui.graphics/Color // app.oreshkov.ledger.core.ui.theme/Pink80.<get-Pink80>|<get-Pink80>(){}[0]
+final val app.oreshkov.ledger.core.ui.theme/Purple40 // app.oreshkov.ledger.core.ui.theme/Purple40|{}Purple40[0]
+    final fun <get-Purple40>(): androidx.compose.ui.graphics/Color // app.oreshkov.ledger.core.ui.theme/Purple40.<get-Purple40>|<get-Purple40>(){}[0]
+final val app.oreshkov.ledger.core.ui.theme/Purple80 // app.oreshkov.ledger.core.ui.theme/Purple80|{}Purple80[0]
+    final fun <get-Purple80>(): androidx.compose.ui.graphics/Color // app.oreshkov.ledger.core.ui.theme/Purple80.<get-Purple80>|<get-Purple80>(){}[0]
+final val app.oreshkov.ledger.core.ui.theme/PurpleGrey40 // app.oreshkov.ledger.core.ui.theme/PurpleGrey40|{}PurpleGrey40[0]
+    final fun <get-PurpleGrey40>(): androidx.compose.ui.graphics/Color // app.oreshkov.ledger.core.ui.theme/PurpleGrey40.<get-PurpleGrey40>|<get-PurpleGrey40>(){}[0]
+final val app.oreshkov.ledger.core.ui.theme/PurpleGrey80 // app.oreshkov.ledger.core.ui.theme/PurpleGrey80|{}PurpleGrey80[0]
+    final fun <get-PurpleGrey80>(): androidx.compose.ui.graphics/Color // app.oreshkov.ledger.core.ui.theme/PurpleGrey80.<get-PurpleGrey80>|<get-PurpleGrey80>(){}[0]
+final val app.oreshkov.ledger.core.ui.theme/Typography // app.oreshkov.ledger.core.ui.theme/Typography|{}Typography[0]
+    final fun <get-Typography>(): androidx.compose.material3/Typography // app.oreshkov.ledger.core.ui.theme/Typography.<get-Typography>|<get-Typography>(){}[0]
+final val ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_array$stableprop // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_array$stableprop|#static{}ledger_core_ui_generated_resources_Res_array$stableprop[0]
+final val ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_drawable$stableprop // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_drawable$stableprop|#static{}ledger_core_ui_generated_resources_Res_drawable$stableprop[0]
+final val ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_font$stableprop // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_font$stableprop|#static{}ledger_core_ui_generated_resources_Res_font$stableprop[0]
+final val ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_plurals$stableprop // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_plurals$stableprop|#static{}ledger_core_ui_generated_resources_Res_plurals$stableprop[0]
+final val ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_string$stableprop // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_string$stableprop|#static{}ledger_core_ui_generated_resources_Res_string$stableprop[0]
+
+final fun (app.oreshkov.ledger.core.ui.di/AppModule).app.oreshkov.ledger.core.ui.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.ui.di/module|module@app.oreshkov.ledger.core.ui.di.AppModule(){}[0]
+final fun app.oreshkov.ledger.core.ui.di/app_oreshkov_ledger_core_ui_di_AppModule$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.ui.di/app_oreshkov_ledger_core_ui_di_AppModule$stableprop_getter|app_oreshkov_ledger_core_ui_di_AppModule$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.core.ui.theme/LedgerTheme(kotlin/Boolean, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // app.oreshkov.ledger.core.ui.theme/LedgerTheme|LedgerTheme(kotlin.Boolean;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun app.oreshkov.ledger.core.ui/App(androidx.compose.runtime/Composer?, kotlin/Int) // app.oreshkov.ledger.core.ui/App|App(androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_array$stableprop_getter(): kotlin/Int // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_array$stableprop_getter|ledger_core_ui_generated_resources_Res_array$stableprop_getter(){}[0]
+final fun ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_drawable$stableprop_getter(): kotlin/Int // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_drawable$stableprop_getter|ledger_core_ui_generated_resources_Res_drawable$stableprop_getter(){}[0]
+final fun ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_font$stableprop_getter(): kotlin/Int // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_font$stableprop_getter|ledger_core_ui_generated_resources_Res_font$stableprop_getter(){}[0]
+final fun ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_plurals$stableprop_getter(): kotlin/Int // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_plurals$stableprop_getter|ledger_core_ui_generated_resources_Res_plurals$stableprop_getter(){}[0]
+final fun ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_string$stableprop_getter(): kotlin/Int // ledger.core.ui.generated.resources/ledger_core_ui_generated_resources_Res_string$stableprop_getter|ledger_core_ui_generated_resources_Res_string$stableprop_getter(){}[0]

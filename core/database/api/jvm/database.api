@@ -1,0 +1,60 @@
+public abstract class app/oreshkov/ledger/core/database/LedgerDatabase : androidx/room3/RoomDatabase {
+	public fun <init> ()V
+	public abstract fun postingDao ()Lapp/oreshkov/ledger/core/database/dao/PostingDao;
+}
+
+public final class app/oreshkov/ledger/core/database/LedgerDatabaseConstructor : androidx/room3/RoomDatabaseConstructor {
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/database/LedgerDatabaseConstructor;
+	public synthetic fun initialize ()Landroidx/room3/RoomDatabase;
+	public fun initialize ()Lapp/oreshkov/ledger/core/database/LedgerDatabase;
+}
+
+public abstract interface class app/oreshkov/ledger/core/database/dao/PostingDao {
+	public abstract fun deleteById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getAllPostings ()Lkotlinx/coroutines/flow/Flow;
+	public abstract fun getPostingById (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun insert (Lapp/oreshkov/ledger/core/database/model/PostingEntity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun update (Lapp/oreshkov/ledger/core/database/model/PostingEntity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class app/oreshkov/ledger/core/database/di/AppOreshkovLedgerCoreDatabaseDiDatabaseModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/core/database/di/DatabaseModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/core/database/di/AppOreshkovLedgerCoreDatabaseDiPlatformDatabaseModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/core/database/di/PlatformDatabaseModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/core/database/di/DatabaseModule {
+	public fun <init> ()V
+	public final fun provideDatabase (Landroidx/room3/RoomDatabase$Builder;)Lapp/oreshkov/ledger/core/database/LedgerDatabase;
+	public final fun providePostingDao (Lapp/oreshkov/ledger/core/database/LedgerDatabase;)Lapp/oreshkov/ledger/core/database/dao/PostingDao;
+}
+
+public final class app/oreshkov/ledger/core/database/di/PlatformDatabaseModule {
+	public fun <init> ()V
+	public final fun provideRoomBuilder ()Landroidx/room3/RoomDatabase$Builder;
+}
+
+public final class app/oreshkov/ledger/core/database/model/PostingEntity {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lapp/oreshkov/ledger/core/database/model/PostingEntity;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/core/database/model/PostingEntity;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/database/model/PostingEntity;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getNarrative ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDatabaseDiDatabaseModuleModuleKt {
+	public static final synthetic fun moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__provideDatabase (Lapp/oreshkov/ledger/core/database/LedgerDatabase;Landroidx/room3/RoomDatabase;)V
+	public static final synthetic fun moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__providePostingDao (Lapp/oreshkov/ledger/core/database/dao/PostingDao;)V
+}
+
+public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDatabaseDiPlatformDatabaseModuleModuleKt {
+	public static final synthetic fun moduledef_app_oreshkov_ledger_core_database_di_PlatformDatabaseModule__provideRoomBuilder (Landroidx/room3/RoomDatabase$Builder;)V
+}
+

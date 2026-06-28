@@ -1,0 +1,27 @@
+public final class app/oreshkov/ledger/core/navigation/LocalNavigatorKt {
+	public static final fun getLocalNavigator ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class app/oreshkov/ledger/core/navigation/Navigator {
+	public static final field $stable I
+	public fun <init> (Ljava/util/List;)V
+	public final fun canGoBack ()Z
+	public final fun getEntries ()Ljava/util/List;
+	public final fun goBack ()V
+	public final fun goTo (Landroidx/navigation3/runtime/NavKey;)V
+}
+
+public final class app/oreshkov/ledger/core/navigation/StartDestination {
+	public static final synthetic fun box-impl (Landroidx/navigation3/runtime/NavKey;)Lapp/oreshkov/ledger/core/navigation/StartDestination;
+	public static fun constructor-impl (Landroidx/navigation3/runtime/NavKey;)Landroidx/navigation3/runtime/NavKey;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Landroidx/navigation3/runtime/NavKey;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Landroidx/navigation3/runtime/NavKey;Landroidx/navigation3/runtime/NavKey;)Z
+	public final fun getKey ()Landroidx/navigation3/runtime/NavKey;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Landroidx/navigation3/runtime/NavKey;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Landroidx/navigation3/runtime/NavKey;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Landroidx/navigation3/runtime/NavKey;
+}
+

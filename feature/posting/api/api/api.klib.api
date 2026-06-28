@@ -1,0 +1,77 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.feature.posting:api>
+sealed interface app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute : androidx.navigation3.runtime/NavKey { // app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute|null[0]
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute> // app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+}
+
+final class app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail : app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute { // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail|null[0]
+    constructor <init>(kotlin/String) // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.<init>|<init>(kotlin.String){}[0]
+
+    final val id // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.id|{}id[0]
+        final fun <get-id>(): kotlin/String // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.id.<get-id>|<get-id>(){}[0]
+
+    final fun component1(): kotlin/String // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail> { // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.$serializer|null[0]
+        final val descriptor // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail) // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;app.oreshkov.ledger.feature.posting.api.navigation.PostingDetail){}[0]
+    }
+
+    final object Companion { // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail> // app.oreshkov.ledger.feature.posting.api.navigation/PostingDetail.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit : app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute { // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit|null[0]
+    constructor <init>(kotlin/String?) // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.<init>|<init>(kotlin.String?){}[0]
+
+    final val id // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.id|{}id[0]
+        final fun <get-id>(): kotlin/String? // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.id.<get-id>|<get-id>(){}[0]
+
+    final fun component1(): kotlin/String? // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.component1|component1(){}[0]
+    final fun copy(kotlin/String? = ...): app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.copy|copy(kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit> { // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.$serializer|null[0]
+        final val descriptor // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit) // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;app.oreshkov.ledger.feature.posting.api.navigation.PostingEdit){}[0]
+    }
+
+    final object Companion { // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit> // app.oreshkov.ledger.feature.posting.api.navigation/PostingEdit.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final object app.oreshkov.ledger.feature.posting.api.navigation/PostingList : app.oreshkov.ledger.feature.posting.api.navigation/PostingRoute, kotlinx.serialization.internal/SerializerFactory { // app.oreshkov.ledger.feature.posting.api.navigation/PostingList|null[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.api.navigation/PostingList.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.api.navigation/PostingList.hashCode|hashCode(){}[0]
+    final fun serializer(): kotlinx.serialization/KSerializer<app.oreshkov.ledger.feature.posting.api.navigation/PostingList> // app.oreshkov.ledger.feature.posting.api.navigation/PostingList.serializer|serializer(){}[0]
+    final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // app.oreshkov.ledger.feature.posting.api.navigation/PostingList.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.api.navigation/PostingList.toString|toString(){}[0]
+}
+
+final val app.oreshkov.ledger.feature.posting.api.navigation/serializerPostings // app.oreshkov.ledger.feature.posting.api.navigation/serializerPostings|{}serializerPostings[0]
+    final fun <get-serializerPostings>(): kotlinx.serialization.modules/SerializersModule // app.oreshkov.ledger.feature.posting.api.navigation/serializerPostings.<get-serializerPostings>|<get-serializerPostings>(){}[0]

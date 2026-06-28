@@ -1,0 +1,49 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.core:test>
+abstract class app.oreshkov.ledger.core.test/PlatformComposeUiTest { // app.oreshkov.ledger.core.test/PlatformComposeUiTest|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.test/PlatformComposeUiTest.<init>|<init>(){}[0]
+}
+
+final class app.oreshkov.ledger.core.test/FakePostingRepository : app.oreshkov.ledger.core.domain.repository/PostingRepository { // app.oreshkov.ledger.core.test/FakePostingRepository|null[0]
+    constructor <init>() // app.oreshkov.ledger.core.test/FakePostingRepository.<init>|<init>(){}[0]
+
+    final val deletedPostings // app.oreshkov.ledger.core.test/FakePostingRepository.deletedPostings|{}deletedPostings[0]
+        final fun <get-deletedPostings>(): kotlin.collections/MutableList<app.oreshkov.ledger.core.model.data/Posting> // app.oreshkov.ledger.core.test/FakePostingRepository.deletedPostings.<get-deletedPostings>|<get-deletedPostings>(){}[0]
+    final val insertedPostings // app.oreshkov.ledger.core.test/FakePostingRepository.insertedPostings|{}insertedPostings[0]
+        final fun <get-insertedPostings>(): kotlin.collections/MutableList<app.oreshkov.ledger.core.model.data/NewPosting> // app.oreshkov.ledger.core.test/FakePostingRepository.insertedPostings.<get-insertedPostings>|<get-insertedPostings>(){}[0]
+    final val updatedPostings // app.oreshkov.ledger.core.test/FakePostingRepository.updatedPostings|{}updatedPostings[0]
+        final fun <get-updatedPostings>(): kotlin.collections/MutableList<app.oreshkov.ledger.core.model.data/Posting> // app.oreshkov.ledger.core.test/FakePostingRepository.updatedPostings.<get-updatedPostings>|<get-updatedPostings>(){}[0]
+
+    final var failNextWrite // app.oreshkov.ledger.core.test/FakePostingRepository.failNextWrite|{}failNextWrite[0]
+        final fun <get-failNextWrite>(): kotlin/Boolean // app.oreshkov.ledger.core.test/FakePostingRepository.failNextWrite.<get-failNextWrite>|<get-failNextWrite>(){}[0]
+        final fun <set-failNextWrite>(kotlin/Boolean) // app.oreshkov.ledger.core.test/FakePostingRepository.failNextWrite.<set-failNextWrite>|<set-failNextWrite>(kotlin.Boolean){}[0]
+    final var shouldThrowOnGetAll // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetAll|{}shouldThrowOnGetAll[0]
+        final fun <get-shouldThrowOnGetAll>(): kotlin/Boolean // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetAll.<get-shouldThrowOnGetAll>|<get-shouldThrowOnGetAll>(){}[0]
+        final fun <set-shouldThrowOnGetAll>(kotlin/Boolean) // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetAll.<set-shouldThrowOnGetAll>|<set-shouldThrowOnGetAll>(kotlin.Boolean){}[0]
+    final var shouldThrowOnGetById // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetById|{}shouldThrowOnGetById[0]
+        final fun <get-shouldThrowOnGetById>(): kotlin/Boolean // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetById.<get-shouldThrowOnGetById>|<get-shouldThrowOnGetById>(){}[0]
+        final fun <set-shouldThrowOnGetById>(kotlin/Boolean) // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetById.<set-shouldThrowOnGetById>|<set-shouldThrowOnGetById>(kotlin.Boolean){}[0]
+
+    final fun getAllPostings(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting>> // app.oreshkov.ledger.core.test/FakePostingRepository.getAllPostings|getAllPostings(){}[0]
+    final fun getPostingById(kotlin/String): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.data/Posting?> // app.oreshkov.ledger.core.test/FakePostingRepository.getPostingById|getPostingById(kotlin.String){}[0]
+    final fun seed(kotlin/Array<out app.oreshkov.ledger.core.model.data/Posting>...) // app.oreshkov.ledger.core.test/FakePostingRepository.seed|seed(kotlin.Array<out|app.oreshkov.ledger.core.model.data.Posting>...){}[0]
+    final suspend fun deletePosting(kotlin/String) // app.oreshkov.ledger.core.test/FakePostingRepository.deletePosting|deletePosting(kotlin.String){}[0]
+    final suspend fun insertPosting(app.oreshkov.ledger.core.model.data/NewPosting) // app.oreshkov.ledger.core.test/FakePostingRepository.insertPosting|insertPosting(app.oreshkov.ledger.core.model.data.NewPosting){}[0]
+    final suspend fun updatePosting(app.oreshkov.ledger.core.model.data/Posting) // app.oreshkov.ledger.core.test/FakePostingRepository.updatePosting|updatePosting(app.oreshkov.ledger.core.model.data.Posting){}[0]
+}
+
+final val app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop|#static{}app_oreshkov_ledger_core_test_FakePostingRepository$stableprop[0]
+final val app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop|#static{}app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop[0]
+
+final fun app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop_getter|app_oreshkov_ledger_core_test_FakePostingRepository$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop_getter|app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.core.test/newPosting(kotlin/String = ...): app.oreshkov.ledger.core.model.data/NewPosting // app.oreshkov.ledger.core.test/newPosting|newPosting(kotlin.String){}[0]
+final fun app.oreshkov.ledger.core.test/posting(kotlin/String = ..., kotlin/String = ...): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.core.test/posting|posting(kotlin.String;kotlin.String){}[0]
+final fun app.oreshkov.ledger.core.test/postings(kotlin/Array<out kotlin/String>...): kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting> // app.oreshkov.ledger.core.test/postings|postings(kotlin.Array<out|kotlin.String>...){}[0]
+final fun app.oreshkov.ledger.core.test/postings(kotlin/Int): kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting> // app.oreshkov.ledger.core.test/postings|postings(kotlin.Int){}[0]
