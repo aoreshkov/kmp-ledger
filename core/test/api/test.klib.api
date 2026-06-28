@@ -38,10 +38,19 @@ final class app.oreshkov.ledger.core.test/FakePostingRepository : app.oreshkov.l
     final suspend fun updatePosting(app.oreshkov.ledger.core.model.data/Posting) // app.oreshkov.ledger.core.test/FakePostingRepository.updatePosting|updatePosting(app.oreshkov.ledger.core.model.data.Posting){}[0]
 }
 
+final class app.oreshkov.ledger.core.test/FakeSettingsRepository : app.oreshkov.ledger.core.domain.repository/SettingsRepository { // app.oreshkov.ledger.core.test/FakeSettingsRepository|null[0]
+    constructor <init>(app.oreshkov.ledger.core.model.settings/ThemeMode = ...) // app.oreshkov.ledger.core.test/FakeSettingsRepository.<init>|<init>(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
+
+    final fun themeMode(): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.settings/ThemeMode> // app.oreshkov.ledger.core.test/FakeSettingsRepository.themeMode|themeMode(){}[0]
+    final suspend fun setThemeMode(app.oreshkov.ledger.core.model.settings/ThemeMode) // app.oreshkov.ledger.core.test/FakeSettingsRepository.setThemeMode|setThemeMode(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
+}
+
 final val app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop|#static{}app_oreshkov_ledger_core_test_FakePostingRepository$stableprop[0]
+final val app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakeSettingsRepository$stableprop // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakeSettingsRepository$stableprop|#static{}app_oreshkov_ledger_core_test_FakeSettingsRepository$stableprop[0]
 final val app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop|#static{}app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop[0]
 
 final fun app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakePostingRepository$stableprop_getter|app_oreshkov_ledger_core_test_FakePostingRepository$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakeSettingsRepository$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_FakeSettingsRepository$stableprop_getter|app_oreshkov_ledger_core_test_FakeSettingsRepository$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.test/app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop_getter|app_oreshkov_ledger_core_test_PlatformComposeUiTest$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger.core.test/newPosting(kotlin/String = ...): app.oreshkov.ledger.core.model.data/NewPosting // app.oreshkov.ledger.core.test/newPosting|newPosting(kotlin.String){}[0]
 final fun app.oreshkov.ledger.core.test/posting(kotlin/String = ..., kotlin/String = ...): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.core.test/posting|posting(kotlin.String;kotlin.String){}[0]

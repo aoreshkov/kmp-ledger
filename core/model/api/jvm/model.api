@@ -22,3 +22,12 @@ public final class app/oreshkov/ledger/core/model/data/Posting {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class app/oreshkov/ledger/core/model/settings/ThemeMode : java/lang/Enum {
+	public static final field DARK Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+	public static final field LIGHT Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+	public static final field SYSTEM Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+	public static fun values ()[Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+}
+

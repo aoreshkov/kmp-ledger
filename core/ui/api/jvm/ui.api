@@ -28,6 +28,7 @@ public final class app/oreshkov/ledger/core/ui/theme/ColorKt {
 }
 
 public final class app/oreshkov/ledger/core/ui/theme/ThemeKt {
+	public static final fun LedgerTheme (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
 	public static final fun LedgerTheme (ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 

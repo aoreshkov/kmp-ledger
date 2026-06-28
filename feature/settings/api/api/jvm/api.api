@@ -1,0 +1,20 @@
+public final class app/oreshkov/ledger/feature/settings/api/navigation/SettingsHome : app/oreshkov/ledger/feature/settings/api/navigation/SettingsRoute {
+	public static final field INSTANCE Lapp/oreshkov/ledger/feature/settings/api/navigation/SettingsHome;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/feature/settings/api/navigation/SettingsNavKeysKt {
+	public static final fun getSerializerSettings ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public abstract interface class app/oreshkov/ledger/feature/settings/api/navigation/SettingsRoute : androidx/navigation3/runtime/NavKey {
+	public static final field Companion Lapp/oreshkov/ledger/feature/settings/api/navigation/SettingsRoute$Companion;
+}
+
+public final class app/oreshkov/ledger/feature/settings/api/navigation/SettingsRoute$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

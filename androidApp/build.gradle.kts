@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":core:bootstrap"))
     implementation(project(":core:ui"))
     implementation(project(":feature:posting:impl"))
+    implementation(project(":feature:settings:impl"))
 
     testImplementation(project(":core:database"))
     testImplementation(libs.kotlin.test)

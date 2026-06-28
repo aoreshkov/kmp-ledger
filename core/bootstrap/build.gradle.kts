@@ -17,6 +17,8 @@ kotlin {
             implementation(project(":core:ui"))
             implementation(project(":feature:posting:api"))
             implementation(project(":feature:posting:impl"))
+            implementation(project(":feature:settings:api"))
+            implementation(project(":feature:settings:impl"))
         }
         commonTest.dependencies {
             implementation(libs.kermit)

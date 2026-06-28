@@ -6,6 +6,18 @@
 // - Show declarations: true
 
 // Library unique name: <Ledger.core:model>
+final enum class app.oreshkov.ledger.core.model.settings/ThemeMode : kotlin/Enum<app.oreshkov.ledger.core.model.settings/ThemeMode> { // app.oreshkov.ledger.core.model.settings/ThemeMode|null[0]
+    enum entry DARK // app.oreshkov.ledger.core.model.settings/ThemeMode.DARK|null[0]
+    enum entry LIGHT // app.oreshkov.ledger.core.model.settings/ThemeMode.LIGHT|null[0]
+    enum entry SYSTEM // app.oreshkov.ledger.core.model.settings/ThemeMode.SYSTEM|null[0]
+
+    final val entries // app.oreshkov.ledger.core.model.settings/ThemeMode.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<app.oreshkov.ledger.core.model.settings/ThemeMode> // app.oreshkov.ledger.core.model.settings/ThemeMode.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): app.oreshkov.ledger.core.model.settings/ThemeMode // app.oreshkov.ledger.core.model.settings/ThemeMode.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<app.oreshkov.ledger.core.model.settings/ThemeMode> // app.oreshkov.ledger.core.model.settings/ThemeMode.values|values#static(){}[0]
+}
+
 final class app.oreshkov.ledger.core.model.data/NewPosting { // app.oreshkov.ledger.core.model.data/NewPosting|null[0]
     constructor <init>(kotlin/String) // app.oreshkov.ledger.core.model.data/NewPosting.<init>|<init>(kotlin.String){}[0]
 

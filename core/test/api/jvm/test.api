@@ -18,6 +18,15 @@ public final class app/oreshkov/ledger/core/test/FakePostingRepository : app/ore
 	public fun updatePosting (Lapp/oreshkov/ledger/core/model/data/Posting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class app/oreshkov/ledger/core/test/FakeSettingsRepository : app/oreshkov/ledger/core/domain/repository/SettingsRepository {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;)V
+	public synthetic fun <init> (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun setThemeMode (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun themeMode ()Lkotlinx/coroutines/flow/Flow;
+}
+
 public final class app/oreshkov/ledger/core/test/FixturesKt {
 	public static final fun newPosting (Ljava/lang/String;)Lapp/oreshkov/ledger/core/model/data/NewPosting;
 	public static synthetic fun newPosting$default (Ljava/lang/String;ILjava/lang/Object;)Lapp/oreshkov/ledger/core/model/data/NewPosting;

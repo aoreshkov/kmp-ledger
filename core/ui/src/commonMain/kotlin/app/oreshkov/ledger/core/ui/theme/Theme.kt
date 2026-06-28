@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import app.oreshkov.ledger.core.model.settings.ThemeMode
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -30,4 +31,21 @@ fun LedgerTheme(
         typography = Typography,
         content = content
     )
+}
+
+/**
+ * Resolves a user-selected [ThemeMode] to dark/light, deferring to the OS for
+ * [ThemeMode.SYSTEM], then applies the theme.
+ */
+@Composable
+fun LedgerTheme(
+    themeMode: ThemeMode,
+    content: @Composable () -> Unit
+) {
+    val darkTheme = when (themeMode) {
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+    LedgerTheme(darkTheme = darkTheme, content = content)
 }

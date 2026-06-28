@@ -7,6 +7,7 @@ import androidx.compose.ui.window.rememberWindowState
 import app.oreshkov.ledger.core.bootstrap.di.BootstrapModule
 import app.oreshkov.ledger.core.ui.App
 import app.oreshkov.ledger.feature.posting.impl.di.postingNavigationModule
+import app.oreshkov.ledger.feature.settings.impl.di.settingsNavigationModule
 import org.koin.core.annotation.KoinApplication
 import org.koin.plugin.module.dsl.startKoin
 
@@ -17,7 +18,7 @@ class LedgerApp
 
 fun main() {
     startKoin<LedgerApp> {
-        modules(postingNavigationModule)
+        modules(postingNavigationModule, settingsNavigationModule)
     }
     application {
         Window(

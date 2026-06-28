@@ -34,6 +34,7 @@ kotlin {
             implementation(project(":core:bootstrap"))
             implementation(project(":core:ui"))
             implementation(project(":feature:posting:impl"))
+            implementation(project(":feature:settings:impl"))
             implementation(libs.kotlinx.coroutines.core)
         }
     }

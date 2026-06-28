@@ -1,0 +1,25 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Ledger.feature.settings:api>
+sealed interface app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute : androidx.navigation3.runtime/NavKey { // app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute|null[0]
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute> // app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+}
+
+final object app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome : app.oreshkov.ledger.feature.settings.api.navigation/SettingsRoute, kotlinx.serialization.internal/SerializerFactory { // app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome|null[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome.hashCode|hashCode(){}[0]
+    final fun serializer(): kotlinx.serialization/KSerializer<app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome> // app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome.serializer|serializer(){}[0]
+    final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome.toString|toString(){}[0]
+}
+
+final val app.oreshkov.ledger.feature.settings.api.navigation/serializerSettings // app.oreshkov.ledger.feature.settings.api.navigation/serializerSettings|{}serializerSettings[0]
+    final fun <get-serializerSettings>(): kotlinx.serialization.modules/SerializersModule // app.oreshkov.ledger.feature.settings.api.navigation/serializerSettings.<get-serializerSettings>|<get-serializerSettings>(){}[0]

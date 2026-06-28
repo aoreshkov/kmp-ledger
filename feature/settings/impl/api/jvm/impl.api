@@ -1,0 +1,55 @@
+public final class app/oreshkov/ledger/feature/settings/impl/ComposableSingletons$SettingsScreenKt {
+	public static final field INSTANCE Lapp/oreshkov/ledger/feature/settings/impl/ComposableSingletons$SettingsScreenKt;
+	public fun <init> ()V
+	public final fun getLambda$2109389608$Ledger_feature_settings_impl ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$998551496$Ledger_feature_settings_impl ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/SettingsScreenKt {
+	public static final fun SettingsScreen (Lkotlin/jvm/functions/Function0;Lapp/oreshkov/ledger/feature/settings/impl/SettingsViewModel;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/SettingsUiState {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;)V
+	public synthetic fun <init> (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+	public final fun copy (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;)Lapp/oreshkov/ledger/feature/settings/impl/SettingsUiState;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/settings/impl/SettingsUiState;Lapp/oreshkov/ledger/core/model/settings/ThemeMode;ILjava/lang/Object;)Lapp/oreshkov/ledger/feature/settings/impl/SettingsUiState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getThemeMode ()Lapp/oreshkov/ledger/core/model/settings/ThemeMode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/SettingsViewModel : androidx/lifecycle/ViewModel {
+	public static final field $stable I
+	public fun <init> (Lapp/oreshkov/ledger/core/domain/GetThemeModeUseCase;Lapp/oreshkov/ledger/core/domain/SetThemeModeUseCase;)V
+	public final fun getUiState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun onThemeModeChange (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;)V
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/di/AppOreshkovLedgerFeatureSettingsImplDiSettingsModuleModuleKt {
+	public static final fun module (Lapp/oreshkov/ledger/feature/settings/impl/di/SettingsModule;)Lorg/koin/core/module/Module;
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/di/ComposableSingletons$SettingsModuleKt {
+	public static final field INSTANCE Lapp/oreshkov/ledger/feature/settings/impl/di/ComposableSingletons$SettingsModuleKt;
+	public fun <init> ()V
+	public final fun getLambda$1775039160$Ledger_feature_settings_impl ()Lkotlin/jvm/functions/Function4;
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/di/SettingsModule {
+	public static final field $stable I
+	public fun <init> ()V
+}
+
+public final class app/oreshkov/ledger/feature/settings/impl/di/SettingsModuleKt {
+	public static final fun getSettingsNavigationModule ()Lorg/koin/core/module/Module;
+}
+
+public final class org/koin/plugin/hints/Koin_hints_app_oreshkov_ledger_feature_settings_impl_di_SettingsModuleKt {
+	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_settings_impl_di_SettingsModule_viewmodel (Lapp/oreshkov/ledger/feature/settings/impl/SettingsViewModel;Landroidx/lifecycle/ViewModel;)V
+}
+

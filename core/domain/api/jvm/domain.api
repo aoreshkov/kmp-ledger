@@ -13,9 +13,19 @@ public final class app/oreshkov/ledger/core/domain/GetPostingsUseCase {
 	public final fun invoke ()Lkotlinx/coroutines/flow/Flow;
 }
 
+public final class app/oreshkov/ledger/core/domain/GetThemeModeUseCase {
+	public fun <init> (Lapp/oreshkov/ledger/core/domain/repository/SettingsRepository;)V
+	public final fun invoke ()Lkotlinx/coroutines/flow/Flow;
+}
+
 public final class app/oreshkov/ledger/core/domain/SavePostingUseCase {
 	public fun <init> (Lapp/oreshkov/ledger/core/domain/repository/PostingRepository;)V
 	public final fun invoke-0E7RQCE (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class app/oreshkov/ledger/core/domain/SetThemeModeUseCase {
+	public fun <init> (Lapp/oreshkov/ledger/core/domain/repository/SettingsRepository;)V
+	public final fun invoke-gIAlu-s (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class app/oreshkov/ledger/core/domain/di/AppOreshkovLedgerCoreDomainDiDomainModuleModuleKt {
@@ -34,10 +44,17 @@ public abstract interface class app/oreshkov/ledger/core/domain/repository/Posti
 	public abstract fun updatePosting (Lapp/oreshkov/ledger/core/model/data/Posting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract interface class app/oreshkov/ledger/core/domain/repository/SettingsRepository {
+	public abstract fun setThemeMode (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun themeMode ()Lkotlinx/coroutines/flow/Flow;
+}
+
 public final class org/koin/plugin/hints/Koin_hints_app_oreshkov_ledger_core_domain_di_DomainModuleKt {
 	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/DeletePostingUseCase;)V
 	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/GetPostingUseCase;)V
 	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/GetPostingsUseCase;)V
+	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/GetThemeModeUseCase;)V
 	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/SavePostingUseCase;)V
+	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/SetThemeModeUseCase;)V
 }
 

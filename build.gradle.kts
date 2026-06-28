@@ -19,12 +19,15 @@ dependencies {
     kover(project(":core:compose"))
     kover(project(":core:data"))
     kover(project(":core:database"))
+    kover(project(":core:datastore"))
     kover(project(":core:domain"))
     kover(project(":core:model"))
     kover(project(":core:navigation"))
     kover(project(":core:ui"))
     kover(project(":feature:posting:api"))
     kover(project(":feature:posting:impl"))
+    kover(project(":feature:settings:api"))
+    kover(project(":feature:settings:impl"))
 }
 
 kover {

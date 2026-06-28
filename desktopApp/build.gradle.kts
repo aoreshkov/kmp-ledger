@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":core:bootstrap"))
     implementation(project(":core:ui"))
     implementation(project(":feature:posting:impl"))
+    implementation(project(":feature:settings:impl"))
     implementation(libs.compose.ui)
     implementation(compose.desktop.currentOs)
     implementation(libs.koin.core)

@@ -14,6 +14,11 @@ abstract interface app.oreshkov.ledger.core.domain.repository/PostingRepository 
     abstract suspend fun updatePosting(app.oreshkov.ledger.core.model.data/Posting) // app.oreshkov.ledger.core.domain.repository/PostingRepository.updatePosting|updatePosting(app.oreshkov.ledger.core.model.data.Posting){}[0]
 }
 
+abstract interface app.oreshkov.ledger.core.domain.repository/SettingsRepository { // app.oreshkov.ledger.core.domain.repository/SettingsRepository|null[0]
+    abstract fun themeMode(): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.settings/ThemeMode> // app.oreshkov.ledger.core.domain.repository/SettingsRepository.themeMode|themeMode(){}[0]
+    abstract suspend fun setThemeMode(app.oreshkov.ledger.core.model.settings/ThemeMode) // app.oreshkov.ledger.core.domain.repository/SettingsRepository.setThemeMode|setThemeMode(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
+}
+
 final class app.oreshkov.ledger.core.domain.di/DomainModule { // app.oreshkov.ledger.core.domain.di/DomainModule|null[0]
     constructor <init>() // app.oreshkov.ledger.core.domain.di/DomainModule.<init>|<init>(){}[0]
 }
@@ -36,10 +41,22 @@ final class app.oreshkov.ledger.core.domain/GetPostingsUseCase { // app.oreshkov
     final fun invoke(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting>> // app.oreshkov.ledger.core.domain/GetPostingsUseCase.invoke|invoke(){}[0]
 }
 
+final class app.oreshkov.ledger.core.domain/GetThemeModeUseCase { // app.oreshkov.ledger.core.domain/GetThemeModeUseCase|null[0]
+    constructor <init>(app.oreshkov.ledger.core.domain.repository/SettingsRepository) // app.oreshkov.ledger.core.domain/GetThemeModeUseCase.<init>|<init>(app.oreshkov.ledger.core.domain.repository.SettingsRepository){}[0]
+
+    final fun invoke(): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.settings/ThemeMode> // app.oreshkov.ledger.core.domain/GetThemeModeUseCase.invoke|invoke(){}[0]
+}
+
 final class app.oreshkov.ledger.core.domain/SavePostingUseCase { // app.oreshkov.ledger.core.domain/SavePostingUseCase|null[0]
     constructor <init>(app.oreshkov.ledger.core.domain.repository/PostingRepository) // app.oreshkov.ledger.core.domain/SavePostingUseCase.<init>|<init>(app.oreshkov.ledger.core.domain.repository.PostingRepository){}[0]
 
     final suspend fun invoke(kotlin/String?, kotlin/String): kotlin/Result<kotlin/Unit> // app.oreshkov.ledger.core.domain/SavePostingUseCase.invoke|invoke(kotlin.String?;kotlin.String){}[0]
+}
+
+final class app.oreshkov.ledger.core.domain/SetThemeModeUseCase { // app.oreshkov.ledger.core.domain/SetThemeModeUseCase|null[0]
+    constructor <init>(app.oreshkov.ledger.core.domain.repository/SettingsRepository) // app.oreshkov.ledger.core.domain/SetThemeModeUseCase.<init>|<init>(app.oreshkov.ledger.core.domain.repository.SettingsRepository){}[0]
+
+    final suspend fun invoke(app.oreshkov.ledger.core.model.settings/ThemeMode): kotlin/Result<kotlin/Unit> // app.oreshkov.ledger.core.domain/SetThemeModeUseCase.invoke|invoke(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
 }
 
 final fun (app.oreshkov.ledger.core.domain.di/DomainModule).app.oreshkov.ledger.core.domain.di/module(): org.koin.core.module/Module // app.oreshkov.ledger.core.domain.di/module|module@app.oreshkov.ledger.core.domain.di.DomainModule(){}[0]
