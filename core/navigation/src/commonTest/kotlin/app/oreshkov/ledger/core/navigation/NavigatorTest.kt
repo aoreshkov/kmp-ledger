@@ -52,4 +52,25 @@ class NavigatorTest {
         nav.goTo(TestKey("b"))
         assertEquals<List<NavKey>>(listOf(start, TestKey("a"), TestKey("b")), nav.entries)
     }
+
+    @Test
+    fun switchTopLevel_resetsDeepStackToSection() {
+        nav.goTo(TestKey("a"))
+        nav.goTo(TestKey("b"))
+        nav.switchTopLevel(TestKey("settings"))
+        assertEquals<List<NavKey>>(listOf(TestKey("settings")), nav.entries)
+    }
+
+    @Test
+    fun switchTopLevel_toCurrentRootWhileDrilledIn_returnsToRoot() {
+        nav.goTo(TestKey("detail"))
+        nav.switchTopLevel(start)
+        assertEquals<List<NavKey>>(listOf(start), nav.entries)
+    }
+
+    @Test
+    fun switchTopLevel_toCurrentRootAtRoot_isNoOp() {
+        nav.switchTopLevel(start)
+        assertEquals<List<NavKey>>(listOf(start), nav.entries)
+    }
 }

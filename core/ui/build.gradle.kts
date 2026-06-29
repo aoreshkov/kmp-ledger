@@ -20,6 +20,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.compose.material.icons.core)
             implementation(libs.compose.material3.adaptive.nav3)
+            implementation(libs.compose.material3.adaptive.navigation.suite)
 
             implementation(libs.koin.compose.navigation)
 

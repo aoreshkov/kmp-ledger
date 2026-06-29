@@ -15,5 +15,16 @@ class Navigator(private val backStack: MutableList<NavKey>) {
         }
     }
 
+    /**
+     * Switches to a top-level section, resetting that section to its root (single-top).
+     * Used by the top-level navigation chrome so re-selecting the current section while
+     * drilled in returns to its start, and switching sections never stacks history.
+     */
+    fun switchTopLevel(destination: NavKey) {
+        if (backStack.size == 1 && backStack.first() == destination) return
+        backStack.clear()
+        backStack.add(destination)
+    }
+
     val entries: List<NavKey> get() = backStack.toList()
 }

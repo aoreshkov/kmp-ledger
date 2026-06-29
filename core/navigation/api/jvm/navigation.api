@@ -9,6 +9,7 @@ public final class app/oreshkov/ledger/core/navigation/Navigator {
 	public final fun getEntries ()Ljava/util/List;
 	public final fun goBack ()V
 	public final fun goTo (Landroidx/navigation3/runtime/NavKey;)V
+	public final fun switchTopLevel (Landroidx/navigation3/runtime/NavKey;)V
 }
 
 public final class app/oreshkov/ledger/core/navigation/StartDestination {
@@ -23,5 +24,23 @@ public final class app/oreshkov/ledger/core/navigation/StartDestination {
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Landroidx/navigation3/runtime/NavKey;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Landroidx/navigation3/runtime/NavKey;
+}
+
+public final class app/oreshkov/ledger/core/navigation/TopLevelDestination {
+	public static final field $stable I
+	public fun <init> (Landroidx/navigation3/runtime/NavKey;Lorg/jetbrains/compose/resources/StringResource;Landroidx/compose/ui/graphics/vector/ImageVector;I)V
+	public final fun component1 ()Landroidx/navigation3/runtime/NavKey;
+	public final fun component2 ()Lorg/jetbrains/compose/resources/StringResource;
+	public final fun component3 ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun component4 ()I
+	public final fun copy (Landroidx/navigation3/runtime/NavKey;Lorg/jetbrains/compose/resources/StringResource;Landroidx/compose/ui/graphics/vector/ImageVector;I)Lapp/oreshkov/ledger/core/navigation/TopLevelDestination;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/core/navigation/TopLevelDestination;Landroidx/navigation3/runtime/NavKey;Lorg/jetbrains/compose/resources/StringResource;Landroidx/compose/ui/graphics/vector/ImageVector;IILjava/lang/Object;)Lapp/oreshkov/ledger/core/navigation/TopLevelDestination;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIcon ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getKey ()Landroidx/navigation3/runtime/NavKey;
+	public final fun getLabel ()Lorg/jetbrains/compose/resources/StringResource;
+	public final fun getOrder ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 

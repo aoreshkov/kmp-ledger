@@ -3,9 +3,13 @@ package app.oreshkov.ledger.core.ui
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
+import androidx.compose.material3.adaptive.navigationsuite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -19,13 +23,20 @@ import app.oreshkov.ledger.core.model.settings.ThemeMode
 import app.oreshkov.ledger.core.navigation.LocalNavigator
 import app.oreshkov.ledger.core.navigation.Navigator
 import app.oreshkov.ledger.core.navigation.StartDestination
+import app.oreshkov.ledger.core.navigation.TopLevelDestination
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI
 
 import app.oreshkov.ledger.core.ui.theme.LedgerTheme
 
-@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3AdaptiveApi::class)
+@OptIn(
+    KoinExperimentalAPI::class,
+    ExperimentalMaterial3AdaptiveApi::class,
+    ExperimentalMaterial3AdaptiveNavigationSuiteApi::class,
+)
 @Composable
 fun App() {
     // Until the stored preference loads, fall back to the OS setting (ThemeMode.SYSTEM).
@@ -45,6 +56,13 @@ fun App() {
 
             val navigator = remember(backStack) { Navigator(backStack) }
 
+            // Each feature contributes its TopLevelDestination via Koin; the app-level
+            // scaffold aggregates them and stays feature-agnostic (see TopLevelDestination).
+            val koin = getKoin()
+            val topLevelDestinations = remember(koin) {
+                koin.getAll<TopLevelDestination>().sortedBy { it.order }
+            }
+
             val entryProvider = koinEntryProvider<NavKey>()
             val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
             val sceneStrategies = remember(listDetailStrategy) { listOf(listDetailStrategy) }
@@ -57,14 +75,31 @@ fun App() {
                 listOf(saveableStateDecorator, viewModelStoreDecorator)
             }
 
+            // Selection tracks the section root (back-stack head), so drilling into a
+            // detail/edit screen keeps the owning section highlighted.
+            val currentRoot = backStack.firstOrNull()
+
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                NavDisplay(
-                    backStack = backStack,
-                    onBack = { navigator.goBack() },
-                    sceneStrategies = sceneStrategies,
-                    entryProvider = entryProvider,
-                    entryDecorators = decorators
-                )
+                NavigationSuiteScaffold(
+                    navigationSuiteItems = {
+                        topLevelDestinations.forEach { destination ->
+                            item(
+                                selected = currentRoot == destination.key,
+                                onClick = { navigator.switchTopLevel(destination.key) },
+                                icon = { Icon(destination.icon, contentDescription = null) },
+                                label = { Text(stringResource(destination.label)) },
+                            )
+                        }
+                    }
+                ) {
+                    NavDisplay(
+                        backStack = backStack,
+                        onBack = { navigator.goBack() },
+                        sceneStrategies = sceneStrategies,
+                        entryProvider = entryProvider,
+                        entryDecorators = decorators
+                    )
+                }
             }
         }
     }

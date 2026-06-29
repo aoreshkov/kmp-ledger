@@ -15,6 +15,29 @@ final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledg
     final fun canGoBack(): kotlin/Boolean // app.oreshkov.ledger.core.navigation/Navigator.canGoBack|canGoBack(){}[0]
     final fun goBack() // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(){}[0]
     final fun goTo(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.goTo|goTo(androidx.navigation3.runtime.NavKey){}[0]
+    final fun switchTopLevel(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.switchTopLevel|switchTopLevel(androidx.navigation3.runtime.NavKey){}[0]
+}
+
+final class app.oreshkov.ledger.core.navigation/TopLevelDestination { // app.oreshkov.ledger.core.navigation/TopLevelDestination|null[0]
+    constructor <init>(androidx.navigation3.runtime/NavKey, org.jetbrains.compose.resources/StringResource, androidx.compose.ui.graphics.vector/ImageVector, kotlin/Int) // app.oreshkov.ledger.core.navigation/TopLevelDestination.<init>|<init>(androidx.navigation3.runtime.NavKey;org.jetbrains.compose.resources.StringResource;androidx.compose.ui.graphics.vector.ImageVector;kotlin.Int){}[0]
+
+    final val icon // app.oreshkov.ledger.core.navigation/TopLevelDestination.icon|{}icon[0]
+        final fun <get-icon>(): androidx.compose.ui.graphics.vector/ImageVector // app.oreshkov.ledger.core.navigation/TopLevelDestination.icon.<get-icon>|<get-icon>(){}[0]
+    final val key // app.oreshkov.ledger.core.navigation/TopLevelDestination.key|{}key[0]
+        final fun <get-key>(): androidx.navigation3.runtime/NavKey // app.oreshkov.ledger.core.navigation/TopLevelDestination.key.<get-key>|<get-key>(){}[0]
+    final val label // app.oreshkov.ledger.core.navigation/TopLevelDestination.label|{}label[0]
+        final fun <get-label>(): org.jetbrains.compose.resources/StringResource // app.oreshkov.ledger.core.navigation/TopLevelDestination.label.<get-label>|<get-label>(){}[0]
+    final val order // app.oreshkov.ledger.core.navigation/TopLevelDestination.order|{}order[0]
+        final fun <get-order>(): kotlin/Int // app.oreshkov.ledger.core.navigation/TopLevelDestination.order.<get-order>|<get-order>(){}[0]
+
+    final fun component1(): androidx.navigation3.runtime/NavKey // app.oreshkov.ledger.core.navigation/TopLevelDestination.component1|component1(){}[0]
+    final fun component2(): org.jetbrains.compose.resources/StringResource // app.oreshkov.ledger.core.navigation/TopLevelDestination.component2|component2(){}[0]
+    final fun component3(): androidx.compose.ui.graphics.vector/ImageVector // app.oreshkov.ledger.core.navigation/TopLevelDestination.component3|component3(){}[0]
+    final fun component4(): kotlin/Int // app.oreshkov.ledger.core.navigation/TopLevelDestination.component4|component4(){}[0]
+    final fun copy(androidx.navigation3.runtime/NavKey = ..., org.jetbrains.compose.resources/StringResource = ..., androidx.compose.ui.graphics.vector/ImageVector = ..., kotlin/Int = ...): app.oreshkov.ledger.core.navigation/TopLevelDestination // app.oreshkov.ledger.core.navigation/TopLevelDestination.copy|copy(androidx.navigation3.runtime.NavKey;org.jetbrains.compose.resources.StringResource;androidx.compose.ui.graphics.vector.ImageVector;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.navigation/TopLevelDestination.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.navigation/TopLevelDestination.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // app.oreshkov.ledger.core.navigation/TopLevelDestination.toString|toString(){}[0]
 }
 
 final value class app.oreshkov.ledger.core.navigation/StartDestination { // app.oreshkov.ledger.core.navigation/StartDestination|null[0]
@@ -31,6 +54,7 @@ final value class app.oreshkov.ledger.core.navigation/StartDestination { // app.
 final val app.oreshkov.ledger.core.navigation/LocalNavigator // app.oreshkov.ledger.core.navigation/LocalNavigator|{}LocalNavigator[0]
     final fun <get-LocalNavigator>(): androidx.compose.runtime/ProvidableCompositionLocal<app.oreshkov.ledger.core.navigation/Navigator> // app.oreshkov.ledger.core.navigation/LocalNavigator.<get-LocalNavigator>|<get-LocalNavigator>(){}[0]
 final val app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop|#static{}app_oreshkov_ledger_core_navigation_Navigator$stableprop[0]
+final val app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop|#static{}app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop[0]
 final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop|#static{}ledger_core_navigation_generated_resources_Res_array$stableprop[0]
 final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop|#static{}ledger_core_navigation_generated_resources_Res_drawable$stableprop[0]
 final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop|#static{}ledger_core_navigation_generated_resources_Res_font$stableprop[0]
@@ -38,6 +62,7 @@ final val ledger.core.navigation.generated.resources/ledger_core_navigation_gene
 final val ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_string$stableprop // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_string$stableprop|#static{}ledger_core_navigation_generated_resources_Res_string$stableprop[0]
 
 final fun app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter|app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop_getter|app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop_getter(){}[0]
 final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_array$stableprop_getter|ledger_core_navigation_generated_resources_Res_array$stableprop_getter(){}[0]
 final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_drawable$stableprop_getter|ledger_core_navigation_generated_resources_Res_drawable$stableprop_getter(){}[0]
 final fun ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop_getter(): kotlin/Int // ledger.core.navigation.generated.resources/ledger_core_navigation_generated_resources_Res_font$stableprop_getter|ledger_core_navigation_generated_resources_Res_font$stableprop_getter(){}[0]

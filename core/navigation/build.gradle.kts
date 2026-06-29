@@ -10,6 +10,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.androidx.navigation3.runtime)
+            // ImageVector type carried by TopLevelDestination.
+            implementation(libs.compose.ui)
         }
         commonTest.dependencies {
             implementation(libs.kotlinx.coroutines.test)

@@ -1,4 +1,7 @@
 <resources>
+    <!-- Navigation -->
+    <string name="posting_nav_label">Postings</string>
+
     <!-- Posting List -->
     <string name="posting_list_title">My Postings</string>
     <string name="posting_list_empty">No postings added yet.</string>

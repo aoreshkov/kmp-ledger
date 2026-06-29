@@ -1,6 +1,7 @@
 <resources>
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_nav_label">Settings</string>
     <string name="settings_theme_section">Theme</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>

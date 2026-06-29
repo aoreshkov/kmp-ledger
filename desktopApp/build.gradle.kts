@@ -21,6 +21,8 @@ dependencies {
     testImplementation(project(":core:data"))
     testImplementation(project(":core:database"))
     testImplementation(libs.room3.runtime)
+    testImplementation(libs.androidx.datastore)
+    testImplementation(libs.androidx.datastore.preferences)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.koin.test)
     testImplementation(libs.compose.ui.test)
