@@ -45,7 +45,8 @@ fun App() {
     // Until the stored preference loads, fall back to the OS setting (ThemeMode.SYSTEM).
     // DataStore reads are async, so a cold start may briefly show the system theme.
     val getThemeMode = koinInject<GetThemeModeUseCase>()
-    val themeMode by getThemeMode().collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)
+    val themeFlow = remember(getThemeMode) { getThemeMode() }
+    val themeMode by themeFlow.collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)
 
     LedgerTheme(themeMode = themeMode) {
         Surface {
