@@ -1,15 +1,16 @@
 ---
 name: review-all
-description: Run BOTH review lenses over the whole project — the eleven rv-* house-rules specialists and the nine bp-* currency specialists — in parallel waves, then synthesize ONE prioritized, cross-deduplicated report. Heavyweight (twenty subagents); for release gates / periodic full audits, not per-diff. Makes no code changes. Do not invoke automatically.
+description: Run BOTH review lenses over the whole project — the eleven rv-* house-rules specialists and the nine bp-* currency specialists — in parallel waves, then synthesize ONE prioritized, cross-deduplicated review document written to docs/full-review-YYYY-MM-DD.md (findings + a phased fix plan). Heavyweight (twenty subagents); for release gates / periodic full audits, not per-diff. Writes only that doc; makes no other code changes. Do not invoke automatically.
 disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Bash, Agent
+allowed-tools: Read, Grep, Glob, Bash, Agent, Write
 ---
 
 Run a **combined** full-project review across both lenses at once: the eleven `rv-*`
 house-rules specialists (`.claude/agents/review/`) **and** the nine `bp-*`
 upstream-currency specialists (`.claude/agents/currency/`), then merge everything into
-**one** prioritized, source-cited, cross-deduplicated report. This skill makes **no
-code changes** — it reviews and reports only.
+**one** prioritized, source-cited, cross-deduplicated review document. The skill's sole
+output is that document — `docs/full-review-YYYY-MM-DD.md`, holding the findings **and a
+phased plan to implement the fixes**; it makes **no other code changes**.
 
 This is the union of `/review-house` (*"does the code obey this project's own
 rules?"*) and `/review-currency` (*"do the code and our rules still match the latest
@@ -44,11 +45,18 @@ only correctness / project-rule gaps; severity, `file:line`, concrete fix), the
 `file:line`, fix, **and source URL + version/date**; defer internal correctness to the
 `rv-*` pair). Neither invents findings when an area is sound.
 
-## Synthesize — one report
-Merge all twenty reports into a single document with the three tiers (Critical /
-Should-fix / Optional). Apply the **Cross-skill de-duplication** rule in
-`.claude/REVIEW-CONVENTIONS.md`: a paired domain that surfaces the same `file:line`
-from both its `rv-*` and `bp-*` agent becomes **one** entry — `rv-*` owns the
-correctness verdict, `bp-*` carries the source citation. Append the *pinned version
-vs. latest stable* currency table from the currency lens. Then **offer next steps** as
-described in `.claude/REVIEW-CONVENTIONS.md` — do not edit anything.
+## Synthesize — one review document
+Merge all twenty reports and **write `docs/full-review-YYYY-MM-DD.md`** (review date)
+per the *Synthesize — write the review document* section of
+`.claude/REVIEW-CONVENTIONS.md`. The doc has two parts: **(1) findings** in the three
+tiers (Critical / Should-fix / Optional), and **(2) a phased implementation plan** for
+the fixes (phases ordered by risk/value, each committable, with files + a `./gradlew`
+verify step and any apiDump/Kover gates).
+
+Apply the **Cross-skill de-duplication** rule in `.claude/REVIEW-CONVENTIONS.md`: a
+paired domain that surfaces the same `file:line` from both its `rv-*` and `bp-*` agent
+becomes **one** entry — `rv-*` owns the correctness verdict, `bp-*` carries the source
+citation. Include the *pinned version vs. latest stable* currency table from the
+currency lens. Writing that one doc is the only file change; then **offer next steps**
+(including implementing the fixes by phase) as described in
+`.claude/REVIEW-CONVENTIONS.md`.

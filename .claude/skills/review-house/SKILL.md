@@ -1,14 +1,15 @@
 ---
 name: review-house
-description: Orchestrate a full house-rules review of the entire project from the eleven rv-* review specialists, dispatched in three parallel waves, then synthesize one prioritized report. Makes no code changes (each subagent may persist notes to its own project memory). Do not invoke automatically.
+description: Orchestrate a full house-rules review of the entire project from the eleven rv-* review specialists, dispatched in three parallel waves, then synthesize one prioritized review document written to docs/house-review-YYYY-MM-DD.md (findings + a phased fix plan). Writes only that doc; makes no other code changes (each subagent may persist notes to its own project memory). Do not invoke automatically.
 disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Bash, Agent
+allowed-tools: Read, Grep, Glob, Bash, Agent, Write
 ---
 
 Run a full-codebase **house-rules** review using the eleven `rv-*` specialist
 subagents in `.claude/agents/review/`, then merge their findings into one
-prioritized report. This skill makes **no code changes** — it reviews and reports
-only.
+prioritized review document. The skill's sole output is that document —
+`docs/house-review-YYYY-MM-DD.md`, holding the findings **and a phased plan to
+implement the fixes**; it makes **no other code changes**.
 
 This is the project-rules lens: *"does the code obey this project's own rules?"* Its
 upstream-currency counterpart is `/review-currency`. Follow the shared orchestration
@@ -39,6 +40,10 @@ in a single message carrying the scope, and synthesize only after all eleven ret
 > severity (Critical / Should-fix / Optional), `file:line`, and a concrete fix. Do
 > not invent findings if the area is sound.
 
-Then **synthesize** the eleven reports and **offer next steps** exactly as described in
-`.claude/REVIEW-CONVENTIONS.md` — including the option to run the sibling
-`/review-currency` or the combined `/review-all`.
+Then **synthesize** the eleven reports into `docs/house-review-YYYY-MM-DD.md` exactly
+as described in `.claude/REVIEW-CONVENTIONS.md` (*Synthesize — write the review
+document*): a two-part doc with the tiered findings **and a phased implementation plan**
+for the fixes (phases ordered by risk/value, each committable, with files + a `./gradlew`
+verify step and any apiDump/Kover gates). Writing that one doc is the only file change;
+then **offer next steps** — including implementing the fixes by phase, or running the
+sibling `/review-currency` or the combined `/review-all`.

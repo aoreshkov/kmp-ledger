@@ -4,9 +4,12 @@ public final class app/oreshkov/ledger/core/navigation/LocalNavigatorKt {
 
 public final class app/oreshkov/ledger/core/navigation/Navigator {
 	public static final field $stable I
-	public fun <init> (Ljava/util/List;)V
+	public fun <init> (Landroidx/navigation3/runtime/NavKey;Ljava/util/Map;Landroidx/compose/runtime/MutableState;)V
 	public final fun canGoBack ()Z
+	public final fun getBackStacks ()Ljava/util/Map;
+	public final fun getCurrentTopLevel ()Landroidx/navigation3/runtime/NavKey;
 	public final fun getEntries ()Ljava/util/List;
+	public final fun getStartRoute ()Landroidx/navigation3/runtime/NavKey;
 	public final fun goBack ()V
 	public final fun goTo (Landroidx/navigation3/runtime/NavKey;)V
 	public final fun switchTopLevel (Landroidx/navigation3/runtime/NavKey;)V

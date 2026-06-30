@@ -13,6 +13,7 @@ import androidx.room3.RoomDatabase
 import app.oreshkov.ledger.core.database.LedgerDatabase
 import app.oreshkov.ledger.core.ui.App
 import app.oreshkov.ledger.feature.posting.impl.di.postingNavigationModule
+import app.oreshkov.ledger.feature.settings.impl.di.settingsNavigationModule
 import org.koin.compose.KoinIsolatedContext
 import org.koin.dsl.module
 import java.io.File
@@ -79,6 +80,35 @@ class DesktopUiTest {
         // Real graph: real NavDisplay + real ViewModels over a real in-memory Room DB.
         onNodeWithText("My Postings").assertExists()
         onNodeWithContentDescription("Add Posting").performClick()
+        onNodeWithText("Add Posting").assertExists()
+    }
+
+    @Test
+    fun inProgressPostingSurvivesTabSwitch() = runDesktopComposeUiTest {
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(
+                        postingNavigationModule,
+                        settingsNavigationModule,
+                        inMemoryDatabaseModule,
+                        testDataStoreModule,
+                    )
+                }
+            ) {
+                App()
+            }
+        }
+
+        // Start adding a posting, hop to Settings and back: the in-progress add screen must
+        // remain (per-section back stacks), not reset to the list.
+        onNodeWithContentDescription("Add Posting").performClick()
+        onNodeWithText("Add Posting").assertExists()
+
+        onNodeWithText("Settings").performClick()
+        onNodeWithText("Postings").performClick()
+
         onNodeWithText("Add Posting").assertExists()
     }
 }

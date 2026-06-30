@@ -1,15 +1,16 @@
 ---
 name: review-currency
-description: Orchestrate a currency audit of the whole project against the latest official upstream best practices, using the nine bp-* specialist subagents dispatched in parallel waves, then synthesize one prioritized, source-cited report. Makes no code changes (each subagent may persist notes to its own project memory). Do not invoke automatically.
+description: Orchestrate a currency audit of the whole project against the latest official upstream best practices, using the nine bp-* specialist subagents dispatched in parallel waves, then synthesize one prioritized, source-cited review document written to docs/currency-review-YYYY-MM-DD.md (findings + a phased fix plan). Writes only that doc; makes no other code changes (each subagent may persist notes to its own project memory). Do not invoke automatically.
 disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Bash, Agent
+allowed-tools: Read, Grep, Glob, Bash, Agent, Write
 ---
 
 Run a **currency audit** of the codebase against the latest official upstream best
 practices, using the nine `bp-*` specialist subagents in
 `.claude/agents/currency/`, then merge their findings into one prioritized,
-source-cited report. This skill makes **no code changes** — it reviews and reports
-only.
+source-cited review document. The skill's sole output is that document —
+`docs/currency-review-YYYY-MM-DD.md`, holding the findings **and a phased plan to
+implement the fixes**; it makes **no other code changes**.
 
 This is the upstream-currency lens: *"do the code and our rules still match the
 latest official guidance for the stack?"* Its project-rules counterpart is
@@ -43,7 +44,11 @@ and synthesize only after all nine return:
 > internal-correctness findings to the matching `rv-*` agent. Do not invent
 > findings if the area is already current.
 
-Then **synthesize** the nine reports — adding a *pinned version vs. latest stable*
-currency table per domain — and **offer next steps** as described in
-`.claude/REVIEW-CONVENTIONS.md` — including the option to run the sibling
+Then **synthesize** the nine reports into `docs/currency-review-YYYY-MM-DD.md` exactly
+as described in `.claude/REVIEW-CONVENTIONS.md` (*Synthesize — write the review
+document*): a two-part doc with the tiered findings — including a *pinned version vs.
+latest stable* currency table — **and a phased implementation plan** for the fixes
+(phases ordered by risk/value, each committable, with files + a `./gradlew` verify step
+and any apiDump/Kover gates). Writing that one doc is the only file change; then **offer
+next steps** — including implementing the fixes by phase, or running the sibling
 `/review-house` or the combined `/review-all`.

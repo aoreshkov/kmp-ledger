@@ -7,10 +7,17 @@
 
 // Library unique name: <Ledger.core:navigation>
 final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledger.core.navigation/Navigator|null[0]
-    constructor <init>(kotlin.collections/MutableList<androidx.navigation3.runtime/NavKey>) // app.oreshkov.ledger.core.navigation/Navigator.<init>|<init>(kotlin.collections.MutableList<androidx.navigation3.runtime.NavKey>){}[0]
+    constructor <init>(androidx.navigation3.runtime/NavKey, kotlin.collections/Map<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavBackStack<androidx.navigation3.runtime/NavKey>>, androidx.compose.runtime/MutableState<androidx.navigation3.runtime/NavKey>) // app.oreshkov.ledger.core.navigation/Navigator.<init>|<init>(androidx.navigation3.runtime.NavKey;kotlin.collections.Map<androidx.navigation3.runtime.NavKey,androidx.navigation3.runtime.NavBackStack<androidx.navigation3.runtime.NavKey>>;androidx.compose.runtime.MutableState<androidx.navigation3.runtime.NavKey>){}[0]
 
+    final val backStacks // app.oreshkov.ledger.core.navigation/Navigator.backStacks|{}backStacks[0]
+        final fun <get-backStacks>(): kotlin.collections/Map<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavBackStack<androidx.navigation3.runtime/NavKey>> // app.oreshkov.ledger.core.navigation/Navigator.backStacks.<get-backStacks>|<get-backStacks>(){}[0]
     final val entries // app.oreshkov.ledger.core.navigation/Navigator.entries|{}entries[0]
         final fun <get-entries>(): kotlin.collections/List<androidx.navigation3.runtime/NavKey> // app.oreshkov.ledger.core.navigation/Navigator.entries.<get-entries>|<get-entries>(){}[0]
+    final val startRoute // app.oreshkov.ledger.core.navigation/Navigator.startRoute|{}startRoute[0]
+        final fun <get-startRoute>(): androidx.navigation3.runtime/NavKey // app.oreshkov.ledger.core.navigation/Navigator.startRoute.<get-startRoute>|<get-startRoute>(){}[0]
+
+    final var currentTopLevel // app.oreshkov.ledger.core.navigation/Navigator.currentTopLevel|{}currentTopLevel[0]
+        final fun <get-currentTopLevel>(): androidx.navigation3.runtime/NavKey // app.oreshkov.ledger.core.navigation/Navigator.currentTopLevel.<get-currentTopLevel>|<get-currentTopLevel>(){}[0]
 
     final fun canGoBack(): kotlin/Boolean // app.oreshkov.ledger.core.navigation/Navigator.canGoBack|canGoBack(){}[0]
     final fun goBack() // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(){}[0]
