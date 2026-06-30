@@ -93,7 +93,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: Code Coverage
           update-comment: true
-          # Informational only for now; raise these (or add koverVerify) to enforce.
+          # Display-only PR comment — the coverage gate is koverVerify in the
+          # "Run tests, lint and coverage" step above. Thresholds stay at 0 so this
+          # step never fails the build (it only renders the summary comment).
           min-coverage-overall: 0
           min-coverage-changed-files: 0
 

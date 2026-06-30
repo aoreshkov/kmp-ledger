@@ -20,7 +20,6 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.koin.android)
-            implementation(libs.room3.sqlite.wrapper)
         }
         commonMain.dependencies {
             implementation(libs.room3.runtime)
@@ -41,7 +40,7 @@ kotlin {
 }
 
 room3 {
-    schemaDirectory("$projectDir/schemas")
+    schemaDirectory(layout.projectDirectory.dir("schemas").asFile.path)
 }
 
 dependencies {

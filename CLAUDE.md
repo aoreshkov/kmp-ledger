@@ -60,7 +60,7 @@ Cross-cutting modules: `core:model` (pure domain types), `core:common` (DataResu
 
 **Feature API/Impl split** — `feature:posting:api` contains only `@Serializable` NavKey types. `feature:posting:impl` contains screens, ViewModels, and Koin DI. No other module may depend on `:impl`. Navigation between features goes through `:api` types only.
 
-**Koin annotation-driven DI** — all dependencies use `@Module`, `@Factory`, `@Single`, `@KoinViewModel`. The Koin Compiler plugin validates the graph at compile time. Never use Koin DSL for domain/data/database modules — only use DSL in `postingNavigationModule` for Compose navigation entries.
+**Koin annotation-driven DI** — all dependencies use `@Module`, `@Factory`, `@Single`, `@KoinViewModel`. The Koin Compiler plugin validates the graph at compile time. Never use Koin DSL for domain/data/database modules. DSL is sanctioned only in the feature `*NavigationModule`s (e.g. `postingNavigationModule`, `settingsNavigationModule`) for exactly two things: (1) Compose `navigation<NavKey>` screen entries, and (2) contributing each feature's top-level nav item via `single(named("<feature>_top_level")) { TopLevelDestination(...) }`. The `named()` qualifier is required because Koin annotations have **no multibinding** — two `@Single TopLevelDestination` would override each other instead of aggregating, whereas DSL `single(named(...))` + `getAll<TopLevelDestination>()` returns every definition regardless of qualifier.
 
 **Expect/Actual for platform database** — `PlatformDatabaseModule` is an `expect class` in `commonMain`. Each platform provides the `RoomDatabase.Builder<LedgerDatabase>` with OS-appropriate paths.
 
@@ -70,7 +70,7 @@ Cross-cutting modules: `core:model` (pure domain types), `core:common` (DataResu
 
 ### Navigation
 
-Uses Navigation 3 (`androidx.navigation3`). Screens are registered as Koin entries using `navigation<NavKey>` DSL in `postingNavigationModule`. Screens obtain ViewModels via `koinViewModel()`. Navigation actions use `LocalNavigator.current` (a `CompositionLocal` wrapping a `Navigator` that manages the `NavBackStack`).
+Uses Navigation 3 (`androidx.navigation3`). Screens are registered as Koin entries using `navigation<NavKey>` DSL in each feature's `*NavigationModule` (e.g. `postingNavigationModule`, `settingsNavigationModule`). Screens obtain ViewModels via `koinViewModel()`. Navigation actions use `LocalNavigator.current` (a `CompositionLocal` wrapping a `Navigator` that manages the `NavBackStack`).
 
 ### Convention Plugins (build-logic)
 

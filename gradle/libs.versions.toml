@@ -87,7 +87,6 @@ koin-gradle-plugin = { module = "io.insert-koin.compiler.plugin:io.insert-koin.c
 # Room & SQLite
 room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "androidx-room" }
 room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "androidx-room" }
-room3-sqlite-wrapper = { module = "androidx.room3:room3-sqlite-wrapper", version.ref = "androidx-room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
 sqlite-bundled-jvm = { module = "androidx.sqlite:sqlite-bundled-jvm", version.ref = "androidx-sqlite" }
 
