@@ -5,16 +5,18 @@ import androidx.lifecycle.viewModelScope
 import app.oreshkov.ledger.core.domain.GetThemeModeUseCase
 import app.oreshkov.ledger.core.domain.SetThemeModeUseCase
 import app.oreshkov.ledger.core.model.settings.ThemeMode
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
 import org.koin.core.annotation.Provided
 
 data class SettingsUiState(
-    val themeMode: ThemeMode = ThemeMode.SYSTEM
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val saveError: Boolean = false,
 )
 
 @KoinViewModel
@@ -23,8 +25,12 @@ class SettingsViewModel(
     @Provided private val setThemeModeUseCase: SetThemeModeUseCase,
 ) : ViewModel() {
 
-    val uiState: StateFlow<SettingsUiState> = getThemeModeUseCase()
-        .map { SettingsUiState(themeMode = it) }
+    private val _saveError = MutableStateFlow(false)
+
+    val uiState: StateFlow<SettingsUiState> = combine(
+        getThemeModeUseCase(),
+        _saveError,
+    ) { themeMode, saveError -> SettingsUiState(themeMode = themeMode, saveError = saveError) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -32,6 +38,9 @@ class SettingsViewModel(
         )
 
     fun onThemeModeChange(mode: ThemeMode) {
-        viewModelScope.launch { setThemeModeUseCase(mode) }
+        _saveError.value = false
+        viewModelScope.launch {
+            setThemeModeUseCase(mode).onFailure { _saveError.value = true }
+        }
     }
 }

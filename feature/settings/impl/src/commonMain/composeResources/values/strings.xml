@@ -6,4 +6,5 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_system">System default</string>
+    <string name="settings_save_failed">Failed to save. Please try again.</string>
 </resources>

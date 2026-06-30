@@ -12,9 +12,12 @@ class FakeSettingsRepository(
 
     private val _themeMode = MutableStateFlow(initial)
 
+    var failNextWrite: Boolean = false
+
     override fun themeMode(): Flow<ThemeMode> = _themeMode.asStateFlow()
 
     override suspend fun setThemeMode(mode: ThemeMode) {
+        if (failNextWrite) { failNextWrite = false; error("settings write error") }
         _themeMode.value = mode
     }
 }

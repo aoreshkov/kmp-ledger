@@ -1,5 +1,7 @@
 package app.oreshkov.ledger.feature.settings.impl
 
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
@@ -36,6 +38,7 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         setContent {
             SettingsContent(
                 uiState = SettingsUiState(ThemeMode.SYSTEM),
+                snackbarHostState = remember { SnackbarHostState() },
                 onNavigateBack = {},
                 onThemeModeChange = {},
             )
@@ -50,6 +53,7 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         setContent {
             SettingsContent(
                 uiState = SettingsUiState(ThemeMode.DARK),
+                snackbarHostState = remember { SnackbarHostState() },
                 onNavigateBack = {},
                 onThemeModeChange = {},
             )
@@ -63,6 +67,7 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         setContent {
             SettingsContent(
                 uiState = SettingsUiState(ThemeMode.SYSTEM),
+                snackbarHostState = remember { SnackbarHostState() },
                 onNavigateBack = {},
                 onThemeModeChange = { selected = it },
             )
@@ -77,6 +82,7 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         setContent {
             SettingsContent(
                 uiState = SettingsUiState(ThemeMode.SYSTEM),
+                snackbarHostState = remember { SnackbarHostState() },
                 onNavigateBack = { backClicked = true },
                 onThemeModeChange = {},
             )
@@ -100,5 +106,20 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         waitForIdle()
 
         onNodeWithTag("theme_light").assertIsSelected()
+    }
+
+    @Test
+    fun screen_showsSnackbar_whenWriteFails() = runComposeUiTest {
+        val repo = FakeSettingsRepository(initial = ThemeMode.SYSTEM).apply { failNextWrite = true }
+        val viewModel = SettingsViewModel(GetThemeModeUseCase(repo), SetThemeModeUseCase(repo))
+
+        setContent {
+            SettingsScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+
+        onNodeWithTag("theme_dark").performClick()
+        waitForIdle()
+
+        onNodeWithText("Failed to save. Please try again.").assertIsDisplayed()
     }
 }

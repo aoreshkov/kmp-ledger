@@ -15,10 +15,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,6 +33,7 @@ import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
 import app.oreshkov.ledger.core.compose.resources.back_content_description
 import app.oreshkov.ledger.core.model.settings.ThemeMode
 import ledger.feature.settings.impl.generated.resources.Res
+import ledger.feature.settings.impl.generated.resources.settings_save_failed
 import ledger.feature.settings.impl.generated.resources.settings_theme_dark
 import ledger.feature.settings.impl.generated.resources.settings_theme_light
 import ledger.feature.settings.impl.generated.resources.settings_theme_section
@@ -43,9 +48,16 @@ fun SettingsScreen(
     viewModel: SettingsViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val errorMessage = stringResource(Res.string.settings_save_failed)
+
+    LaunchedEffect(uiState.saveError) {
+        if (uiState.saveError) snackbarHostState.showSnackbar(errorMessage)
+    }
 
     SettingsContent(
         uiState = uiState,
+        snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
         onThemeModeChange = viewModel::onThemeModeChange,
     )
@@ -61,10 +73,12 @@ private val themeModeLabels: List<Pair<ThemeMode, StringResource>> = listOf(
 @Composable
 internal fun SettingsContent(
     uiState: SettingsUiState,
+    snackbarHostState: SnackbarHostState,
     onNavigateBack: () -> Unit,
     onThemeModeChange: (ThemeMode) -> Unit,
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(Res.string.settings_title)) },

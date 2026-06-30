@@ -20,4 +20,14 @@ class SetThemeModeUseCaseTest {
         assertTrue(result.isSuccess)
         assertEquals(ThemeMode.DARK, repo.themeMode().first())
     }
+
+    @Test
+    fun `invoke returns failure when the write throws`() = runTest {
+        val repo = FakeSettingsRepository().apply { failNextWrite = true }
+        val useCase = SetThemeModeUseCase(repo)
+
+        val result = useCase(ThemeMode.DARK)
+
+        assertTrue(result.isFailure)
+    }
 }

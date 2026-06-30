@@ -23,6 +23,8 @@ public final class app/oreshkov/ledger/core/test/FakeSettingsRepository : app/or
 	public fun <init> ()V
 	public fun <init> (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;)V
 	public synthetic fun <init> (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getFailNextWrite ()Z
+	public final fun setFailNextWrite (Z)V
 	public fun setThemeMode (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun themeMode ()Lkotlinx/coroutines/flow/Flow;
 }

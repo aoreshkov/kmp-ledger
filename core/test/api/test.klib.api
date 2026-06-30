@@ -41,6 +41,10 @@ final class app.oreshkov.ledger.core.test/FakePostingRepository : app.oreshkov.l
 final class app.oreshkov.ledger.core.test/FakeSettingsRepository : app.oreshkov.ledger.core.domain.repository/SettingsRepository { // app.oreshkov.ledger.core.test/FakeSettingsRepository|null[0]
     constructor <init>(app.oreshkov.ledger.core.model.settings/ThemeMode = ...) // app.oreshkov.ledger.core.test/FakeSettingsRepository.<init>|<init>(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
 
+    final var failNextWrite // app.oreshkov.ledger.core.test/FakeSettingsRepository.failNextWrite|{}failNextWrite[0]
+        final fun <get-failNextWrite>(): kotlin/Boolean // app.oreshkov.ledger.core.test/FakeSettingsRepository.failNextWrite.<get-failNextWrite>|<get-failNextWrite>(){}[0]
+        final fun <set-failNextWrite>(kotlin/Boolean) // app.oreshkov.ledger.core.test/FakeSettingsRepository.failNextWrite.<set-failNextWrite>|<set-failNextWrite>(kotlin.Boolean){}[0]
+
     final fun themeMode(): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.settings/ThemeMode> // app.oreshkov.ledger.core.test/FakeSettingsRepository.themeMode|themeMode(){}[0]
     final suspend fun setThemeMode(app.oreshkov.ledger.core.model.settings/ThemeMode) // app.oreshkov.ledger.core.test/FakeSettingsRepository.setThemeMode|setThemeMode(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
 }

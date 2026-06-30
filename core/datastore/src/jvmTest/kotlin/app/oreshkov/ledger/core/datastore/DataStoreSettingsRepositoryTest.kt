@@ -1,9 +1,13 @@
 package app.oreshkov.ledger.core.datastore
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import app.oreshkov.ledger.core.model.settings.ThemeMode
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import java.io.File
 import java.nio.file.Files
@@ -47,6 +51,19 @@ class DataStoreSettingsRepositoryTest {
         dataStore.edit { it[stringPreferencesKey("theme_mode")] = "NONSENSE" }
 
         val repo = DataStoreSettingsRepository(dataStore)
+
+        assertEquals(ThemeMode.SYSTEM, repo.themeMode().first())
+    }
+
+    @Test
+    fun `recovers from read IO error by falling back to SYSTEM`() = runTest {
+        val failing = object : DataStore<Preferences> {
+            override val data: Flow<Preferences> = flow { throw okio.IOException("boom") }
+            override suspend fun updateData(
+                transform: suspend (Preferences) -> Preferences
+            ): Preferences = error("not used")
+        }
+        val repo = DataStoreSettingsRepository(failing)
 
         assertEquals(ThemeMode.SYSTEM, repo.themeMode().first())
     }

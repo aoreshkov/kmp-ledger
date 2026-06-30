@@ -11,13 +11,16 @@ final class app.oreshkov.ledger.feature.settings.impl.di/SettingsModule { // app
 }
 
 final class app.oreshkov.ledger.feature.settings.impl/SettingsUiState { // app.oreshkov.ledger.feature.settings.impl/SettingsUiState|null[0]
-    constructor <init>(app.oreshkov.ledger.core.model.settings/ThemeMode = ...) // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.<init>|<init>(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
+    constructor <init>(app.oreshkov.ledger.core.model.settings/ThemeMode = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.<init>|<init>(app.oreshkov.ledger.core.model.settings.ThemeMode;kotlin.Boolean){}[0]
 
+    final val saveError // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.saveError|{}saveError[0]
+        final fun <get-saveError>(): kotlin/Boolean // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.saveError.<get-saveError>|<get-saveError>(){}[0]
     final val themeMode // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.themeMode|{}themeMode[0]
         final fun <get-themeMode>(): app.oreshkov.ledger.core.model.settings/ThemeMode // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.themeMode.<get-themeMode>|<get-themeMode>(){}[0]
 
     final fun component1(): app.oreshkov.ledger.core.model.settings/ThemeMode // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.component1|component1(){}[0]
-    final fun copy(app.oreshkov.ledger.core.model.settings/ThemeMode = ...): app.oreshkov.ledger.feature.settings.impl/SettingsUiState // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.copy|copy(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
+    final fun component2(): kotlin/Boolean // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.component2|component2(){}[0]
+    final fun copy(app.oreshkov.ledger.core.model.settings/ThemeMode = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.settings.impl/SettingsUiState // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.copy|copy(app.oreshkov.ledger.core.model.settings.ThemeMode;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // app.oreshkov.ledger.feature.settings.impl/SettingsUiState.toString|toString(){}[0]
