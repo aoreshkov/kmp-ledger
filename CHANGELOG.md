@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-06-30
+
+### Added
+- Added a Settings feature (`feature:settings:api` + `:impl`) with a theme-mode picker (System / Light / Dark).
+- Added the `core:datastore` module, persisting settings via DataStore Preferences (`ledger.preferences_pb`), with per-platform path actuals and corruption/IO recovery.
+- Added `SettingsRepository` (declared in `core:domain`) plus `GetThemeModeUseCase` and `SetThemeModeUseCase`.
+- Added the `ThemeMode` model in `core:model`.
+- Added adaptive top-level navigation: a `NavigationSuiteScaffold` shell that aggregates each feature's `TopLevelDestination` via DI.
+- Added `FakeSettingsRepository` in `core:test`.
+- Added a `dependency-submission` CI workflow.
+
+### Changed
+- Reworked `Navigator` to hold one back stack per section with exit-through-home back handling.
+- Drove the theme from the stored preference in `App()` via `LedgerTheme(themeMode)`.
+- Build CI now runs `./gradlew check` (tests + lint) instead of `allTests`.
+- Read Android signing secrets via the Gradle provider API for config-cache correctness.
+- Updated the Desktop CI matrix (`macos-latest` → `macos-26`) and disabled the Windows desktop Gradle cache.
+- Added `androidx-datastore` 1.2.1 and `material3-adaptive-navigation-suite` to the version catalog.
+- Resolved the Room `schemaDirectory` via the Gradle `layout` API.
+
+### Removed
+- Dropped the unused `room3-sqlite-wrapper` dependency and the redundant `kotlin.swift-export.experimental.nowarn` property.
+
 ## [1.3.0] - 2026-06-27
 
 ### Added
@@ -94,7 +117,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.0...v1.1.1
