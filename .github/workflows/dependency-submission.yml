@@ -1,0 +1,37 @@
+name: Dependency Submission
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dependency-submission:
+    name: Submit Dependency Graph
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write   # submit the dependency graph snapshot via the Dependency submission API
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      # Builds and submits the Gradle dependency graph so dependency-review.yml has a
+      # populated graph to diff. The push->main run establishes the base graph; the
+      # pull_request run submits the PR-branch graph. Fork/Dependabot PRs run with a
+      # read-only token, so their submission is skipped rather than failing the job.
+      - name: Submit dependency graph
+        uses: gradle/actions/dependency-submission@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
