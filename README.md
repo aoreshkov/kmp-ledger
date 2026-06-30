@@ -16,7 +16,7 @@
 
 **Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
-> **Note:** Kotlin, Compose Multiplatform, Navigation 3, Koin, and Coroutines are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: Room 3 / AndroidX SQLite (Release Candidate), AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+> **Note:** Kotlin, Compose Multiplatform, Navigation 3, Koin, Coroutines, and AndroidX DataStore are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: Room 3 / AndroidX SQLite (Release Candidate), AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components — including the Adaptive Navigation Suite — (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
 ---
 
@@ -36,7 +36,9 @@
 | Kotlin Gradle Plugin | 2.4.0 | Build tooling |
 | Compose Multiplatform | 1.11.1 | Shared UI (Android, iOS, Desktop) |
 | Room 3 / SQLite | 3.0.0-rc01 / 2.7.0-rc01 | Local database with KMP support |
+| AndroidX DataStore (Preferences) | 1.2.1 | Multiplatform key-value persistence (theme preference) |
 | Navigation 3 | 1.1.3 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
+| Material3 Adaptive Navigation Suite | 1.11.0-alpha07 | Adaptive top-level nav (bottom bar / rail / drawer) |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
 | Kover | 0.9.8 | Kotlin Multiplatform code coverage |
@@ -64,53 +66,64 @@ Ledger follows a strict unidirectional layered architecture. Each layer depends 
         │      └───────┬───────┘
         │              │
 ┌───────▼──────────────▼──────────────┐
-│              core:ui                │  App composable, theme, NavDisplay setup
-│           core:navigation           │  Navigator, StartDestination
+│              core:ui                │  App composable, theme, NavigationSuiteScaffold, NavDisplay
+│           core:navigation           │  Navigator, StartDestination, TopLevelDestination
 │           core:bootstrap            │  Root Koin module wiring
 └────────────────┬────────────────────┘
                  │
 ┌────────────────▼────────────────────┐
-│       feature:posting:impl          │  Screens, ViewModels, DI
-│       feature:posting:api           │  Navigation keys (NavKey contracts)
+│  feature:posting:impl   feature:settings:impl   │  Screens, ViewModels, DI
+│  feature:posting:api    feature:settings:api    │  Navigation keys (NavKey contracts)
 └────────────────┬────────────────────┘
                  │
 ┌────────────────▼────────────────────┐
-│           core:domain               │  Use cases (SavePosting, GetPosting, …)
+│           core:domain               │  Use cases (SavePosting, GetPosting, GetThemeMode, …)
+│                                     │  + SettingsRepository interface
 │           core:common               │  DataResult, shared utilities
 │           core:compose              │  Shared Compose components
-└────────────────┬────────────────────┘
-                 │
-┌────────────────▼────────────────────┐
-│            core:data                │  PostingRepository, mappers
-└────────────────┬────────────────────┘
-                 │
-┌────────────────▼────────────────────┐
+└──────────┬───────────────────┬──────┘
+           │                   │
+┌──────────▼─────────┐ ┌───────▼─────────────────┐
+│      core:data     │ │      core:datastore     │  DataStore-backed SettingsRepository impl
+│ PostingRepository, │ │ DataStoreSettings-      │
+│      mappers       │ │ Repository, platform    │
+└──────────┬─────────┘ │ DataStore builders      │
+           │           └─────────────────────────┘
+┌──────────▼──────────────────────────┐
 │           core:database             │  Room 3 database, DAOs, entities, TypeConverters
 └─────────────────────────────────────┘
 
 Supporting modules (no layer dependency):
-  core:model   — pure Kotlin domain models (Posting, NewPosting)
-  core:test    — shared test utilities (FakePostingRepository)
+  core:model   — pure Kotlin domain models (Posting, NewPosting, ThemeMode)
+  core:test    — shared test utilities (FakePostingRepository, FakeSettingsRepository)
   build-logic  — Gradle convention plugins
 ```
+
+> **Repository placement:** `PostingRepository` is declared in `core:data` and implemented there.
+> `SettingsRepository` is instead declared in `core:domain` (`repository/`) and implemented in the
+> separate `core:datastore` module — so `core:datastore` depends on `core:domain` and supplies the
+> binding, rather than the domain depending on it. Both expose only domain models upward.
 
 ### Module responsibilities
 
 | Module | Responsibility |
 |---|---|
-| `core:model` | Pure Kotlin data classes with no framework dependency. The single source of truth for domain types. |
+| `core:model` | Pure Kotlin data classes with no framework dependency. The single source of truth for domain types (`Posting`, `NewPosting`, `ThemeMode`). |
 | `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. |
 | `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers. |
-| `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`). Each wraps a repository call with a single responsibility. |
+| `core:datastore` | `DataStoreSettingsRepository` — the AndroidX DataStore Preferences implementation of `SettingsRepository` (declared in `core:domain`). Provides `PlatformDataStoreModule` (`expect`/`actual`) with OS-aware preference-file paths and corruption/IO-error recovery. |
+| `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`, `GetThemeModeUseCase`, `SetThemeModeUseCase`). Also declares the `SettingsRepository` interface. Each use case wraps a repository call with a single responsibility. |
 | `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension, the `runCatchingCancellable` cancellation-safe result helper, plus `AppDispatchers` interface and `DispatcherModule` Koin binding. |
 | `core:compose` | Shared Compose components used across feature modules (e.g. `LabeledField`). |
-| `core:navigation` | `Navigator` (backstack wrapper) and `StartDestination` value class. Framework-agnostic. |
-| `core:ui` | Root `App` composable, Material 3 theme, `NavDisplay` wiring. |
-| `core:bootstrap` | Root Koin module that wires all sub-modules together and provides `StartDestination` and `SavedStateConfiguration`. |
-| `core:test` | `FakePostingRepository`, `PlatformComposeUiTest` expect/actual, and shared posting fixture builders (`posting()`, `newPosting()`, `postings()`). Consumed by all test source sets. |
+| `core:navigation` | `Navigator` (per-section back-stack manager), `StartDestination` value class, and `TopLevelDestination` (a section surfaced in the top-level nav chrome). Framework-agnostic. |
+| `core:ui` | Root `App` composable, Material 3 theme (driven by the persisted `ThemeMode`), `NavigationSuiteScaffold` + `NavDisplay` wiring. |
+| `core:bootstrap` | Root Koin module that wires all sub-modules together (including `SettingsModule`) and provides `StartDestination` and a `SavedStateConfiguration` that combines every feature's NavKey serializers. |
+| `core:test` | `FakePostingRepository`, `FakeSettingsRepository`, `PlatformComposeUiTest` expect/actual, and shared posting fixture builders (`posting()`, `newPosting()`, `postings()`). Consumed by all test source sets. |
 | `iosExport` | Bridge module for Swift Export. Contains the `MainViewController` and Koin initialization for iOS. |
 | `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`) and their serializers module. Consumed by both the feature impl and the bootstrap/navigation modules. |
 | `feature:posting:impl` | `PostingListScreen`, `PostingDetailsScreen`, `PostingEditScreen`, their ViewModels, and the Koin navigation module (`postingNavigationModule`). |
+| `feature:settings:api` | `SettingsRoute`/`SettingsHome` `NavKey` types and the `serializerSettings` module. Consumed by the feature impl and the bootstrap/navigation modules. |
+| `feature:settings:impl` | `SettingsScreen`, `SettingsViewModel` (theme toggle + write-failure surfacing), and the Koin navigation module (`settingsNavigationModule`), which also contributes the Settings `TopLevelDestination`. |
 
 ---
 
@@ -241,33 +254,69 @@ class PostingDetailsViewModel(
 
 ### 6. Navigation 3 with `koinEntryProvider`
 
-Screens are registered as Koin navigation entries, keeping navigation and DI fully integrated without manual ViewModel factories:
+Screens are registered as Koin navigation entries in each feature's `*NavigationModule` (`postingNavigationModule`, `settingsNavigationModule`), keeping navigation and DI fully integrated without manual ViewModel factories. The same DSL module is the **only** place Koin DSL is allowed, and it does exactly two things: register `navigation<NavKey>` screen entries, and contribute the feature's top-level nav item. Because Koin annotations have no multibinding, each `TopLevelDestination` is published under a distinct `named(...)` qualifier and the app shell aggregates them with `getAll<TopLevelDestination>()`:
 
 ```kotlin
-val postingNavigationModule = module {
-    navigation<PostingList>(metadata = ListDetailSceneStrategy.listPane()) {
-        val navigator = LocalNavigator.current
-        PostingListScreen(
-            onNavigateToEdit = { id -> navigator.goTo(PostingEdit(id)) },
-            onNavigateToDetails = { id -> navigator.goTo(PostingDetail(id)) },
-            viewModel = koinViewModel()
+val settingsNavigationModule = module {
+    // Contribute this feature as a top-level section (distinct qualifier → no override).
+    single(named("settings_top_level")) {
+        TopLevelDestination(
+            key = SettingsHome,
+            label = Res.string.settings_nav_label,
+            icon = Icons.Filled.Settings,
+            order = 1,
         )
     }
-    navigation<PostingDetail>(metadata = ListDetailSceneStrategy.detailPane()) { route ->
+    navigation<SettingsHome> {
         val navigator = LocalNavigator.current
-        PostingDetailsScreen(
-            onNavigateBack = { navigator.goBack() },
-            viewModel = koinViewModel(parameters = { parametersOf(route.id) })
-        )
+        SettingsScreen(onNavigateBack = { navigator.goBack() }, viewModel = koinViewModel())
     }
 }
 ```
 
-### 7. Multiplatform Logging with Kermit
+### 7. Adaptive top-level navigation
+
+The app shell (`core:ui`'s `App()`) renders a `NavigationSuiteScaffold`, which adapts the top-level chrome to the window size — bottom bar on compact, navigation rail / drawer on larger windows — without any per-platform branching. It stays feature-agnostic: every section comes from the `TopLevelDestination`s aggregated via DI (`getKoin().getAll<TopLevelDestination>().sortedBy { it.order }`), so adding a feature never edits the shell.
+
+`Navigator` keeps **one `NavBackStack` per section**, keyed by the section's start route:
+
+```kotlin
+class Navigator(
+    val startRoute: NavKey,
+    val backStacks: Map<NavKey, NavBackStack<NavKey>>,
+    private val currentTopLevelState: MutableState<NavKey>,
+) {
+    fun switchTopLevel(destination: NavKey) { /* preserve each section's stack; re-select resets to root */ }
+    fun goBack() { /* pop within section, else fall back to the start section (exit-through-home) */ }
+}
+```
+
+Each section's stack survives configuration change and process death (`rememberNavBackStack`), and every section is decorated each frame with its **own** `SaveableStateHolder`/`ViewModelStore` decorators so inactive sections keep their ViewModels and scroll/UI state alive instead of being disposed.
+
+### 8. Theme preference persisted with DataStore
+
+The theme preference is stored with **AndroidX DataStore Preferences** in `core:datastore`. Like the Room database, each platform supplies its file path through an `expect`/`actual` Koin module:
+
+```kotlin
+// commonMain — contract
+@Module
+expect class PlatformDataStoreModule
+
+// jvmMain — OS-aware path (macOS / %APPDATA% / XDG_DATA_HOME), same dirs as the Room DB
+@Module actual class PlatformDataStoreModule {
+    @Single
+    fun provideDataStore(): DataStore<Preferences> =
+        createPreferencesDataStore { jvmDataStoreFile().absolutePath }
+}
+```
+
+The store is resilient: the factory installs a `ReplaceFileCorruptionHandler`, reads recover from `IOException` by emitting `emptyPreferences()`, and an unrecognised stored value falls back to `ThemeMode.SYSTEM`. `ThemeMode` is a three-value enum (`LIGHT`/`DARK`/`SYSTEM`) because a plain boolean can't express "follow the OS". `App()` collects the preference with `collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)` and applies `LedgerTheme(themeMode)`, which resolves `SYSTEM` via `isSystemInDarkTheme()`; because DataStore reads are async, a cold start may briefly show the system theme before the stored value loads. Writes go through `SetThemeModeUseCase`, which wraps the suspend call in `runCatchingCancellable` so the `SettingsViewModel` can surface a save failure without swallowing cancellation.
+
+### 9. Multiplatform Logging with Kermit
 
 Ledger uses **Kermit** for unified logging. Platform-specific writers are provided via `expect`/`actual` functions in `core:common`, ensuring that logs are routed to the appropriate system (Logcat on Android, OSLog on iOS, and SLF4J/Logback on Desktop).
 
-### 8. Injectable dispatcher seam (`AppDispatchers`)
+### 10. Injectable dispatcher seam (`AppDispatchers`)
 
 `AppDispatchers` is an injectable interface over the coroutine dispatchers used by the data layer:
 
@@ -286,14 +335,14 @@ Production code receives `DefaultAppDispatchers` (backed by `Dispatchers.IO` / `
 
 All tests use pure Kotlin — no mocking framework.
 
-**Fakes over mocks:** `FakePostingRepository` is a full in-memory implementation of `PostingRepository` backed by a `MutableStateFlow`. It exposes `insertedPostings`, `deletedPostings`, and `updatedPostings` lists for assertions, and `failNextWrite` / `shouldThrowOnGetById` flags to simulate error conditions without any mock library.
+**Fakes over mocks:** `FakePostingRepository` is a full in-memory implementation of `PostingRepository` backed by a `MutableStateFlow`. It exposes `insertedPostings`, `deletedPostings`, and `updatedPostings` lists for assertions, and `failNextWrite` / `shouldThrowOnGetById` flags to simulate error conditions without any mock library. `FakeSettingsRepository` follows the same shape for `SettingsRepository` — a `MutableStateFlow<ThemeMode>` plus a `failNextWrite` flag to drive the theme-write failure path.
 
 **ViewModel tests** use `UnconfinedTestDispatcher` set as the main dispatcher in `@BeforeTest`, ensuring coroutines and `StateFlow` updates run eagerly and can be asserted synchronously.
 
 **Code Coverage:**
 The project uses **JetBrains Kover** for multiplatform coverage tracking. Coverage is automatically collected for all `commonMain` logic across JVM and Android targets. Reports are aggregated at the root project level and filtered to exclude generated code (Koin factories, Compose singletons, etc.).
 
-Coverage is **enforced**, not just reported: CI runs `koverVerify`, which fails the build if coverage drops below the configured floors. The root project sets aggregate floors (88% line / 60% branch / 84% instruction), and the pure-logic modules `core:data`, `core:domain`, and `feature:posting:api` each add stricter per-module floors (90% line / 85% branch).
+Coverage is **enforced**, not just reported: CI runs `koverVerify`, which fails the build if coverage drops below the configured floors. The root project sets aggregate floors (88% line / 60% branch / 84% instruction), and individual modules add stricter per-module floors: the pure-logic modules `core:data`, `core:domain`, and `feature:posting:api` each require 90% line / 85% branch; `core:datastore` requires 90% line; and `feature:settings:impl` requires 90% line / 60% branch (its branch floor is tuned lower because the `@Composable` screen emits synthetic branches via Compose codegen).
 
 In CI, the `check` job runs `koverXmlReport koverVerify` and posts a coverage summary as a comment on each pull request, alongside a test-results summary with inline annotations for any failures. The aggregated HTML report is also uploaded as a build artifact. Docs-only changes skip the build and test jobs entirely (a `changes` path filter gates them, with a single `ci-success` status check as the required gate).
 
@@ -305,9 +354,12 @@ A separate `instrumented-tests` job runs the Android smoke suite on a **Gradle M
 |---|---|
 | `core:database` | DAO tests against a real in-memory Room 3 database |
 | `core:data` | `OfflineFirstPostingRepositoryTest` with `FakePostingDao` |
-| `core:domain` | Use case tests with `FakePostingRepository` |
+| `core:datastore` | `DataStoreSettingsRepositoryTest` against a real temp-file DataStore (read/write + write-failure path) |
+| `core:domain` | Use case tests with `FakePostingRepository` / `FakeSettingsRepository` |
 | `core:common` | `DataResultTest` for the `asResult()` extension |
+| `core:navigation` | `NavigatorTest` for per-section back stacks, `switchTopLevel`, and exit-through-home `goBack` |
 | `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level) |
+| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle and save-error surfacing) |
 | `core:ui` | App-level Compose UI test |
 | DI modules | Compile-time validation (Koin Compiler Plugin) + runtime `verify()` (`KoinModuleTest`) + App-level integration tests |
 
@@ -374,17 +426,21 @@ kmp-ledger/
 │   ├── bootstrap/                # Root DI wiring
 │   ├── common/                   # DataResult, asResult()
 │   ├── compose/                  # Shared Compose components
-│   ├── data/                     # Repository implementations and mappers
+│   ├── data/                     # PostingRepository impl and mappers
 │   ├── database/                 # Room 3 database, DAOs, TypeConverters
-│   ├── domain/                   # Use cases
-│   ├── model/                    # Pure domain models
-│   ├── navigation/               # Navigator, StartDestination
+│   ├── datastore/                # DataStore-backed SettingsRepository impl
+│   ├── domain/                   # Use cases, SettingsRepository interface
+│   ├── model/                    # Pure domain models (Posting, ThemeMode)
+│   ├── navigation/               # Navigator, StartDestination, TopLevelDestination
 │   ├── test/                     # Shared test utilities
-│   └── ui/                       # App composable, theme
+│   └── ui/                       # App composable, theme, NavigationSuiteScaffold
 └── feature/
-    └── posting/
+    ├── posting/
+    │   ├── api/                  # NavKey contracts
+    │   └── impl/                 # Screens, ViewModels, DI
+    └── settings/
         ├── api/                  # NavKey contracts
-        └── impl/                 # Screens, ViewModels, DI
+        └── impl/                 # Settings screen, ViewModel, DI
 ```
 
 ---
