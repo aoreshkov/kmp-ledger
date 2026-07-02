@@ -1,3 +1,3 @@
 # Memory Index
 
-- [Supply-chain posture (2026-06)](supply-chain-posture.md) — workflows are SHA-pinned, least-priv, attested; what's already current vs. open optionals
+- [Supply-chain posture (2026-07)](supply-chain-posture.md) — 4 workflows SHA-pinned, least-priv, attested; open: retry-on-snapshot-warnings, immutable releases, env-scoped signing secrets

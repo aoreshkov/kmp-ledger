@@ -6,9 +6,17 @@ metadata:
 ---
 
 Room KMP layer (`core:database`) currency baseline, verified against the official
-KMP Room guide (developer.android.com/kotlin/multiplatform/room, last updated
-2026-06-17) and the Room 3.0 release page (.../releases/room3, 2026-06-17) on
-2026-06-26 for pinned Room 3.0.0-rc01.
+KMP Room guide (developer.android.com/kotlin/multiplatform/room) and the Room 3.0
+release page (.../releases/room3). Last re-verified 2026-07-02 (docs last-updated
+2026-07-01; guide content substantively unchanged from the 2026-06-17 revision).
+
+**Stable is out:** Room 3.0.0 stable and androidx.sqlite 2.7.0 stable both released
+2026-07-01. If the repo still pins 3.0.0-rc01 / 2.7.0-rc01 (gradle/libs.versions.toml
+`androidx-room` / `androidx-sqlite`), recommend bumping both to stable — no API delta
+vs rc01 noted in release notes, straight version bump.
+
+The former `room3-sqlite-wrapper` version-pin defect is RESOLVED: the wrapper
+dependency was dropped from the repo entirely (see CHANGELOG). Don't re-flag.
 
 These already match current best practice — do not flag on re-audit unless docs change:
 - `DatabaseModule.provideDatabase`: `.setDriver(BundledSQLiteDriver())` +

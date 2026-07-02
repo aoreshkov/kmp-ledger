@@ -22,9 +22,17 @@
 
 ## Screenshots
 
-|                      Posting List                       |                      Posting Detail                       |                      Edit Posting                       |
-|:-------------------------------------------------------:|:---------------------------------------------------------:|:-------------------------------------------------------:|
-| <img src=".github/assets/postingList.webp" width="250"> | <img src=".github/assets/postingDetail.webp" width="250"> | <img src=".github/assets/postingEdit.webp" width="250"> |
+### Android
+
+|                        Posting List                        |                         Posting Detail                         |                        Edit Posting                        |                          Settings                          |
+|:----------------------------------------------------------:|:--------------------------------------------------------------:|:----------------------------------------------------------:|:----------------------------------------------------------:|
+| <img src=".github/assets/androidPostingList.webp" width="200"> | <img src=".github/assets/androidPostingDetail.webp" width="200"> | <img src=".github/assets/androidPostingEdit.webp" width="200"> | <img src=".github/assets/androidSettings.webp" width="200"> |
+
+### Desktop
+
+|                        Posting List                        |                         Posting Detail                         |                        Edit Posting                        |                          Settings                          |
+|:----------------------------------------------------------:|:--------------------------------------------------------------:|:----------------------------------------------------------:|:----------------------------------------------------------:|
+| <img src=".github/assets/desktopPostingList.webp" width="250"> | <img src=".github/assets/desktopPostingDetail.webp" width="250"> | <img src=".github/assets/desktopPostingEdit.webp" width="250"> | <img src=".github/assets/desktopSettings.webp" width="250"> |
 
 ---
 
