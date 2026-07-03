@@ -15,7 +15,7 @@ jobs:
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: read
       pull-requests: write   # post the dependency review summary comment
@@ -29,3 +29,7 @@ jobs:
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5
         with:
           comment-summary-in-pr: on-failure
+          # The dependency graph is submitted by the separate dependency-submission
+          # workflow; wait for the head-commit snapshot instead of diffing stale data.
+          retry-on-snapshot-warnings: true
+          retry-on-snapshot-warnings-timeout: 600
