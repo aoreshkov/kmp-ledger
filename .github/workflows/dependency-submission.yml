@@ -36,11 +36,13 @@ jobs:
       - name: Submit dependency graph
         uses: gradle/actions/dependency-submission@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
         with:
-          # Exclude build-tooling resolutions from the graph: buildscript/plugin
-          # classpaths plus AGP's lint and Unified Test Platform configurations
-          # (netty, opentelemetry, bouncycastle, ...). Dependabot cannot update
-          # them, so its security-update jobs fail with
-          # security_update_dependency_not_found on every graph resubmission.
-          # Build-tooling CVEs are addressed by plugin (AGP/Kotlin) version bumps,
-          # which Dependabot already tracks via the version catalog.
-          dependency-graph-exclude-configurations: 'classpath|detachedConfiguration\d+|androidLintTool|unified-test-platform-.*|.*LintChecksClasspath'
+          # Exclude build-tooling resolutions from the graph: the convention-plugin
+          # build, buildscript/plugin classpaths, AGP's lint and Unified Test
+          # Platform configurations, and the Kotlin Swift-export worker (netty,
+          # opentelemetry, bouncycastle, ...). Dependabot cannot update them, so
+          # its security-update jobs fail with security_update_dependency_not_found
+          # on every graph resubmission. Build-tooling CVEs are addressed by plugin
+          # (AGP/Kotlin) version bumps, which Dependabot already tracks via the
+          # version catalog.
+          dependency-graph-exclude-projects: ':build-logic'
+          dependency-graph-exclude-configurations: 'classpath|detachedConfiguration\d+|androidLintTool|unified-test-platform-.*|.*LintChecksClasspath|swiftExportClasspathResolvable'
