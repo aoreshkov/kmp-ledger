@@ -7,10 +7,6 @@ kotlin {
         namespace = "app.oreshkov.ledger.core.bootstrap"
     }
 
-    swiftExport {
-        moduleName = "Ledger"
-    }
-
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:navigation"))

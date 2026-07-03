@@ -9,6 +9,10 @@ plugins {
 val libs = the<VersionCatalogsExtension>().named("libs")
 
 kotlin {
+    compilerOptions {
+        extraWarnings.set(true)
+    }
+
     extensions.configure<com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget>("android") {
         compileSdk = libs.findVersion("android-sdk-compile").get().requiredVersion.toInt()
         minSdk = libs.findVersion("android-sdk-min").get().requiredVersion.toInt()
