@@ -60,7 +60,12 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             // Signed when keystore credentials are present (CI release);
             // local/dev release builds remain unsigned.
             signingConfig = signingConfigs.findByName("release")
