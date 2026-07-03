@@ -5,6 +5,7 @@
 ![Room 3](https://img.shields.io/badge/Database-Room%203-3DDC84?logo=android&logoColor=white)
 ![Navigation 3](https://img.shields.io/badge/Navigation-3-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/aoreshkov/kmp-ledger/badge)](https://scorecard.dev/viewer/?uri=github.com/aoreshkov/kmp-ledger)
 
 **Supported Platforms:**
 
