@@ -26,6 +26,11 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
+
+    constraints {
+        // robolectric 4.16.1 pins bcprov 1.81 (GHSA-574f-3g2m-x479, fixed in 1.84).
+        testImplementation(libs.bouncycastle.bcprov)
+    }
 }
 
 android {

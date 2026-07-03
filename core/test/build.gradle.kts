@@ -36,3 +36,11 @@ kotlin {
         }
     }
 }
+
+dependencies {
+    constraints {
+        // robolectric 4.16.1 pins bcprov 1.81 (GHSA-574f-3g2m-x479, fixed in 1.84).
+        // api scope so the constraint propagates to every consumer's unit-test classpath.
+        "androidMainApi"(libs.bouncycastle.bcprov)
+    }
+}
