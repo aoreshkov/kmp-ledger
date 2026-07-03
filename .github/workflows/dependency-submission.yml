@@ -35,3 +35,11 @@ jobs:
       # read-only token, so their submission is skipped rather than failing the job.
       - name: Submit dependency graph
         uses: gradle/actions/dependency-submission@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
+        with:
+          # Exclude buildscript/plugin classpath resolutions (e.g. AGP transitives like
+          # netty/bouncycastle, attributed to settings.gradle.kts). Dependabot cannot
+          # update them, so its security-update jobs fail with
+          # security_update_dependency_not_found on every graph resubmission.
+          # Build-tooling CVEs are addressed by plugin (AGP/Kotlin) version bumps,
+          # which Dependabot already tracks via the version catalog.
+          dependency-graph-exclude-configurations: 'classpath|detachedConfiguration\d+'
