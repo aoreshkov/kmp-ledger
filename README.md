@@ -16,7 +16,7 @@
 
 **Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
-> **Note:** Kotlin, Compose Multiplatform, Navigation 3, Koin, Coroutines, and AndroidX DataStore are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: Room 3 / AndroidX SQLite (Release Candidate), AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components — including the Adaptive Navigation Suite — (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+> **Note:** Kotlin, Compose Multiplatform, Navigation 3, Room 3 / AndroidX SQLite, Koin, Coroutines, and AndroidX DataStore are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components — including the Adaptive Navigation Suite — (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
 ---
 
@@ -43,9 +43,9 @@
 | Kotlin | 2.4.0 | Language and compiler |
 | Kotlin Gradle Plugin | 2.4.0 | Build tooling |
 | Compose Multiplatform | 1.11.1 | Shared UI (Android, iOS, Desktop) |
-| Room 3 / SQLite | 3.0.0-rc01 / 2.7.0-rc01 | Local database with KMP support |
+| Room 3 / SQLite | 3.0.0 / 2.7.0 | Local database with KMP support |
 | AndroidX DataStore (Preferences) | 1.2.1 | Multiplatform key-value persistence (theme preference) |
-| Navigation 3 | 1.1.3 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
+| Navigation 3 | 1.1.4 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
 | Material3 Adaptive Navigation Suite | 1.11.0-alpha07 | Adaptive top-level nav (bottom bar / rail / drawer) |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
@@ -354,7 +354,7 @@ Coverage is **enforced**, not just reported: CI runs `koverVerify`, which fails 
 
 In CI, the `check` job runs `koverXmlReport koverVerify` and posts a coverage summary as a comment on each pull request, alongside a test-results summary with inline annotations for any failures. The aggregated HTML report is also uploaded as a build artifact. Docs-only changes skip the build and test jobs entirely (a `changes` path filter gates them, with a single `ci-success` status check as the required gate).
 
-A separate `instrumented-tests` job runs the Android smoke suite on a **Gradle Managed Device** (`aospAtd30`: Pixel 2, API 30, AOSP ATD). This exercises the real shipped APK — real Koin startup, real platform Room database, real Navigation 3 graph — keeping end-to-end integration coverage separate from the JVM host-test pass. Supply-chain hardening is provided by a `dependency-review` workflow and Dependabot-maintained, SHA-pinned GitHub Actions.
+A separate `instrumented-tests` job runs the Android smoke suite on a **Gradle Managed Device** (`aospAtd30`: Pixel 2, API 30, AOSP ATD). This exercises the real shipped APK — real Koin startup, real platform Room database, real Navigation 3 graph — keeping end-to-end integration coverage separate from the JVM host-test pass. Supply-chain hardening is provided by a `dependency-review` workflow, Dependabot-maintained, SHA-pinned GitHub Actions, and a checksum-pinned Gradle wrapper distribution.
 
 **Layer coverage:**
 
@@ -477,6 +477,11 @@ To release a new version:
 > **Note:** The release workflow includes a `verify-version` job that fails immediately if the pushed tag does not match `ledger.version.name` in `gradle.properties`. It also generates a `SHA256SUMS` file attached to the release and publishes a [SLSA build provenance attestation](https://slsa.dev) via `actions/attest`.
 
 ### Android release signing
+
+Android release builds are **R8-minified with resource shrinking** (using the
+`proguard-android-optimize.txt` defaults plus `androidApp/proguard-rules.pro`, which is
+currently empty — Room 3, Compose, and kotlinx-serialization ship consumer keep rules,
+and Koin Annotations is compile-time codegen).
 
 The release workflow signs the Android APK when the following **repository secrets**
 (Settings → Secrets and variables → Actions) are present. If they are absent, the
