@@ -7,6 +7,10 @@ on:
     - cron: '30 4 * * 1'
   push:
     branches: [ main ]
+  # Manual re-run knob: the Binary-Artifacts gradle-wrapper exemption requires a
+  # *successful* Build run at HEAD, so push-triggered runs (which race the ~35-min
+  # Build) can't see it — dispatch after Build finishes to re-evaluate.
+  workflow_dispatch:
 
 permissions: read-all
 

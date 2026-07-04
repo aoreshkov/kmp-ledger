@@ -52,9 +52,17 @@ here instead.
   a step rather than a new job to avoid an extra runner spin-up; a wrapper-jar
   change can never be docs-only, so the `changes` path filter always routes it
   through `check`.
-- **Verify:** next push to `main` triggers the Scorecard workflow; alert #1 then
-  reports `state: fixed`
-  (`gh api repos/aoreshkov/kmp-ledger/code-scanning/alerts/1 -q .state`).
+- **Race caveat (found during verification):** the exemption additionally requires
+  a **successful run of the validating workflow at the exact HEAD commit**
+  (`gradleWrapperValidated` in `checks/raw/binary_artifact.go`, scorecard v5.3.0).
+  Push-triggered Scorecard runs finish in ~2 min while Build takes ~35 min, so a
+  push-triggered evaluation always races Build and loses — the alert only closes
+  on a run that happens *after* Build has succeeded at HEAD (the weekly Monday
+  schedule, or a manual dispatch). `workflow_dispatch:` was added to
+  `scorecard.yml` for exactly this.
+- **Verify:** after Build succeeds on HEAD, `gh workflow run scorecard.yml`, then
+  `gh api repos/aoreshkov/kmp-ledger/code-scanning/alerts/1 -q .state` reports
+  `fixed`.
 - Source: <https://github.com/ossf/scorecard/blob/main/checks/raw/binary_artifact.go>;
   <https://github.com/ossf/scorecard/blob/main/docs/checks.md#binary-artifacts>.
 
