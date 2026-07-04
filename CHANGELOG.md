@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-07-04
+
+### Added
+- Added an OpenSSF Scorecard CI workflow and a README badge.
+- Added a `CONTRIBUTING` guide and a Contributor Covenant 2.1 code of conduct.
+
+### Changed
+- Upgraded Room and SQLite from `-rc01` to 3.0.0 / 2.7.0 stable.
+- Upgraded the Navigation 3 runtime to 1.1.4.
+- Enabled R8 minification and resource shrinking for the Android release build.
+- Enabled Kotlin `extraWarnings` in the base multiplatform convention plugin.
+- Enforced `FAIL_ON_PROJECT_REPOS` repository mode and pinned the Gradle wrapper distribution SHA-256.
+- Constrained BouncyCastle `bcprov` to 1.84 to clear the robolectric-transitive GHSA-574f-3g2m-x479 alert.
+- Gated the Android release CI job to the `release` environment.
+- Hardened the dependency-review and dependency-submission workflows, excluding build-tooling and Swift-export worker deps from the submitted dependency graph.
+- Split the README screenshots into Android and Desktop groups.
+
 ## [1.4.0] - 2026-06-30
 
 ### Added
@@ -117,7 +134,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.1.1...v1.2.0
