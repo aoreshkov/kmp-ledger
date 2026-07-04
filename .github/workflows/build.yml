@@ -62,6 +62,13 @@ jobs:
         with:
           persist-credentials: false
 
+      # setup-gradle already validates the wrapper by default; this explicit
+      # step exists because OpenSSF Scorecard's Binary-Artifacts check only
+      # exempts gradle-wrapper.jar when it sees a wrapper-validation step
+      # directly in a workflow file.
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
+
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
