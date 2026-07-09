@@ -6,6 +6,7 @@
 ![Navigation 3](https://img.shields.io/badge/Navigation-3-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/aoreshkov/kmp-ledger/badge)](https://scorecard.dev/viewer/?uri=github.com/aoreshkov/kmp-ledger)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-EA4AAA?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/aoreshkov)
 
 **Supported Platforms:**
 
@@ -451,6 +452,16 @@ kmp-ledger/
         ├── api/                  # NavKey contracts
         └── impl/                 # Settings screen, ViewModel, DI
 ```
+
+---
+
+## Sponsors
+
+If Ledger has saved you an architecture debate or a migration headache, consider
+[sponsoring its development](https://github.com/sponsors/aoreshkov) — sponsorship funds keeping
+the reference current with each new Kotlin / Compose Multiplatform release.
+
+Backer-tier and above sponsors are listed here — thank you! 💜
 
 ---
 
