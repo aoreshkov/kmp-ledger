@@ -7,6 +7,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/aoreshkov/kmp-ledger/badge)](https://scorecard.dev/viewer/?uri=github.com/aoreshkov/kmp-ledger)
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-EA4AAA?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/aoreshkov)
+[![KMP Project Wizard](https://img.shields.io/jetbrains/plugin/v/31786?label=KMP%20Project%20Wizard&logo=jetbrains&logoColor=white)](https://plugins.jetbrains.com/plugin/31786-kmp-project-wizard)
 
 **Supported Platforms:**
 
@@ -19,6 +20,20 @@
 **Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
 > **Note:** Kotlin, Compose Multiplatform, Navigation 3, Room 3 / AndroidX SQLite, Koin, Coroutines, and AndroidX DataStore are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components — including the Adaptive Navigation Suite — (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+
+---
+
+## Generate This Project
+
+Want this architecture as the starting point for your own app? The
+[KMP Project Wizard](https://plugins.jetbrains.com/plugin/31786-kmp-project-wizard) plugin for
+IntelliJ IDEA and Android Studio generates a project with this exact module structure straight
+from **File → New Project** — tailored to your package name, feature and entity names, and
+target platforms. Ledger is the open-source reference app the wizard's defaults mirror.
+
+The core Android and Desktop templates are free. A **Pro** tier additionally generates the
+Claude Code agent configuration and GitHub Actions CI scaffolding — the same setups you can
+study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your project in one click.
 
 ---
 
