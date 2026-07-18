@@ -40,10 +40,6 @@ they cannot be grouped into subfolders, so they are grouped by name instead.
 - All review agents: `model: opus`, `memory: project`, `maxTurns: 40`, `effort: high`,
   read-only (no `Edit`/`Write`).
 
-## Hooks (`hooks/`)
-- `block-coauthored-by.sh` — `PreToolUse` guard on `Bash` that blocks commits adding a
-  `Co-Authored-By` trailer (project commit convention). Wired in `settings.json`.
-
 ## Memory (`agent-memory/`)
 One directory per agent, keyed by the agent's `name` (`agent-memory/<name>/`), holding
 that agent's durable project notes. Renaming an agent requires renaming its memory dir.
