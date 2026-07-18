@@ -35,6 +35,14 @@ kotlin {
     }
 }
 
+// Pin the Java side too: without this, compileJava targets whatever JDK runs the
+// Gradle daemon (IDEs may override gradle/gradle-daemon-jvm.properties with their
+// own runtime), tripping KGP's JVM-target validation against jvmTarget 21.
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 compose.desktop {
     application {
         mainClass = "app.oreshkov.ledger.MainKt"
