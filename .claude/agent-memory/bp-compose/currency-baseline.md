@@ -1,15 +1,22 @@
 ---
 name: currency-baseline
-description: Upstream-currency verification of kmp-ledger Compose UI + Navigation 3 against pinned CMP 1.11.1 / nav3 1.1.3, last re-checked 2026-07-02
+description: Upstream-currency verification of kmp-ledger Compose UI + Navigation 3 against pinned CMP 1.11.1 / nav3 runtime 1.1.4 + ui 1.1.1, last re-checked 2026-07-16
 metadata:
   type: project
 ---
 
-Upstream-currency audit result (re-verified 2026-07-02, prior pass 2026-06-26):
-the Compose + Navigation 3 surface is CURRENT for the pinned versions. Details
-so future reviews can confirm-fast instead of re-deriving:
+Upstream-currency audit result (re-verified 2026-07-16; prior passes 2026-07-02,
+2026-06-26): the Compose + Navigation 3 surface is CURRENT for the pinned
+versions. UI code is materially unchanged across these passes.
 
-**Navigation 3 (pinned 1.1.3; 1.1.4 stable released 2026-07-01, bug-fixes only):**
+**Version delta as of 2026-07-16:** project now pins navigation3-runtime 1.1.4
+(Google `androidx.navigation3`) + navigation3-ui 1.1.1 (JetBrains
+`org.jetbrains.androidx.navigation3`, CMP-aligned — treat like the material3
+alpha pin, not a gap). CMP still 1.11.1 (latest stable; 1.12.0-alpha02 out
+2026-06-16). lifecycle bumped to 2.11.0-rc01. These bumps land squarely on the
+API surface already verified below — no code changes were required or observed.
+
+**Navigation 3 (pinned runtime 1.1.4, released 2026-07-01, bug-fixes only):**
 - Multi-back-stack shell (App.kt, added commit aad1d23 2026-06-29) matches the
   official recipe developer.android.com/guide/navigation/navigation-3/recipes/multiple-backstacks
   (page updated 2026-03-16) point for point: per-section `rememberNavBackStack`,

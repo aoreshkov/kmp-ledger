@@ -7,9 +7,9 @@ metadata:
 
 SDK levels live in `gradle/libs.versions.toml`: `android-sdk-compile = 37`, `android-sdk-target = 37`, `android-sdk-min = 24`. AGP 9.2.1.
 
-Currency facts (re-verified 2026-07-02): API 37 = Android 17, stable June 16 2026 — the latest level, exceeding Google Play's Aug 31 2026 requirement of API 36. AGP 9.2.1 is on the current stable line (9.2.x, max supported API 37). So SDK/AGP currency is ahead of, not behind, requirements.
+Currency facts (re-verified 2026-07-16): API 37 = Android 17, stable June 2026 — the latest level, exceeding Google Play's Aug 31 2026 requirement (API 36 for new apps/updates, API 35 to stay visible on existing apps). AGP 9.2.1 is on the current stable line (9.2.x, max supported API 37). So SDK/AGP currency is ahead of, not behind, requirements.
 
-Open currency gap (flagged 2026-07-02, not a pinned decision — present since initial commit as template default): release build has `isMinifyEnabled = false` and no proguardFiles; official guidance says always enable R8 + resource shrinking for release. If the user later rejects this, record it as deliberate.
+R8 release config: RESOLVED (verified 2026-07-16). `androidApp/build.gradle.kts` release buildType now has `isMinifyEnabled = true`, `isShrinkResources = true`, and `proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")`. `proguard-rules.pro` is intentionally near-empty (Room 3 / Compose / kotlinx-serialization ship consumer keep rules; Koin Annotations is compile-time codegen). The earlier "isMinifyEnabled = false" gap is closed — do not re-flag.
 
 targetSdk-37 behavior changes and how they map to this app:
 - **Edge-to-edge**: enforced (targetSdk 35+). `MainActivity` calls `enableEdgeToEdge()`. OK.

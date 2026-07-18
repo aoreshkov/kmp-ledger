@@ -6,3 +6,5 @@ build/
 /local.properties
 /gradle/gradle-daemon-jvm.properties
 docs/
+.env
+Secrets.xcconfig

@@ -110,12 +110,14 @@ Use today's date in `YYYY-MM-DD` format. Only include categories that have at le
 - …
 ```
 
-Then update the two link lines at the bottom of the file:
+Then update the two link lines at the bottom of the file. Read the existing
+`[Unreleased]:` link line there; everything before `/compare/` is the repository
+base URL (`<repo_url>`).
 
 - Replace the `[Unreleased]` line with:
-  `[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v<confirmed version>...HEAD`
+  `[Unreleased]: <repo_url>/compare/v<confirmed version>...HEAD`
 - Add a new line for the new version above the previous top version line:
-  `[<confirmed version>]: https://github.com/aoreshkov/kmp-ledger/compare/<previous_tag_version>...v<confirmed version>`
+  `[<confirmed version>]: <repo_url>/compare/<previous_tag_version>...v<confirmed version>`
 
 ### 7. Commit
 

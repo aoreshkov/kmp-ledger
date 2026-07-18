@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-State of the kmp-ledger Gradle build vs upstream best practice (verified 2026-07-02 against docs.gradle.org for Gradle 9.6.1).
+State of the kmp-ledger Gradle build vs upstream best practice (re-verified 2026-07-16 against docs.gradle.org for Gradle 9.6.1; prior pass 2026-07-02).
 
 **Already current — do not re-flag:**
 - Wrapper `gradle-9.6.1-bin.zip` = latest stable (released 2026-06-26). Re-check `gradle/wrapper/gradle-wrapper.properties` against gradle.org/releases each audit.
@@ -17,10 +17,14 @@ State of the kmp-ledger Gradle build vs upstream best practice (verified 2026-07
 - Daemon JVM pinned via `gradle/gradle-daemon-jvm.properties` (toolchainVersion=21 + foojay toolchainUrl entries from `updateDaemonJvm`) — this is the current recommended daemon-JVM provisioning.
 - Repositories centralized in settings (`dependencyResolutionManagement`), google() content-filtered; `rootProject.name` set in both settings files.
 
+**Resolved since 2026-07-02 (do not re-flag):**
+- `distributionSha256Sum` IS now present in gradle-wrapper.properties (line 3) — wrapper checksum verification done.
+- `RepositoriesMode.FAIL_ON_PROJECT_REPOS` IS now enforced in settings.gradle.kts:19.
+
 **Standing Optional items (raise only as Optional, never higher):**
-- No `distributionSha256Sum` in gradle-wrapper.properties (wrapper distribution checksum verification).
 - No `gradle/verification-metadata.xml` (dependency verification).
-- `RepositoriesMode.FAIL_ON_PROJECT_REPOS` not enforced (behavior already compliant; enforcement only).
+- `org.gradle.tooling.parallel=true` (gradle.properties:23) is a REAL documented property since Gradle 9.4.0 (parallel Tooling API / IDE sync). Comment is accurate — do not flag.
+- BCV: project uses standalone `binary-compatibility-validator` 0.18.1 (deliberate pin). Kotlin 2.2+ ships a built-in KGP `abiValidation {}` DSL intended to replace it, but it is still `@ExperimentalAbiValidation` in Kotlin 2.4 and the standalone plugin is NOT yet officially deprecated (deprecation follows stabilization, KT-71172). Staying on standalone is current-appropriate; migration is informational only.
 
 **Why:** Avoids spending audit budget re-deriving the same green areas every run.
 **How to apply:** On the next currency pass, confirm these are unchanged and move on; respect [[deliberate-gradle-divergences]].

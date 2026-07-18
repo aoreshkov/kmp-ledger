@@ -1,6 +1,6 @@
 ---
 name: currency-baseline
-description: Which parts of the Room KMP layer already match official Room 3.0.0-rc01 guidance (so future audits don't re-litigate them)
+description: Which parts of the Room KMP layer already match official Room 3.0.0 stable guidance (so future audits don't re-litigate them)
 metadata:
   type: project
 ---
@@ -10,10 +10,15 @@ KMP Room guide (developer.android.com/kotlin/multiplatform/room) and the Room 3.
 release page (.../releases/room3). Last re-verified 2026-07-02 (docs last-updated
 2026-07-01; guide content substantively unchanged from the 2026-06-17 revision).
 
-**Stable is out:** Room 3.0.0 stable and androidx.sqlite 2.7.0 stable both released
-2026-07-01. If the repo still pins 3.0.0-rc01 / 2.7.0-rc01 (gradle/libs.versions.toml
-`androidx-room` / `androidx-sqlite`), recommend bumping both to stable — no API delta
-vs rc01 noted in release notes, straight version bump.
+**Stable is adopted (2026-07-16 re-verify):** repo now pins `androidx-room = "3.0.0"`
+and `androidx-sqlite = "2.7.0"` (both stable, released 2026-07-01). The earlier
+recommendation to bump off rc01 is DONE — no action. Release notes document no API
+delta between 3.0.0-rc01 and 3.0.0 stable.
+
+**rc01 API rename note (N/A here):** 3.0.0-rc01 renamed `@TypeConverter` ->
+`@ColumnTypeConverter` (symmetry with `@DaoReturnTypeConverter`). The layer uses NO
+type converters (minimal 2-col String entity), so this rename does not apply. If a
+converter is ever added, use `@androidx.room3.ColumnTypeConverter`, not `@TypeConverter`.
 
 The former `room3-sqlite-wrapper` version-pin defect is RESOLVED: the wrapper
 dependency was dropped from the repo entirely (see CHANGELOG). Don't re-flag.

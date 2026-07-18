@@ -5,7 +5,11 @@ metadata:
   type: project
 ---
 
-Test-stack currency facts verified 2026-07-02 (re-verify before reusing; versions move):
+Test-stack currency facts verified 2026-07-02, re-verified 2026-07-16 — unchanged
+(re-verify before reusing; versions move). 2026-07-16 re-check: coroutines 1.11.0 still
+latest stable, CMP 1.12.0 still beta-only (1.12.0-beta02 shipped 2026-07-01), Kover 0.9.8
+still latest — no newer stable release changes the advice. Full repo re-scanned: still zero
+upstream-currency gaps.
 
 - **kotlinx-coroutines 1.11.0 is the latest release** (per CHANGES.md on master). Its only
   test-module change: advanced deprecations of the `runTest(dispatchTimeout=...)` overloads
