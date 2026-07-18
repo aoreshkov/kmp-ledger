@@ -14,6 +14,11 @@ updates:
       github-actions:
         patterns:
           - "*"
+    # Supply-chain hardening: wait out the window where a freshly published
+    # (potentially compromised) release is live before proposing it.
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
 
   # Keep Gradle dependencies (including the version catalog) current.
   - package-ecosystem: "gradle"
@@ -24,3 +29,18 @@ updates:
     labels:
       - "dependencies"
       - "gradle"
+    # Majors stay as individual PRs; minor/patch bumps arrive as one weekly PR.
+    groups:
+      gradle-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
+    ignore:
+      # material3 artifacts must stay aligned with the Compose Multiplatform
+      # release (androidx-material3 pin in gradle/libs.versions.toml); drop this
+      # when deliberately upgrading compose-multiplatform. Note: ignore also
+      # suppresses security updates for these artifacts.
+      - dependency-name: "org.jetbrains.compose.material3:*"
