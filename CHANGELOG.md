@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-07-18
+
+### Added
+- Added GitHub Sponsors funding (`.github/FUNDING.yml`) plus a Sponsor badge and Sponsors section in the README.
+- Added a "Generate This Project" README section cross-linking the KMP Project Wizard IntelliJ plugin.
+- Added an explicit Gradle wrapper-validation step to the build workflow for the OpenSSF Scorecard Binary-Artifacts exemption.
+- Added a `workflow_dispatch` trigger to the Scorecard workflow.
+- Added Dependabot supply-chain cooldowns (3 days default, 7 for majors) and grouped Gradle minor/patch updates, ignoring Compose `material3` artifacts to stay aligned with Compose Multiplatform.
+
+### Changed
+- Upgraded AndroidX Lifecycle to 2.11.0-rc01.
+- Enabled parallel IDE sync (`org.gradle.tooling.parallel=true`, Gradle 9.4+).
+- Bumped pinned GitHub Actions: `actions/attest` v4.2.0, `softprops/action-gh-release` v3.0.2, `codeql-action/upload-sarif` v4.37.1.
+- Extended `.gitignore` to cover `docs/`, `.env`, and `Secrets.xcconfig`.
+
 ## [1.5.0] - 2026-07-04
 
 ### Added
@@ -134,7 +149,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.2.0...v1.3.0
