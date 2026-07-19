@@ -1,6 +1,6 @@
 [versions]
 # Build tools
-android-gradle-plugin = "9.2.1"
+android-gradle-plugin = "9.1.0"
 android-sdk-compile = "37"
 android-sdk-min = "24"
 android-sdk-target = "37"

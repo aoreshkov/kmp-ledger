@@ -5,9 +5,9 @@ metadata:
   type: project
 ---
 
-SDK levels live in `gradle/libs.versions.toml`: `android-sdk-compile = 37`, `android-sdk-target = 37`, `android-sdk-min = 24`. AGP 9.2.1.
+SDK levels live in `gradle/libs.versions.toml`: `android-sdk-compile = 37`, `android-sdk-target = 37`, `android-sdk-min = 24`. AGP 9.1.0.
 
-Currency facts (re-verified 2026-07-16): API 37 = Android 17, stable June 2026 — the latest level, exceeding Google Play's Aug 31 2026 requirement (API 36 for new apps/updates, API 35 to stay visible on existing apps). AGP 9.2.1 is on the current stable line (9.2.x, max supported API 37). So SDK/AGP currency is ahead of, not behind, requirements.
+Currency facts (re-verified 2026-07-16): API 37 = Android 17, stable June 2026 — the latest level, exceeding Google Play's Aug 31 2026 requirement (API 36 for new apps/updates, API 35 to stay visible on existing apps). AGP 9.1.0 is on a current stable line and supports API 37. So SDK/AGP currency is ahead of, not behind, requirements. **Do not flag AGP as "behind latest" (9.3.0):** it is deliberately pinned to 9.1.0 because that is the ceiling the latest IntelliJ IDEA Android plugin supports (IDEA lags Android Studio on AGP). See [[gradle-currency-baseline]].
 
 R8 release config: RESOLVED (verified 2026-07-16). `androidApp/build.gradle.kts` release buildType now has `isMinifyEnabled = true`, `isShrinkResources = true`, and `proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")`. `proguard-rules.pro` is intentionally near-empty (Room 3 / Compose / kotlinx-serialization ship consumer keep rules; Koin Annotations is compile-time codegen). The earlier "isMinifyEnabled = false" gap is closed — do not re-flag.
 
