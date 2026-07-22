@@ -35,6 +35,19 @@ kotlin {
     }
 }
 
+// Koin compiler plugin 1.0.2's aggregator (A3) validation is too strict for this
+// project's multi-Gradle-module + expect/actual `@Module` graph: at the entry point it
+// can't see definitions provided by sibling modules / platform `actual` `@Module`s (e.g.
+// `RoomDatabase.Builder` from `PlatformDatabaseModule`) and reports false KOIN-D001
+// "Missing dependency" (InsertKoinIO/koin-compiler-plugin#51 — maintainer confirms the
+// A3 pass is over-strict, relaxed multi-module safety is slated for 1.1.0). Per-module
+// A2 validation stays on for every library module; the full assembled graph is still
+// verified at runtime by the `verify()` tests in core:bootstrap / feature *:impl. Revert
+// to the default (compileSafety = true) once the plugin ships the 1.1.0 fix.
+koinCompiler {
+    compileSafety = false
+}
+
 // Pin the Java side too: without this, compileJava targets whatever JDK runs the
 // Gradle daemon (IDEs may override gradle/gradle-daemon-jvm.properties with their
 // own runtime), tripping KGP's JVM-target validation against jvmTarget 21.
