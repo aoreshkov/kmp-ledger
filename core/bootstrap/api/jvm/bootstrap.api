@@ -7,11 +7,3 @@ public final class app/oreshkov/ledger/core/bootstrap/di/BootstrapModule {
 	public fun <init> ()V
 }
 
-public final class org/koin/plugin/hints/Core_bootstrap_Ledger_core_bootstrap__injectedparams_app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModelKt {
-	public static final synthetic fun injectedparams_app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel (Ljava/lang/String;)V
-}
-
-public final class org/koin/plugin/hints/Core_bootstrap_Ledger_core_bootstrap__injectedparams_app_oreshkov_ledger_feature_posting_impl_PostingEditViewModelKt {
-	public static final synthetic fun injectedparams_app_oreshkov_ledger_feature_posting_impl_PostingEditViewModel (Ljava/lang/String;)V
-}
-

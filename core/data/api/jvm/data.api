@@ -22,7 +22,3 @@ public final class app/oreshkov/ledger/core/data/repository/OfflineFirstPostingR
 	public fun updatePosting (Lapp/oreshkov/ledger/core/model/data/Posting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDataDiDataModuleModuleKt {
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_data_di_DataModule__providePostingRepository (Lapp/oreshkov/ledger/core/domain/repository/PostingRepository;)V
-}
-

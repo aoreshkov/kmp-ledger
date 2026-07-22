@@ -51,11 +51,3 @@ public final class app/oreshkov/ledger/feature/settings/impl/di/SettingsModuleKt
 	public static final fun getSettingsNavigationModule ()Lorg/koin/core/module/Module;
 }
 
-public final class org/koin/plugin/hints/Feature_settings_impl_Ledger_feature_settings_impl__appOreshkovLedgerCoreNavigationTopLevelDestinationDsl_singleKt {
-	public static final synthetic fun dsl_single (Lapp/oreshkov/ledger/core/navigation/TopLevelDestination;Lkotlin/Unit;Lkotlin/Unit;Lkotlin/Unit;)V
-}
-
-public final class org/koin/plugin/hints/Koin_hints_app_oreshkov_ledger_feature_settings_impl_di_SettingsModuleKt {
-	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_settings_impl_di_SettingsModule_viewmodel (Lapp/oreshkov/ledger/feature/settings/impl/SettingsViewModel;)V
-}
-

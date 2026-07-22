@@ -36,11 +36,3 @@ public final class app/oreshkov/ledger/core/ui/theme/TypeKt {
 	public static final fun getTypography ()Landroidx/compose/material3/Typography;
 }
 
-public final class org/koin/plugin/hints/Core_ui_Ledger_core_ui__androidxSavedstateSerializationSavedStateConfiguration_callsiteKt {
-	public static final synthetic fun callsite (Landroidx/savedstate/serialization/SavedStateConfiguration;)V
-}
-
-public final class org/koin/plugin/hints/Core_ui_Ledger_core_ui__appOreshkovLedgerCoreNavigationStartDestination_callsiteKt {
-	public static final synthetic fun callsite-KDQ7_7g (Landroidx/navigation3/runtime/NavKey;)V
-}
-

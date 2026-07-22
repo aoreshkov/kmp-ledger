@@ -65,6 +65,11 @@ kover {
 }
 
 apiValidation {
+    // Koin compiler emits public `org.koin.plugin.hints.*` synthetics purely for
+    // cross-module graph validation; they are compiler-owned and re-shape on every
+    // Koin/Kotlin compiler bump, so they are not stable public API worth tracking.
+    ignoredPackages.add("org.koin.plugin.hints")
+
     @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
     klib {
         enabled = true

@@ -49,12 +49,3 @@ public abstract interface class app/oreshkov/ledger/core/domain/repository/Setti
 	public abstract fun themeMode ()Lkotlinx/coroutines/flow/Flow;
 }
 
-public final class org/koin/plugin/hints/Koin_hints_app_oreshkov_ledger_core_domain_di_DomainModuleKt {
-	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/DeletePostingUseCase;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/GetPostingUseCase;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/GetPostingsUseCase;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/GetThemeModeUseCase;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/SavePostingUseCase;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_core_domain_di_DomainModule_factory (Lapp/oreshkov/ledger/core/domain/SetThemeModeUseCase;)V
-}
-

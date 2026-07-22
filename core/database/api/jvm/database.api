@@ -49,12 +49,3 @@ public final class app/oreshkov/ledger/core/database/model/PostingEntity {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDatabaseDiDatabaseModuleModuleKt {
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__provideDatabase (Lapp/oreshkov/ledger/core/database/LedgerDatabase;Landroidx/room3/RoomDatabase;)V
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_database_di_DatabaseModule__providePostingDao (Lapp/oreshkov/ledger/core/database/dao/PostingDao;)V
-}
-
-public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDatabaseDiPlatformDatabaseModuleModuleKt {
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_database_di_PlatformDatabaseModule__provideRoomBuilder (Landroidx/room3/RoomDatabase$Builder;)V
-}
-

@@ -75,7 +75,3 @@ public final class app/oreshkov/ledger/core/common/util/UuidKt {
 	public static final fun randomUuidString ()Ljava/lang/String;
 }
 
-public final class org/koin/plugin/hints/AppOreshkovLedgerCoreCommonDiDispatcherModuleModuleKt {
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_common_di_DispatcherModule__provideAppDispatchers (Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;)V
-}
-

@@ -16,11 +16,3 @@ public final class app/oreshkov/ledger/core/datastore/di/PlatformDataStoreModule
 	public final fun provideDataStore ()Landroidx/datastore/core/DataStore;
 }
 
-public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDatastoreDiDataStoreModuleModuleKt {
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_datastore_di_DataStoreModule__provideSettingsRepository (Lapp/oreshkov/ledger/core/domain/repository/SettingsRepository;)V
-}
-
-public final class org/koin/plugin/hints/AppOreshkovLedgerCoreDatastoreDiPlatformDataStoreModuleModuleKt {
-	public static final synthetic fun moduledef_app_oreshkov_ledger_core_datastore_di_PlatformDataStoreModule__provideDataStore (Landroidx/datastore/core/DataStore;)V
-}
-
