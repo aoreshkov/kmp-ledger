@@ -220,6 +220,10 @@ public final class app/oreshkov/ledger/feature/posting/impl/di/PostingModuleKt {
 	public static final fun getPostingNavigationModule ()Lorg/koin/core/module/Module;
 }
 
+public final class org/koin/plugin/hints/Feature_posting_impl_Ledger_feature_posting_impl__appOreshkovLedgerCoreNavigationTopLevelDestinationDsl_singleKt {
+	public static final synthetic fun dsl_single (Lapp/oreshkov/ledger/core/navigation/TopLevelDestination;Lkotlin/Unit;Lkotlin/Unit;Lkotlin/Unit;)V
+}
+
 public final class org/koin/plugin/hints/Feature_posting_impl_commonMain__injectedparams_app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModelKt {
 	public static final synthetic fun injectedparams_app_oreshkov_ledger_feature_posting_impl_PostingDetailsViewModel (Ljava/lang/String;)V
 }
@@ -229,8 +233,8 @@ public final class org/koin/plugin/hints/Feature_posting_impl_commonMain__inject
 }
 
 public final class org/koin/plugin/hints/Koin_hints_app_oreshkov_ledger_feature_posting_impl_di_PostingModuleKt {
-	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_posting_impl_di_PostingModule_viewmodel (Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsViewModel;Landroidx/lifecycle/ViewModel;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_posting_impl_di_PostingModule_viewmodel (Lapp/oreshkov/ledger/feature/posting/impl/PostingEditViewModel;Landroidx/lifecycle/ViewModel;)V
-	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_posting_impl_di_PostingModule_viewmodel (Lapp/oreshkov/ledger/feature/posting/impl/PostingListViewModel;Landroidx/lifecycle/ViewModel;)V
+	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_posting_impl_di_PostingModule_viewmodel (Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsViewModel;)V
+	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_posting_impl_di_PostingModule_viewmodel (Lapp/oreshkov/ledger/feature/posting/impl/PostingEditViewModel;)V
+	public static final synthetic fun componentscan_app_oreshkov_ledger_feature_posting_impl_di_PostingModule_viewmodel (Lapp/oreshkov/ledger/feature/posting/impl/PostingListViewModel;)V
 }
 
