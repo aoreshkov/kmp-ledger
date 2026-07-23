@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.3] - 2026-07-24
+
+### Changed
+- Pinned the Android Gradle Plugin to 9.1.1 (from 9.2.1) to stay within the current IntelliJ IDEA Android plugin ceiling.
+- Upgraded the Koin compiler to 1.0.2.
+- Upgraded Kover to 0.9.9.
+- Upgraded AndroidX Lifecycle to 2.11.0 (from 2.11.0-rc01).
+- Upgraded Logback to 1.5.38.
+- Bumped the BouncyCastle `bcprov` constraint to 1.85.
+- Excluded the Koin compiler's `org.koin.plugin.hints` synthetics from binary-compatibility-validator tracking (compiler-owned, re-shape on every Koin/Kotlin bump).
+- Set `compileSafety = false` for `desktopApp` to work around Koin compiler 1.0.2's over-strict A3 aggregator check (false KOIN-D001 across the multi-module + expect/actual `@Module` graph); per-module A2 validation and the runtime `verify()` tests still enforce the graph. Revert once koin-compiler 1.1.0 ships the fix.
+
 ## [1.6.2] - 2026-07-18
 
 ### Fixed
@@ -159,7 +171,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.2...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.3...HEAD
+[1.6.3]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.5.0...v1.6.0
