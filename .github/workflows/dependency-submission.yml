@@ -36,13 +36,24 @@ jobs:
       - name: Submit dependency graph
         uses: gradle/actions/dependency-submission@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
         with:
-          # Exclude build-tooling resolutions from the graph: the convention-plugin
-          # build, buildscript/plugin classpaths, AGP's lint and Unified Test
-          # Platform configurations, and the Kotlin Swift-export worker (netty,
-          # opentelemetry, bouncycastle, ...). Dependabot cannot update them, so
-          # its security-update jobs fail with security_update_dependency_not_found
-          # on every graph resubmission. Build-tooling CVEs are addressed by plugin
-          # (AGP/Kotlin) version bumps, which Dependabot already tracks via the
-          # version catalog.
+          # Submit ONLY real runtime dependencies (allowlist) instead of maintaining
+          # an ever-growing denylist of build-tooling configurations. Every
+          # ".*RuntimeClasspath" carries the shipped app deps across the JVM, Desktop,
+          # Android and test-runtime targets; by construction it excludes every
+          # buildscript/plugin classpath, AGP lint + Unified Test Platform, KSP and
+          # compiler plugins, and the Kotlin Swift-export worker. Those tooling
+          # transitives (netty, httpclient, commons-lang3, bcpkix, opentelemetry,
+          # bouncycastle, ...) are exactly the ones Dependabot cannot update, whose
+          # security-update jobs failed with security_update_dependency_not_found on
+          # every graph resubmission. ":build-logic" (the convention-plugin project)
+          # is excluded so its own runtimeClasspath does not re-admit the AGP/Kotlin
+          # plugins as if they were app dependencies. Tooling CVEs are still addressed
+          # by AGP/Kotlin version-catalog bumps, which Dependabot tracks.
+          #
+          # Trade-off: Kotlin/Native (iOS) targets expose no *RuntimeClasspath, so
+          # iOS-only klib variants (e.g. compose ui-uikit) drop out of the graph.
+          # Every such library is still covered via its JVM/Android variant, which
+          # carries the same security advisories. Adding a new tooling dependency now
+          # needs no workflow edit — the allowlist never admits it.
           dependency-graph-exclude-projects: ':build-logic'
-          dependency-graph-exclude-configurations: 'classpath|detachedConfiguration\d+|androidLintTool|unified-test-platform-.*|.*LintChecksClasspath|swiftExportClasspathResolvable'
+          dependency-graph-include-configurations: '.*[Rr]untimeClasspath'
