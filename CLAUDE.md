@@ -94,11 +94,11 @@ Three composable Gradle plugins — modules declare one of these instead of conf
 | Kotlin | 2.4.0 |
 | Compose Multiplatform | 1.11.1 |
 | Koin | 4.2.2 |
-| Room | 3.0.0-rc01 |
-| Navigation 3 | 1.1.3 |
+| Room | 3.0.0 |
+| Navigation 3 | 1.1.4 (runtime) / 1.1.1 (ui) |
 | AndroidX DataStore | 1.2.1 |
 | Coroutines | 1.11.0 |
-| Kover | 0.9.8 |
+| Kover | 0.9.9 |
 
 ## Module Conventions
 

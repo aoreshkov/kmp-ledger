@@ -66,11 +66,11 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 | Material3 Adaptive Navigation Suite | 1.11.0-alpha07 | Adaptive top-level nav (bottom bar / rail / drawer) |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
-| Kover | 0.9.8 | Kotlin Multiplatform code coverage |
-| SLF4J / Logback | 2.0.18 / 1.5.34 | Desktop logging implementation |
+| Kover | 0.9.9 | Kotlin Multiplatform code coverage |
+| SLF4J / Logback | 2.0.18 / 1.6.0 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
-| Lifecycle / ViewModel | 2.11.0-beta02 | State management and lifecycle-aware components |
+| Lifecycle / ViewModel | 2.11.0 | State management and lifecycle-aware components |
 | Material3 Adaptive | 1.3.0-beta02 | List/detail adaptive layouts |
 | Material3 (Compose) | 1.11.0-alpha07 | Material You components |
 | Android SDK | compile/target 37, min 24 | Android target |
