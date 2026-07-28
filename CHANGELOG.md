@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.4] - 2026-07-28
+
+### Changed
+- Upgraded Logback to 1.6.0 (from 1.5.38). The 1.6.x line targets the SLF4J 2.0.18 baseline the project already pins and drops long-deprecated variables, methods, and classes — none of which the Desktop `logback.xml` uses.
+- Bumped pinned GitHub Actions: `actions/checkout` v7.0.1, `ossf/scorecard-action` v2.4.4, `github/codeql-action/upload-sarif` v4.37.3.
+- Refreshed the README and `CLAUDE.md` tech-stack tables to match `gradle/libs.versions.toml` (Kover 0.9.9, Lifecycle 2.11.0, Room 3.0.0, Navigation 3 1.1.4/1.1.1, Logback 1.6.0).
+
 ## [1.6.3] - 2026-07-24
 
 ### Changed
@@ -171,7 +178,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.3...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.4...HEAD
+[1.6.4]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.3...v1.6.4
 [1.6.3]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.0...v1.6.1
