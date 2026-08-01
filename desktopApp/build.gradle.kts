@@ -35,15 +35,23 @@ kotlin {
     }
 }
 
-// Koin compiler plugin 1.0.2's aggregator (A3) validation is too strict for this
-// project's multi-Gradle-module + expect/actual `@Module` graph: at the entry point it
-// can't see definitions provided by sibling modules / platform `actual` `@Module`s (e.g.
-// `RoomDatabase.Builder` from `PlatformDatabaseModule`) and reports false KOIN-D001
-// "Missing dependency" (InsertKoinIO/koin-compiler-plugin#51 — maintainer confirms the
-// A3 pass is over-strict, relaxed multi-module safety is slated for 1.1.0). Per-module
-// A2 validation stays on for every library module; the full assembled graph is still
-// verified at runtime by the `verify()` tests in core:bootstrap / feature *:impl. Revert
-// to the default (compileSafety = true) once the plugin ships the 1.1.0 fix.
+// Koin compiler: full-graph validation doesn't honour the `providerOnly` flag the plugin itself
+// sets on a DSL `single<T> { … }` whose lambda builds T (KoinDSLTransformer sets it and
+// CallSiteValidator filters on it, but CompileSafetyValidator does not). It therefore walks T's
+// *constructor* and reports those parameters missing. Here that is test-only: DesktopUiTest's
+// `single<RoomDatabase.Builder<LedgerDatabase>> { … }` override yields false KOIN-D001 for
+// `klass` and `factory`. Those tests pass, so the graph is fine.
+//
+// This — not the multi-module false positive fixed in 1.1.0 — was always the real cause; the
+// earlier diagnosis blamed A3 for not seeing `PlatformDatabaseModule`'s platform `actual`, but
+// main source (`compileKotlin`, where that graph lives) compiles clean and the error names the
+// test's own `inMemoryDatabaseModule`.
+//
+// `compileSafety` is per-Gradle-project, so silencing the test compilation silences main too.
+// Acceptable: androidApp is an entry point with compile safety on and validates the identical
+// `BootstrapModule` closure, leaving only the JVM platform `actual`s uncovered at compile time,
+// and those are checked at runtime by core:bootstrap's KoinModuleVerificationTest. Remove once
+// the plugin honours `providerOnly` in the full-graph pass.
 koinCompiler {
     compileSafety = false
 }

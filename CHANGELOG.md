@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Upgraded the Koin compiler to 1.1.0. This release removes per-module validation entirely: the full dependency graph is now verified once at each `@KoinApplication` entry point (`androidApp`, `desktopApp`, `iosExport`) instead of module by module. Library modules are still covered — every one of them is part of the `BootstrapModule` closure the entry points assemble — but a wiring error now surfaces when building an app module rather than the library that introduced it. The runtime `verify()` tests in `core:bootstrap` and the feature `*:impl` modules are unchanged and remain the per-module check.
+- Set `logSeverity = "info"` in the `ledger.kotlin.multiplatform.koin` convention plugin. Koin 1.1.0 discloses "compile-safety validation skipped — no Koin entry point in this compilation" at warning level from every library compilation, which on this project is every module across five targets; it is informational, not a diagnostic, so it is demoted to info. Real `KOIN-D***`/`KOIN-W***` diagnostics keep their own severity.
+- Corrected the `compileSafety = false` justification for `desktopApp`. It was attributed to 1.0.2's cross-module false positive, which 1.1.0 does fix; the real cause is that the full-graph pass does not honour the `providerOnly` flag the plugin sets on a DSL `single<T> { … }` whose lambda builds `T`, so it walks `T`'s constructor and reports those parameters missing — here, `DesktopUiTest`'s in-memory `RoomDatabase.Builder` override. Main source compiles clean either way. `androidApp` validates the identical `BootstrapModule` closure with compile safety on, so only the JVM platform `actual`s rely on the runtime check.
 - Upgraded Navigation 3 runtime to 1.1.5 (from 1.1.4).
 - Upgraded Room to 3.0.1 (from 3.0.0).
 - Upgraded Logback to 1.6.1 (from 1.6.0).
