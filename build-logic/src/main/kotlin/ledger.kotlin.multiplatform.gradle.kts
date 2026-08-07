@@ -45,7 +45,9 @@ kover {
                     "*ComposableSingletons*",
                     "*_Factory",
                     "*\$\$serializer",
-                    "*.generated.resources.*",
+                    // Compose `Res` accessors; each module pins its own package via
+                    // `packageOfResClass` under `app.oreshkov.ledger.*.resources`.
+                    "app.oreshkov.ledger.*.resources.*",
                     "*.compose.resources.*",
                     "*.di.*",
                 )

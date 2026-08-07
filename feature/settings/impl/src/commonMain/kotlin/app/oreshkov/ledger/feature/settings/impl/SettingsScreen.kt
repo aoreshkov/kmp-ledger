@@ -32,13 +32,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
 import app.oreshkov.ledger.core.compose.resources.back_content_description
 import app.oreshkov.ledger.core.model.settings.ThemeMode
-import ledger.feature.settings.impl.generated.resources.Res
-import ledger.feature.settings.impl.generated.resources.settings_save_failed
-import ledger.feature.settings.impl.generated.resources.settings_theme_dark
-import ledger.feature.settings.impl.generated.resources.settings_theme_light
-import ledger.feature.settings.impl.generated.resources.settings_theme_section
-import ledger.feature.settings.impl.generated.resources.settings_theme_system
-import ledger.feature.settings.impl.generated.resources.settings_title
+import app.oreshkov.ledger.feature.settings.impl.resources.Res
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_save_failed
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_theme_dark
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_theme_light
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_theme_section
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_theme_system
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_title
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 

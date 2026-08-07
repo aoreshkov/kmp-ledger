@@ -33,17 +33,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
 import app.oreshkov.ledger.core.compose.resources.back_content_description
-import ledger.feature.posting.impl.generated.resources.Res
-import ledger.feature.posting.impl.generated.resources.posting_details_retry
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_load_failed
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_not_found
-import ledger.feature.posting.impl.generated.resources.posting_edit_go_back
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_narrative_required
-import ledger.feature.posting.impl.generated.resources.posting_edit_error_save_failed
-import ledger.feature.posting.impl.generated.resources.posting_edit_field_narrative
-import ledger.feature.posting.impl.generated.resources.posting_edit_save
-import ledger.feature.posting.impl.generated.resources.posting_edit_title_add
-import ledger.feature.posting.impl.generated.resources.posting_edit_title_edit
+import app.oreshkov.ledger.feature.posting.impl.resources.Res
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_retry
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_error_load_failed
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_error_narrative_required
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_error_not_found
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_error_save_failed
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_go_back
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_field_narrative
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_save
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_title_add
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_edit_title_edit
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

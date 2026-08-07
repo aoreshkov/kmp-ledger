@@ -38,7 +38,10 @@ kover {
                     "*ComposableSingletons*",
                     "*_Factory",
                     "*\$\$serializer",
-                    "*.generated.resources.*",
+                    // Compose `Res` accessors. Each module pins its own package via
+                    // `packageOfResClass`, so this tracks `app.oreshkov.ledger.*.resources`
+                    // rather than the `*.generated.resources` default.
+                    "app.oreshkov.ledger.*.resources.*",
                     "*.compose.resources.*",
                     // DI wiring lives in *.di packages; validated by Koin verify(),
                     // not by execution — exclude so coverage reflects real logic.
