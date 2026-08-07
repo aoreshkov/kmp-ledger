@@ -51,7 +51,8 @@ kotlin {
 // Acceptable: androidApp is an entry point with compile safety on and validates the identical
 // `BootstrapModule` closure, leaving only the JVM platform `actual`s uncovered at compile time,
 // and those are checked at runtime by core:bootstrap's KoinModuleVerificationTest. Remove once
-// the plugin honours `providerOnly` in the full-graph pass.
+// the plugin honours `providerOnly` in the full-graph pass —
+// tracked at InsertKoinIO/koin-compiler-plugin#83.
 koinCompiler {
     compileSafety = false
 }

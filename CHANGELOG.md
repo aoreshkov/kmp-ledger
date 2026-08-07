@@ -7,13 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.5] - 2026-08-07
+
 ### Changed
+- Pinned `packageOfResClass` in every module that generates a Compose `Res` class. Six modules were taking the derived `{group}.{module}.generated.resources` default which — with no `group` set — resolves from `rootProject.name`, so renaming the root project would have silently repackaged every module's resource accessors at once. Each now pins `app.oreshkov.ledger.<module path>.resources`, the convention `core:compose` already followed. Four of the six (`core:bootstrap`, `core:navigation`, `core:ui`, `iosExport`) have no `composeResources/` directory but still generate an empty `Res`, because the `koin.compose` convention plugin adds an explicit `compose.components.resources` dependency and `generateResClass = auto` generates on that basis. The Kover excludes moved with them to `app.oreshkov.ledger.*.resources.*`; the previous `*.generated.resources.*` pattern would have stopped matching and quietly readmitted the generated classes into coverage.
 - Upgraded the Koin compiler to 1.1.0. This release removes per-module validation entirely: the full dependency graph is now verified once at each `@KoinApplication` entry point (`androidApp`, `desktopApp`, `iosExport`) instead of module by module. Library modules are still covered — every one of them is part of the `BootstrapModule` closure the entry points assemble — but a wiring error now surfaces when building an app module rather than the library that introduced it. The runtime `verify()` tests in `core:bootstrap` and the feature `*:impl` modules are unchanged and remain the per-module check.
 - Set `logSeverity = "info"` in the `ledger.kotlin.multiplatform.koin` convention plugin. Koin 1.1.0 discloses "compile-safety validation skipped — no Koin entry point in this compilation" at warning level from every library compilation, which on this project is every module across five targets; it is informational, not a diagnostic, so it is demoted to info. Real `KOIN-D***`/`KOIN-W***` diagnostics keep their own severity.
 - Corrected the `compileSafety = false` justification for `desktopApp`. It was attributed to 1.0.2's cross-module false positive, which 1.1.0 does fix; the real cause is that the full-graph pass does not honour the `providerOnly` flag the plugin sets on a DSL `single<T> { … }` whose lambda builds `T`, so it walks `T`'s constructor and reports those parameters missing — here, `DesktopUiTest`'s in-memory `RoomDatabase.Builder` override. Main source compiles clean either way. `androidApp` validates the identical `BootstrapModule` closure with compile safety on, so only the JVM platform `actual`s rely on the runtime check.
 - Upgraded Navigation 3 runtime to 1.1.5 (from 1.1.4).
 - Upgraded Room to 3.0.1 (from 3.0.0).
 - Upgraded Logback to 1.6.1 (from 1.6.0).
+- Refreshed the README and `CLAUDE.md` tech-stack tables to match `gradle/libs.versions.toml` (Room 3.0.1, Navigation 3 runtime 1.1.5, Logback 1.6.1).
 
 ## [1.6.4] - 2026-07-28
 
@@ -188,7 +192,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.4...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.5...HEAD
+[1.6.5]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.4...v1.6.5
 [1.6.4]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.3...v1.6.4
 [1.6.3]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.1...v1.6.2
