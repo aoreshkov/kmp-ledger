@@ -30,3 +30,10 @@ kotlin {
         }
     }
 }
+
+// Pin the generated `Res` package instead of taking the `{group}.{module}.generated.resources`
+// default, which derives from `rootProject.name` and so would silently repackage every module's
+// accessors if the root project were renamed. Stays internal (`publicResClass` defaults to false).
+compose.resources {
+    packageOfResClass = "app.oreshkov.ledger.core.bootstrap.resources"
+}

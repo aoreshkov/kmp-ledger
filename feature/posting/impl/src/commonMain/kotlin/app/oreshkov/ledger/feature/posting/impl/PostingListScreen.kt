@@ -29,12 +29,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.model.data.Posting
-import ledger.feature.posting.impl.generated.resources.Res
-import ledger.feature.posting.impl.generated.resources.posting_list_add_content_description
-import ledger.feature.posting.impl.generated.resources.posting_list_empty
-import ledger.feature.posting.impl.generated.resources.posting_list_error
-import ledger.feature.posting.impl.generated.resources.posting_list_retry
-import ledger.feature.posting.impl.generated.resources.posting_list_title
+import app.oreshkov.ledger.feature.posting.impl.resources.Res
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_add_content_description
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_empty
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_error
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_retry
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_title
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -8,8 +8,8 @@ import app.oreshkov.ledger.core.navigation.LocalNavigator
 import app.oreshkov.ledger.core.navigation.TopLevelDestination
 import app.oreshkov.ledger.feature.settings.api.navigation.SettingsHome
 import app.oreshkov.ledger.feature.settings.impl.SettingsScreen
-import ledger.feature.settings.impl.generated.resources.Res
-import ledger.feature.settings.impl.generated.resources.settings_nav_label
+import app.oreshkov.ledger.feature.settings.impl.resources.Res
+import app.oreshkov.ledger.feature.settings.impl.resources.settings_nav_label
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.KoinExperimentalAPI

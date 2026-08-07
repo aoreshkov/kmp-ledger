@@ -39,20 +39,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.compose.LabeledField
 import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
 import app.oreshkov.ledger.core.compose.resources.back_content_description
-import ledger.feature.posting.impl.generated.resources.Res
-import ledger.feature.posting.impl.generated.resources.posting_details_delete_cancel
-import ledger.feature.posting.impl.generated.resources.posting_details_delete_confirm
-import ledger.feature.posting.impl.generated.resources.posting_details_delete_content_description
-import ledger.feature.posting.impl.generated.resources.posting_details_delete_dialog_body
-import ledger.feature.posting.impl.generated.resources.posting_details_delete_dialog_title
-import ledger.feature.posting.impl.generated.resources.posting_details_delete_failed
-import ledger.feature.posting.impl.generated.resources.posting_details_edit_content_description
-import ledger.feature.posting.impl.generated.resources.posting_details_failed_to_load
-import ledger.feature.posting.impl.generated.resources.posting_details_field_narrative
-import ledger.feature.posting.impl.generated.resources.posting_details_go_back
-import ledger.feature.posting.impl.generated.resources.posting_details_not_found
-import ledger.feature.posting.impl.generated.resources.posting_details_retry
-import ledger.feature.posting.impl.generated.resources.posting_details_title
+import app.oreshkov.ledger.feature.posting.impl.resources.Res
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_delete_cancel
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_delete_confirm
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_delete_content_description
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_delete_dialog_body
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_delete_dialog_title
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_delete_failed
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_edit_content_description
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_failed_to_load
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_field_narrative
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_go_back
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_not_found
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_retry
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_details_title
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -14,8 +14,8 @@ import app.oreshkov.ledger.feature.posting.api.navigation.PostingList
 import app.oreshkov.ledger.feature.posting.impl.PostingDetailsScreen
 import app.oreshkov.ledger.feature.posting.impl.PostingEditScreen
 import app.oreshkov.ledger.feature.posting.impl.PostingListScreen
-import ledger.feature.posting.impl.generated.resources.Res
-import ledger.feature.posting.impl.generated.resources.posting_nav_label
+import app.oreshkov.ledger.feature.posting.impl.resources.Res
+import app.oreshkov.ledger.feature.posting.impl.resources.posting_nav_label
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.KoinExperimentalAPI
