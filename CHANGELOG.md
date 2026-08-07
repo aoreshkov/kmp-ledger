@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added `.gitattributes` so line endings are pinned by the repository rather than by each contributor's `core.autocrlf`. Text files normalize to LF on commit. The binary-compatibility-validator dumps (`*.api`) are additionally pinned to LF in the working tree: `./gradlew apiDump` writes LF on every platform, so a Windows checkout (CRLF) left every dump reported as modified after each run even though the ABI was unchanged. `gradlew` is pinned to LF so it runs under Git Bash and WSL; `gradlew.bat` is marked `-text` to stay byte-identical to the file `gradle wrapper` generates; image and archive assets are marked binary.
+
 ## [1.6.5] - 2026-08-07
 
 ### Changed
