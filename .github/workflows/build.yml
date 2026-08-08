@@ -35,7 +35,7 @@ jobs:
 
       - name: Filter changed paths
         id: filter
-        uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
         with:
           # 'code' is true unless every changed file is docs-only.
           filters: |
@@ -67,7 +67,7 @@ jobs:
       # exempts gradle-wrapper.jar when it sees a wrapper-validation step
       # directly in a workflow file.
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
+        uses: gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
