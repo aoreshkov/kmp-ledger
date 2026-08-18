@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-08-18
+
 ### Added
 - Postings now carry data-layer sync metadata: `updatedAt` (client write time in epoch milliseconds), `isDeleted` (soft-delete tombstone), and `pendingSync` (changed locally, not yet replicated). The columns exist on `PostingEntity` only — the domain `Posting` is still id + narrative, and the mappers deliberately drop them — and `OfflineFirstPostingRepository` stamps `updatedAt` and `pendingSync` on every insert and update from an injected `kotlin.time.Clock` (`Clock.System` in production, a fixed clock in tests).
 - `PostingDao` gained replication-facing queries that the app itself never calls: `getPendingSync()`, `getByIds()`, `upsert()`, `clearPendingSyncIfUnchanged()`, and `hardDeleteById()`. They exist so a replication layer can be added on top of this DAO without reopening the entity or the schema, and they are covered by tests so the last-write-wins contract lives in one place. Two details worth knowing: `upsert()` uses `@Insert(onConflict = REPLACE)` rather than `@Upsert` so it also runs on older SQLite builds such as Robolectric's, and `clearPendingSyncIfUnchanged()` clears the pending flag only while `updatedAt` still matches the value that was read for the push, so an edit made mid-push is replicated next time instead of being lost.
@@ -17,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **The local database schema changed and there is no migration — an existing install must have its app data cleared, or the app reinstalled.** The three columns above were folded into **schema version 1** rather than shipping as version 2 with a migration: this project is a template, and a project generated from it must start at version 1 rather than inherit this repository's release history. Room compares the stored identity hash before any migration logic runs, so an install from 1.6.1–1.6.5 fails to open the database with "Room cannot verify the data integrity…" rather than losing data silently. `fallbackToDestructiveMigration(dropAllTables = true)` does not cover this — it only fires on a version change. `core/database/schemas/…/1.json` was regenerated accordingly and its `identityHash` differs from the previous 1.6.x releases.
 - Deleting a posting is now a soft delete: the row is tombstoned (`isDeleted`, `pendingSync`, and `updatedAt` stamped) instead of being removed, and both DAO reads filter tombstones out, so the UI behaves exactly as before. Tombstones are retained — nothing purges them — which is harmless at this project's scale; `hardDeleteById()` removes a row outright for a replication layer that has confirmed the deletion.
 - The README now states plainly that this is a showcase project, to be used as a template and a reference for new projects rather than as an app to keep data in, and that the local schema may change between releases without a migration path.
+- Upgraded Navigation 3 runtime to 1.1.6 (from 1.1.5), Logback to 1.6.3 (from 1.6.1), and the constraint-only BouncyCastle pin to 1.85.2 (from 1.85) — the latter exists solely to keep Robolectric off the vulnerable 1.81 and is not a runtime dependency.
+- Bumped pinned GitHub Actions: `dorny/paths-filter` v4, `gradle/actions/wrapper-validation` and `gradle/actions/dependency-submission` v6, `actions/attest` v4.2.2, `github/codeql-action/upload-sarif` v4.37.6.
+- Refreshed the README and `CLAUDE.md` tech-stack tables to match `gradle/libs.versions.toml` (Navigation 3 runtime 1.1.6, Logback 1.6.3).
+
+### Removed
+- `PostingDao.deleteById`, replaced by `softDeleteById` (tombstones the row so the deletion can propagate to a replica) and `hardDeleteById` (drops the row outright, tombstone included). `OfflineFirstPostingRepository.deletePosting` now calls `softDeleteById`; no caller outside the data layer used the removed method.
 
 ## [1.6.5] - 2026-08-07
 
@@ -203,7 +211,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.5...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.5...v1.7.0
 [1.6.5]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.4...v1.6.5
 [1.6.4]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.3...v1.6.4
 [1.6.3]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.2...v1.6.3
