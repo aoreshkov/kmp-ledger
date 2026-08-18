@@ -17,13 +17,19 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OfflineFirstPostingRepositoryTest {
 
     private val fakeDao = FakePostingDao()
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val repository = OfflineFirstPostingRepository(fakeDao, TestAppDispatchers(testDispatcher))
+    private val fixedClock = object : Clock {
+        override fun now(): Instant = Instant.fromEpochMilliseconds(FIXED_TIME)
+    }
+    private val repository =
+        OfflineFirstPostingRepository(fakeDao, TestAppDispatchers(testDispatcher), fixedClock)
 
     @Test
     fun getAllPostings_mapsEntitiesToModels() = runTest {
@@ -36,42 +42,47 @@ class OfflineFirstPostingRepositoryTest {
     }
 
     @Test
-    fun insertPosting_mapsNewPostingToEntity() = runTest {
+    fun insertPosting_stampsSyncMetadata() = runTest {
         repository.insertPosting(newPosting())
 
         val entities = fakeDao.entities.value
         assertEquals(1, entities.size)
         assertEquals("Groceries", entities[0].narrative)
+        assertEquals(FIXED_TIME, entities[0].updatedAt)
+        assertTrue(entities[0].pendingSync)
     }
 
     @Test
-    fun deletePosting_callsDaoDelete() = runTest {
+    fun deletePosting_softDeletesAndTombstones() = runTest {
         val entity = PostingEntity("1", "Groceries")
         fakeDao.insert(entity)
 
-        repository.deletePosting(posting().id)
+        repository.deletePosting("1")
 
-        val remaining = fakeDao.entities.value
-        assertTrue(remaining.isEmpty())
+        // Hidden from live reads, but retained as a pending tombstone.
+        assertTrue(repository.getAllPostings().first().isEmpty())
+        val tombstone = fakeDao.entities.value.single()
+        assertTrue(tombstone.isDeleted)
+        assertTrue(tombstone.pendingSync)
+        assertEquals(FIXED_TIME, tombstone.updatedAt)
     }
 
     @Test
-    fun updatePosting_mapsToEntityAndCallsDao() = runTest {
-        val initialEntity = PostingEntity("1", "Old")
-        fakeDao.insert(initialEntity)
+    fun updatePosting_mapsToEntityAndStampsMetadata() = runTest {
+        fakeDao.insert(PostingEntity("1", "Old"))
         val updatedPosting = posting(narrative = "New")
 
         repository.updatePosting(updatedPosting)
 
-        val entities = fakeDao.entities.value
-        assertEquals(1, entities.size)
-        assertEquals("New", entities[0].narrative)
+        val entity = fakeDao.entities.value.single()
+        assertEquals("New", entity.narrative)
+        assertEquals(FIXED_TIME, entity.updatedAt)
+        assertTrue(entity.pendingSync)
     }
 
     @Test
     fun getPostingById_returnsMappedModel() = runTest {
-        val entity = PostingEntity("1", "Groceries")
-        fakeDao.insert(entity)
+        fakeDao.insert(PostingEntity("1", "Groceries"))
 
         val posting = repository.getPostingById("1").first()
         assertEquals("1", posting?.id)
@@ -80,8 +91,11 @@ class OfflineFirstPostingRepositoryTest {
 
     @Test
     fun getPostingById_returnsNullWhenNotFound() = runTest {
-        val nonExistent = repository.getPostingById("99").first()
-        assertNull(nonExistent)
+        assertNull(repository.getPostingById("99").first())
+    }
+
+    private companion object {
+        const val FIXED_TIME = 1_000L
     }
 }
 
@@ -97,15 +111,43 @@ class FakePostingDao : PostingDao {
         entities.value = entities.value + posting
     }
 
-    override suspend fun deleteById(id: String) {
-        entities.value = entities.value.filterNot { it.id == id }
-    }
-
     override suspend fun update(posting: PostingEntity) {
         entities.value = entities.value.map { if (it.id == posting.id) posting else it }
     }
 
-    override fun getAllPostings(): Flow<List<PostingEntity>> = entities
+    override suspend fun softDeleteById(id: String, updatedAt: Long) {
+        entities.value = entities.value.map {
+            if (it.id == id) it.copy(isDeleted = true, pendingSync = true, updatedAt = updatedAt) else it
+        }
+    }
 
-    override fun getPostingById(id: String): Flow<PostingEntity?> = entities.map { list -> list.find { it.id == id } }
+    override suspend fun hardDeleteById(id: String) {
+        entities.value = entities.value.filterNot { it.id == id }
+    }
+
+    override fun getAllPostings(): Flow<List<PostingEntity>> =
+        entities.map { list -> list.filterNot { it.isDeleted } }
+
+    override fun getPostingById(id: String): Flow<PostingEntity?> =
+        entities.map { list -> list.find { it.id == id && !it.isDeleted } }
+
+    override suspend fun getPendingSync(): List<PostingEntity> =
+        entities.value.filter { it.pendingSync }
+
+    override suspend fun getByIds(ids: List<String>): List<PostingEntity> =
+        entities.value.filter { it.id in ids }
+
+    override suspend fun upsert(postings: List<PostingEntity>) {
+        val byId = postings.associateBy { it.id }
+        val updated = entities.value.map { byId[it.id] ?: it }
+        val existingIds = entities.value.map { it.id }.toSet()
+        val added = postings.filterNot { it.id in existingIds }
+        entities.value = updated + added
+    }
+
+    override suspend fun clearPendingSyncIfUnchanged(id: String, updatedAt: Long) {
+        entities.value = entities.value.map {
+            if (it.id == id && it.updatedAt == updatedAt) it.copy(pendingSync = false) else it
+        }
+    }
 }

@@ -14,7 +14,8 @@ public final class app/oreshkov/ledger/core/data/model/PostingMappersKt {
 }
 
 public final class app/oreshkov/ledger/core/data/repository/OfflineFirstPostingRepository : app/oreshkov/ledger/core/domain/repository/PostingRepository {
-	public fun <init> (Lapp/oreshkov/ledger/core/database/dao/PostingDao;Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;)V
+	public fun <init> (Lapp/oreshkov/ledger/core/database/dao/PostingDao;Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;Lkotlin/time/Clock;)V
+	public synthetic fun <init> (Lapp/oreshkov/ledger/core/database/dao/PostingDao;Lapp/oreshkov/ledger/core/common/dispatcher/AppDispatchers;Lkotlin/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun deletePosting (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getAllPostings ()Lkotlinx/coroutines/flow/Flow;
 	public fun getPostingById (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
