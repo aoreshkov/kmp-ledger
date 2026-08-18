@@ -19,6 +19,8 @@
 
 **Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
+> **Important:** This is a **showcase project — use it as a template and a reference for new projects, not as an app to keep data in.** It ships no database migrations: the local schema may change between releases, and when it does, an existing install fails to open its database until the app's data is cleared or the app is reinstalled. Treat anything you enter here as disposable.
+
 > **Note:** Kotlin, Compose Multiplatform, Navigation 3, Room 3 / AndroidX SQLite, Koin, Coroutines, and AndroidX DataStore are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components — including the Adaptive Navigation Suite — (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
 ---
@@ -134,13 +136,13 @@ Supporting modules (no layer dependency):
 | Module | Responsibility |
 |---|---|
 | `core:model` | Pure Kotlin data classes with no framework dependency. The single source of truth for domain types (`Posting`, `NewPosting`, `ThemeMode`). |
-| `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. |
-| `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers. |
+| `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. `PostingEntity` carries data-layer sync metadata (`updatedAt`, `isDeleted`, `pendingSync`) that never reaches the domain model; deletes are soft, so a tombstoned row is hidden from reads but retained. |
+| `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers, and stamps `updatedAt`/`pendingSync` on every local write from an injected `kotlin.time.Clock`. |
 | `core:datastore` | `DataStoreSettingsRepository` — the AndroidX DataStore Preferences implementation of `SettingsRepository` (declared in `core:domain`). Provides `PlatformDataStoreModule` (`expect`/`actual`) with OS-aware preference-file paths and corruption/IO-error recovery. |
 | `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`, `GetThemeModeUseCase`, `SetThemeModeUseCase`). Also declares the `SettingsRepository` interface. Each use case wraps a repository call with a single responsibility. |
 | `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension, the `runCatchingCancellable` cancellation-safe result helper, plus `AppDispatchers` interface and `DispatcherModule` Koin binding. |
 | `core:compose` | Shared Compose components used across feature modules (e.g. `LabeledField`). |
-| `core:navigation` | `Navigator` (per-section back-stack manager), `StartDestination` value class, and `TopLevelDestination` (a section surfaced in the top-level nav chrome). Framework-agnostic. |
+| `core:navigation` | `Navigator` (per-section back-stack manager), `StartDestination` value class, `TopLevelDestination` (a section surfaced in the top-level nav chrome), and `LocalAccountAction` — an app-bar slot for an account action that renders nothing unless the app root provides one. Framework-agnostic. |
 | `core:ui` | Root `App` composable, Material 3 theme (driven by the persisted `ThemeMode`), `NavigationSuiteScaffold` + `NavDisplay` wiring. |
 | `core:bootstrap` | Root Koin module that wires all sub-modules together (including `SettingsModule`) and provides `StartDestination` and a `SavedStateConfiguration` that combines every feature's NavKey serializers. |
 | `core:test` | `FakePostingRepository`, `FakeSettingsRepository`, `PlatformComposeUiTest` expect/actual, and shared posting fixture builders (`posting()`, `newPosting()`, `postings()`). Consumed by all test source sets. |
