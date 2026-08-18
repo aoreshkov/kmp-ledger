@@ -9,9 +9,14 @@
 abstract interface app.oreshkov.ledger.core.database.dao/PostingDao { // app.oreshkov.ledger.core.database.dao/PostingDao|null[0]
     abstract fun getAllPostings(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.database.model/PostingEntity>> // app.oreshkov.ledger.core.database.dao/PostingDao.getAllPostings|getAllPostings(){}[0]
     abstract fun getPostingById(kotlin/String): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.database.model/PostingEntity?> // app.oreshkov.ledger.core.database.dao/PostingDao.getPostingById|getPostingById(kotlin.String){}[0]
-    abstract suspend fun deleteById(kotlin/String) // app.oreshkov.ledger.core.database.dao/PostingDao.deleteById|deleteById(kotlin.String){}[0]
+    abstract suspend fun clearPendingSyncIfUnchanged(kotlin/String, kotlin/Long) // app.oreshkov.ledger.core.database.dao/PostingDao.clearPendingSyncIfUnchanged|clearPendingSyncIfUnchanged(kotlin.String;kotlin.Long){}[0]
+    abstract suspend fun getByIds(kotlin.collections/List<kotlin/String>): kotlin.collections/List<app.oreshkov.ledger.core.database.model/PostingEntity> // app.oreshkov.ledger.core.database.dao/PostingDao.getByIds|getByIds(kotlin.collections.List<kotlin.String>){}[0]
+    abstract suspend fun getPendingSync(): kotlin.collections/List<app.oreshkov.ledger.core.database.model/PostingEntity> // app.oreshkov.ledger.core.database.dao/PostingDao.getPendingSync|getPendingSync(){}[0]
+    abstract suspend fun hardDeleteById(kotlin/String) // app.oreshkov.ledger.core.database.dao/PostingDao.hardDeleteById|hardDeleteById(kotlin.String){}[0]
     abstract suspend fun insert(app.oreshkov.ledger.core.database.model/PostingEntity) // app.oreshkov.ledger.core.database.dao/PostingDao.insert|insert(app.oreshkov.ledger.core.database.model.PostingEntity){}[0]
+    abstract suspend fun softDeleteById(kotlin/String, kotlin/Long) // app.oreshkov.ledger.core.database.dao/PostingDao.softDeleteById|softDeleteById(kotlin.String;kotlin.Long){}[0]
     abstract suspend fun update(app.oreshkov.ledger.core.database.model/PostingEntity) // app.oreshkov.ledger.core.database.dao/PostingDao.update|update(app.oreshkov.ledger.core.database.model.PostingEntity){}[0]
+    abstract suspend fun upsert(kotlin.collections/List<app.oreshkov.ledger.core.database.model/PostingEntity>) // app.oreshkov.ledger.core.database.dao/PostingDao.upsert|upsert(kotlin.collections.List<app.oreshkov.ledger.core.database.model.PostingEntity>){}[0]
 }
 
 abstract class app.oreshkov.ledger.core.database/LedgerDatabase : androidx.room3/RoomDatabase { // app.oreshkov.ledger.core.database/LedgerDatabase|null[0]
@@ -34,16 +39,25 @@ final class app.oreshkov.ledger.core.database.di/PlatformDatabaseModule { // app
 }
 
 final class app.oreshkov.ledger.core.database.model/PostingEntity { // app.oreshkov.ledger.core.database.model/PostingEntity|null[0]
-    constructor <init>(kotlin/String, kotlin/String) // app.oreshkov.ledger.core.database.model/PostingEntity.<init>|<init>(kotlin.String;kotlin.String){}[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/Long = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.core.database.model/PostingEntity.<init>|<init>(kotlin.String;kotlin.String;kotlin.Long;kotlin.Boolean;kotlin.Boolean){}[0]
 
     final val id // app.oreshkov.ledger.core.database.model/PostingEntity.id|{}id[0]
         final fun <get-id>(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.id.<get-id>|<get-id>(){}[0]
+    final val isDeleted // app.oreshkov.ledger.core.database.model/PostingEntity.isDeleted|{}isDeleted[0]
+        final fun <get-isDeleted>(): kotlin/Boolean // app.oreshkov.ledger.core.database.model/PostingEntity.isDeleted.<get-isDeleted>|<get-isDeleted>(){}[0]
     final val narrative // app.oreshkov.ledger.core.database.model/PostingEntity.narrative|{}narrative[0]
         final fun <get-narrative>(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.narrative.<get-narrative>|<get-narrative>(){}[0]
+    final val pendingSync // app.oreshkov.ledger.core.database.model/PostingEntity.pendingSync|{}pendingSync[0]
+        final fun <get-pendingSync>(): kotlin/Boolean // app.oreshkov.ledger.core.database.model/PostingEntity.pendingSync.<get-pendingSync>|<get-pendingSync>(){}[0]
+    final val updatedAt // app.oreshkov.ledger.core.database.model/PostingEntity.updatedAt|{}updatedAt[0]
+        final fun <get-updatedAt>(): kotlin/Long // app.oreshkov.ledger.core.database.model/PostingEntity.updatedAt.<get-updatedAt>|<get-updatedAt>(){}[0]
 
     final fun component1(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.component1|component1(){}[0]
     final fun component2(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.component2|component2(){}[0]
-    final fun copy(kotlin/String = ..., kotlin/String = ...): app.oreshkov.ledger.core.database.model/PostingEntity // app.oreshkov.ledger.core.database.model/PostingEntity.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun component3(): kotlin/Long // app.oreshkov.ledger.core.database.model/PostingEntity.component3|component3(){}[0]
+    final fun component4(): kotlin/Boolean // app.oreshkov.ledger.core.database.model/PostingEntity.component4|component4(){}[0]
+    final fun component5(): kotlin/Boolean // app.oreshkov.ledger.core.database.model/PostingEntity.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/Long = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.core.database.model/PostingEntity // app.oreshkov.ledger.core.database.model/PostingEntity.copy|copy(kotlin.String;kotlin.String;kotlin.Long;kotlin.Boolean;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.core.database.model/PostingEntity.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // app.oreshkov.ledger.core.database.model/PostingEntity.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // app.oreshkov.ledger.core.database.model/PostingEntity.toString|toString(){}[0]

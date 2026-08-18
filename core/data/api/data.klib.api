@@ -13,7 +13,7 @@ final class app.oreshkov.ledger.core.data.di/DataModule { // app.oreshkov.ledger
 }
 
 final class app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository : app.oreshkov.ledger.core.domain.repository/PostingRepository { // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository|null[0]
-    constructor <init>(app.oreshkov.ledger.core.database.dao/PostingDao, app.oreshkov.ledger.core.common.dispatcher/AppDispatchers) // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.<init>|<init>(app.oreshkov.ledger.core.database.dao.PostingDao;app.oreshkov.ledger.core.common.dispatcher.AppDispatchers){}[0]
+    constructor <init>(app.oreshkov.ledger.core.database.dao/PostingDao, app.oreshkov.ledger.core.common.dispatcher/AppDispatchers, kotlin.time/Clock = ...) // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.<init>|<init>(app.oreshkov.ledger.core.database.dao.PostingDao;app.oreshkov.ledger.core.common.dispatcher.AppDispatchers;kotlin.time.Clock){}[0]
 
     final fun getAllPostings(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting>> // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.getAllPostings|getAllPostings(){}[0]
     final fun getPostingById(kotlin/String): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.data/Posting?> // app.oreshkov.ledger.core.data.repository/OfflineFirstPostingRepository.getPostingById|getPostingById(kotlin.String){}[0]

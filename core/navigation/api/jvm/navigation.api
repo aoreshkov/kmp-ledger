@@ -1,3 +1,13 @@
+public final class app/oreshkov/ledger/core/navigation/ComposableSingletons$LocalAccountActionKt {
+	public static final field INSTANCE Lapp/oreshkov/ledger/core/navigation/ComposableSingletons$LocalAccountActionKt;
+	public fun <init> ()V
+	public final fun getLambda$-859266368$Ledger_core_navigation ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class app/oreshkov/ledger/core/navigation/LocalAccountActionKt {
+	public static final fun getLocalAccountAction ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
 public final class app/oreshkov/ledger/core/navigation/LocalNavigatorKt {
 	public static final fun getLocalNavigator ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }

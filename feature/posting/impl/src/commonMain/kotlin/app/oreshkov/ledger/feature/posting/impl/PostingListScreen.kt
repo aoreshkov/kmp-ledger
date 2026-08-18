@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.model.data.Posting
+import app.oreshkov.ledger.core.navigation.LocalAccountAction
 import app.oreshkov.ledger.feature.posting.impl.resources.Res
 import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_add_content_description
 import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_empty
@@ -63,7 +64,10 @@ internal fun PostingListContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(Res.string.posting_list_title)) })
+            TopAppBar(
+                title = { Text(stringResource(Res.string.posting_list_title)) },
+                actions = { LocalAccountAction.current() },
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddClick) {
