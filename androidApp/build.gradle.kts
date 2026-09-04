@@ -16,21 +16,10 @@ dependencies {
     implementation(project(":feature:posting:impl"))
     implementation(project(":feature:settings:impl"))
 
-    testImplementation(project(":core:database"))
-    testImplementation(libs.kotlin.test)
-    testImplementation(libs.koin.test)
-    testImplementation(libs.androidx.test.core)
-    testImplementation(libs.junit)
-    testImplementation(libs.robolectric)
-
+    // No local unit tests here: androidApp's only tests are instrumented (src/androidTest).
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
-
-    constraints {
-        // robolectric 4.16.1 pins bcprov 1.81 (GHSA-574f-3g2m-x479, fixed in 1.84).
-        testImplementation(libs.bouncycastle.bcprov)
-    }
 }
 
 android {
@@ -77,7 +66,6 @@ android {
         }
     }
     testOptions {
-        unitTests.isIncludeAndroidResources = true
         managedDevices {
             localDevices {
                 create("aospAtd30") {
