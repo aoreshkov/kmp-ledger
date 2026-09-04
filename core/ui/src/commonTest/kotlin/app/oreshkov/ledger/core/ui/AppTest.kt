@@ -20,17 +20,53 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import org.koin.compose.KoinApplication
+import org.koin.core.annotation.KoinApplication
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.dsl.koinConfiguration
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
+import org.koin.plugin.module.dsl.koinConfiguration
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import org.koin.compose.KoinApplication as KoinApplicationScope
 
 @Serializable
 data class TestKey(val id: String = "test") : NavKey
+
+/**
+ * Annotated so the Koin compiler plugin can resolve this test's graph statically. Passing a
+ * `module { }` lambda straight to `koinConfiguration` makes the module set dynamically computed,
+ * which downgrades the entry point to runtime-only checking (KOIN-W003).
+ */
+@Module
+class AppTestModule {
+    @Single
+    fun startDestination() = StartDestination(TestKey())
+
+    @Single
+    fun getThemeMode() = GetThemeModeUseCase(FakeSettingsRepository())
+
+    @Single
+    fun savedStateConfiguration() = SavedStateConfiguration {
+        serializersModule = SerializersModule {
+            polymorphic(NavKey::class) { subclass(TestKey::class) }
+        }
+    }
+}
+
+@KoinApplication(modules = [AppTestModule::class])
+class TestApp
+
+// `navigation<T>` has no annotation equivalent, so the screen entry stays DSL — the same split
+// the feature `*NavigationModule`s use.
+@OptIn(KoinExperimentalAPI::class)
+private val testNavigationModule = module {
+    navigation<TestKey> {
+        Text("Hello from TestKey")
+    }
+}
 
 @OptIn(ExperimentalTestApi::class, KoinExperimentalAPI::class, ExperimentalCoroutinesApi::class)
 class AppTest : PlatformComposeUiTest() {
@@ -42,30 +78,10 @@ class AppTest : PlatformComposeUiTest() {
 
     @Test
     fun app_rendersStartDestination() = runComposeUiTest {
-        val startKey = TestKey()
-
         setContent {
-            KoinApplication(
-                configuration = koinConfiguration {
-                    modules(
-                        module {
-                            single { StartDestination(startKey) }
-                            single { GetThemeModeUseCase(FakeSettingsRepository()) }
-                            single {
-                                SavedStateConfiguration {
-                                    serializersModule = SerializersModule {
-                                        polymorphic(NavKey::class) {
-                                            subclass(TestKey::class)
-                                        }
-                                    }
-                                }
-                            }
-
-                            navigation<TestKey> {
-                                Text("Hello from TestKey")
-                            }
-                        }
-                    )
+            KoinApplicationScope(
+                configuration = koinConfiguration<TestApp> {
+                    modules(testNavigationModule)
                 }
             ) {
                 App()

@@ -26,4 +26,6 @@ kotlin {
 // assembled graph is still checked at the entry points plus by the runtime `verify()` tests.
 koinCompiler {
     logSeverity = "info"
+    // Vendor CTA pointing at Kotzilla MCP; not a diagnostic.
+    aiAssist = false
 }
