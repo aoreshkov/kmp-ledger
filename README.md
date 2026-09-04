@@ -411,6 +411,16 @@ A separate `instrumented-tests` job runs the Android smoke suite on a **Gradle M
 ./gradlew :desktopApp:run
 ```
 
+### Run on Desktop with hot reload
+
+```bash
+./gradlew :desktopApp:hotRun
+```
+
+Edits to composable code are applied to the running window without a restart. Hot reload
+runs on a JetBrains Runtime, which the plugin downloads and caches on first use, so no
+local JBR install is required.
+
 ### Run on iOS
 
 1.  Open `iosApp/iosApp.xcodeproj` in Xcode.
