@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-09-05
+
+### Added
+- Compose Hot Reload (1.2.0, the version bundled with Compose Multiplatform 1.12.0) is wired into `:desktopApp`. `./gradlew :desktopApp:hotRun` applies composable edits to the running window without a restart. `compose.reload.jbr.autoProvisioningEnabled=true` lets the plugin download and cache a JetBrains Runtime under `<GRADLE_USER_HOME>/chr/jbr` for the hot-run JVM only — JBR ships the enhanced class redefinition hot reload needs — so compilation keeps using the daemon JDK from `gradle/gradle-daemon-jvm.properties` and no toolchain resolver plugin is required.
+- `:desktopApp:hotMcpServer`, an MCP endpoint from the same plugin that lets a coding agent reload, screenshot, read the semantic tree, and drive the running app. A repository-level `.mcp.json` wires it up for MCP clients that read that file; it invokes `./gradlew`, so on Windows register the server with the `gradlew.bat` form locally instead.
+
+### Changed
+- The desktop window moved to the Window API v2 (`androidx.compose.ui.window.v2`) introduced in Compose Multiplatform 1.12.0: initial bounds come from a `WindowBoundsProvider` with `WindowSizeProvider.Fixed(DpSize(800.dp, 600.dp))` and `WindowPositionProvider.CenteredOnScreen`, and the minimum size is the Dp-typed `minSize` parameter. The API is experimental and its KDoc notes the package may move to `androidx.compose.ui.window` before stabilization — expect an import change, not a rewrite.
+- Upgraded Compose Multiplatform to 1.12.0 (from 1.11.1), and with it Material3 and the Material3 Adaptive Navigation Suite to 1.12.0-alpha03 (from 1.11.0-alpha07). The alpha coordinate is deliberate: it is the exact version Compose Multiplatform 1.12.0 declares itself aligned to, so moving it to a "stable" number would de-align the stack.
+- Upgraded Room to 3.0.2 (from 3.0.1), Navigation 3 runtime to 1.1.7 (from 1.1.6), binary-compatibility-validator to 0.18.2 (from 0.18.1), and SLF4J to 2.0.19 (from 2.0.18).
+- The AGP (9.1.1) and Kotlin (2.4.0) pins are now documented and suppressed where they were being flagged as stale. Both are held at what the bundled IntelliJ IDEA plugin supports — bumping either breaks project import in the IDE — so the version catalog carries per-line `#noinspection` comments for the currency inspections and Dependabot ignores the matching artifacts. The suppressions are scoped to those two lines; every other dependency is still checked.
+- The Koin convention plugin sets `aiAssist = false`. The flag emits a vendor call-to-action pointing at Kotzilla MCP during compilation, not a diagnostic.
+- `core:ui`'s `AppTest` now assembles its Koin graph from an annotated `@Module` plus a `@KoinApplication` entry point instead of a `module { }` lambda passed straight to `koinConfiguration`. The lambda form made the module set dynamically computed, which downgrades the entry point to runtime-only checking (KOIN-W003); only the `navigation<TestKey>` screen entry stays DSL, the same split the feature `*NavigationModule`s use.
+- Removed dead local unit test configuration from `androidApp`. The module has no `src/test` sources — its only tests are instrumented — so the unused Robolectric, JUnit, `koin-test`, `core:database`, and `androidx.test:core` test dependencies are gone, along with `unitTests.isIncludeAndroidResources` and the BouncyCastle constraint that existed solely to keep Robolectric off the vulnerable bcprov 1.81. `androidx.test:core` left the version catalog with it.
+- Bumped pinned GitHub Actions: `mikepenz/action-junit-report` v6, `softprops/action-gh-release` v3.0.3, and `github/codeql-action/upload-sarif` v4.37.9.
+- Refreshed the README and `CLAUDE.md` tech-stack tables to match `gradle/libs.versions.toml`, recorded why Material3 is pinned to an alpha, and documented the hot-reload workflow in the README and `CONTRIBUTING.md`.
+
+### Fixed
+- The desktop window's minimum size now scales with display density. It was previously applied through AWT (`window.minimumSize = Dimension(350, 600)`) in device pixels, which do not scale, so on a 200%-scaled display the floor was half the intended physical size while the Dp-typed initial size scaled correctly. It is now `minSize = DpSize(350.dp, 600.dp)`.
+- New desktop windows open centred on the screen. The v1 default cascades from the last window position, which on a multi-monitor setup landed the window wherever the previous one had been.
+
 ## [1.7.0] - 2026-08-18
 
 ### Added
@@ -211,7 +232,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.5...v1.7.0
 [1.6.5]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.4...v1.6.5
 [1.6.4]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.3...v1.6.4
