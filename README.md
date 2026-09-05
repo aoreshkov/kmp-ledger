@@ -61,20 +61,20 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 |---|---|---|
 | Kotlin | 2.4.0 | Language and compiler |
 | Kotlin Gradle Plugin | 2.4.0 | Build tooling |
-| Compose Multiplatform | 1.11.1 | Shared UI (Android, iOS, Desktop) |
-| Room 3 / SQLite | 3.0.1 / 2.7.0 | Local database with KMP support |
+| Compose Multiplatform | 1.12.0 | Shared UI (Android, iOS, Desktop) |
+| Room 3 / SQLite | 3.0.2 / 2.7.0 | Local database with KMP support |
 | AndroidX DataStore (Preferences) | 1.2.1 | Multiplatform key-value persistence (theme preference) |
-| Navigation 3 | 1.1.6 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
-| Material3 Adaptive Navigation Suite | 1.11.0-alpha07 | Adaptive top-level nav (bottom bar / rail / drawer) |
+| Navigation 3 | 1.1.7 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
+| Material3 Adaptive Navigation Suite | 1.12.0-alpha03 | Adaptive top-level nav (bottom bar / rail / drawer) |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.1.0 | Kotlin Multiplatform logging |
 | Kover | 0.9.9 | Kotlin Multiplatform code coverage |
-| SLF4J / Logback | 2.0.18 / 1.6.3 | Desktop logging implementation |
+| SLF4J / Logback | 2.0.19 / 1.6.3 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
 | Lifecycle / ViewModel | 2.11.0 | State management and lifecycle-aware components |
 | Material3 Adaptive | 1.3.0-beta02 | List/detail adaptive layouts |
-| Material3 (Compose) | 1.11.0-alpha07 | Material You components |
+| Material3 (Compose) | 1.12.0-alpha03 | Material You components |
 | Android SDK | compile/target 37, min 24 | Android target |
 
 ---

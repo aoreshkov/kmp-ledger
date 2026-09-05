@@ -103,7 +103,6 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         onNodeWithTag("theme_dark").assertIsSelected()
 
         onNodeWithTag("theme_light").performClick()
-        waitForIdle()
 
         onNodeWithTag("theme_light").assertIsSelected()
     }
@@ -118,7 +117,6 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         }
 
         onNodeWithTag("theme_dark").performClick()
-        waitForIdle()
 
         onNodeWithText("Failed to save. Please try again.").assertIsDisplayed()
     }
