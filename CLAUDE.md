@@ -96,13 +96,15 @@ Three composable Gradle plugins — modules declare one of these instead of conf
 | Technology | Version |
 |---|---|
 | Kotlin | 2.4.0 |
-| Compose Multiplatform | 1.11.1 |
+| Compose Multiplatform | 1.12.0 |
 | Koin | 4.2.2 |
-| Room | 3.0.1 |
-| Navigation 3 | 1.1.6 (runtime) / 1.1.1 (ui) |
+| Room | 3.0.2 |
+| Navigation 3 | 1.1.7 (runtime) / 1.1.1 (ui) |
 | AndroidX DataStore | 1.2.1 |
 | Coroutines | 1.11.0 |
 | Kover | 0.9.9 |
+
+Material3 and Material3 Adaptive are pinned to prerelease versions (`androidx-material3 = "1.12.0-alpha03"`, `androidx-adaptive = "1.3.0-beta02"`) on purpose: those are the exact coordinates Compose Multiplatform 1.12.0 declares itself aligned to. They are not debt to pay down, and moving either to a "stable" number would de-align the stack. Re-check the alignment table in the Compose Multiplatform release notes on every CM bump.
 
 ## Module Conventions
 
