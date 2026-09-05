@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.koin.compiler)
+    alias(libs.plugins.compose.hot.reload)
 }
 
 dependencies {

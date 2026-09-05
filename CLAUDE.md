@@ -27,6 +27,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Run Desktop (JVM) application
 ./gradlew :desktopApp:run
 
+# Run Desktop with hot reload (JetBrains Runtime is provisioned on first use);
+# :desktopApp:hotMcpServer exposes the same session to MCP clients (see .mcp.json)
+./gradlew :desktopApp:hotRun
+
 # iOS: open iosApp/iosApp.xcodeproj in Xcode
 ```
 

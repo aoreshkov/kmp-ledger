@@ -21,6 +21,21 @@ JDK 21+ is required. Useful commands:
 ./gradlew check        # full gate: tests + API check + lint + coverage floors
 ```
 
+## Running the desktop app with hot reload
+
+```bash
+./gradlew :desktopApp:hotRun
+```
+
+Code edits are applied to the running window without a restart. The first run downloads a
+JetBrains Runtime (hot reload needs its enhanced class redefinition) and caches it outside
+the project; normal builds are unaffected and keep using the daemon JDK.
+
+The same plugin exposes `:desktopApp:hotMcpServer`, an MCP endpoint that lets a coding
+agent reload, screenshot, read the semantic tree and drive the running app. `.mcp.json`
+wires it up for MCP clients that read that file. It invokes `./gradlew`, so on Windows
+register the server with the `gradlew.bat` form locally instead.
+
 ## Pull request expectations
 
 - **CI must pass** — the `CI Success` status check gates merges. It runs `check`,

@@ -13,6 +13,9 @@ android-sdk-target = "37"
 kotlin = "2.4.0"
 ksp = "2.3.9"
 kover = "0.9.9"
+# Bundled with Compose Multiplatform 1.12.0; drives :desktopApp:hotRun and the
+# hotMcpServer endpoint. Runs on a JetBrains Runtime the plugin provisions itself.
+compose-hot-reload = "1.2.0"
 
 # Jetpack
 androidx-activity = "1.13.0"
@@ -126,6 +129,7 @@ common-test = ["kotlin-test", "kotlinx-coroutines-test"]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library-multiplatform = { id = "com.android.kotlin.multiplatform.library", version.ref = "android-gradle-plugin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
