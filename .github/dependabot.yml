@@ -44,3 +44,13 @@ updates:
       # when deliberately upgrading compose-multiplatform. Note: ignore also
       # suppresses security updates for these artifacts.
       - dependency-name: "org.jetbrains.compose.material3:*"
+      # AGP and Kotlin are pinned to what the bundled IntelliJ IDEA plugin
+      # supports (see the pins in gradle/libs.versions.toml, where the matching
+      # lint currency checks are suppressed too); bumping either breaks project
+      # import in the IDE. Drop these once IDEA supports a newer line. Note:
+      # ignore also suppresses security updates for these artifacts.
+      - dependency-name: "com.android.tools.build:gradle"
+      - dependency-name: "com.android.application:*"
+      - dependency-name: "com.android.kotlin.multiplatform.library:*"
+      - dependency-name: "org.jetbrains.kotlin:*"
+      - dependency-name: "org.jetbrains.kotlin.*:*"
