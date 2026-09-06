@@ -1,3 +1,3 @@
 # Memory Index
 
-- [Test-stack currency notes](test-stack-currency-notes.md) — verified 2026-07-02: coroutines 1.11.0 / CMP 1.11.1 (v2 UI-test API) / Kover 0.9.8 all latest; repo fully on v2; zero gaps
+- [Test-stack currency notes](test-stack-currency-notes.md) — v2 UI-test adoption + coroutines-test facts; the "CMP 1.11.1 / Kover 0.9.8 are latest" claims EXPIRED (now 1.12.0 / 0.9.9) — re-derive version claims before reuse

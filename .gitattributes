@@ -30,3 +30,10 @@ gradlew text eol=lf
 *.png  binary
 *.ico  binary
 *.icns binary
+
+# Claude Code definitions. The agent loader does not parse CRLF frontmatter, so a
+# Windows checkout (where `core.autocrlf=true` gives them CRLF) silently drops every
+# agent in `.claude/agents/`. The hook is a POSIX shell script and needs LF to run
+# under Git Bash. Pin the working-tree form to LF, as with the `*.api` dumps above.
+.claude/**/*.md text eol=lf
+.claude/**/*.sh text eol=lf
