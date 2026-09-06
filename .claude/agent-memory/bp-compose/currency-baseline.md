@@ -1,6 +1,6 @@
 ---
 name: currency-baseline
-description: Upstream-currency verification of kmp-ledger Compose UI + Navigation 3 against pinned CMP 1.12.0 / nav3 runtime 1.1.7 + ui 1.1.1 / material3 1.12.0-alpha03, last re-checked 2026-09-06
+description: Upstream-currency verification of kmp-ledger Compose UI + Navigation 3 (incl. theme, shared components, Android/desktop/iOS entry points) against pinned CMP 1.12.0 / nav3 runtime 1.1.7 + ui 1.1.1 / material3 1.12.0-alpha03, last re-checked 2026-09-06
 metadata:
   type: project
 ---
@@ -63,6 +63,13 @@ never as staleness.
   the marker class is a leftover. Removable. Keep `ExperimentalMaterial3AdaptiveApi`
   — `rememberListDetailSceneStrategy` and the `ListDetailSceneStrategy` companion
   are still experimental in adaptive 1.3.0-beta02.
+- **`ExperimentalMaterial3AdaptiveApi` is still required in BOTH places** (re-checked
+  2026-09-06 against the pinned `adaptive-navigation3-1.3.0-beta02-sources.jar`):
+  `App.kt:40` for `rememberListDetailSceneStrategy` (`@ExperimentalMaterial3AdaptiveApi`
+  on the fun, `ListDetailSceneStrategy.kt:69`) and `PostingModule.kt:32` for
+  `ListDetailSceneStrategy.listPane()/detailPane()` — the marker sits on the **class**
+  (line 128), so companion access inherits it. Not a finding; do not propose removal
+  without re-reading that sources jar.
 - `@OptIn(ExperimentalMaterial3Api::class)` on all four screens
   (`PostingListScreen.kt:57`, `PostingEditScreen.kt:77`, `PostingDetailsScreen.kt:87`,
   `SettingsScreen.kt:72`) — the only experimental API they used was `TopAppBar`, which
@@ -91,6 +98,40 @@ never as staleness.
   latest *stable*, and 1.2.0 is source-breaking. Re-evaluate when nav3-ui 1.2.0 ships
   stable or the next CMP bump forces it.
 
+## Open guideline gap — no composable in the repo takes a `Modifier`
+
+Grep-verified 2026-09-06: `modifier: Modifier` appears **zero** times in hand-written
+source; all 14 `@Composable` functions omit it. The Compose API guidelines make
+"Elements accept and respect a `Modifier` parameter" a MUST, echoed by
+developer.android.com/develop/ui/compose/modifiers (rev. 2026-08-14). The load-bearing
+case is `core/compose/.../LabeledField.kt:12` — public, BCV-dumped, consumed
+cross-module by `PostingDetailsScreen.kt:193` **positionally** (`LabeledField(label,
+value, MaterialTheme.typography.titleLarge)`), so inserting `modifier` as the first
+optional param (per the guideline) breaks that call site and needs `./gradlew apiDump`.
+Report as Should-fix for `LabeledField`; the screen-level ones are the screens' owner's
+call.
+
+## Platform entry points — verified current 2026-09-06
+
+- `androidApp/.../MainActivity.kt` — `ComponentActivity` + `setContent` +
+  `enableEdgeToEdge()`. `enableEdgeToEdge` is **not** deprecated in the pinned
+  androidx-activity 1.13.0 (`activity-1.13.0-sources.jar`, `EdgeToEdge.kt`), and the
+  ordering matches developer.android.com/develop/ui/compose/system/setup-e2e
+  (rev. 2026-09-02), which calls it **after** `super.onCreate`. Note the 1.13.0 KDoc
+  sample shows it *before* — docs and KDoc disagree; do not raise this as a finding.
+  targetSdk 37 ⇒ predictive back is on by default, so no manifest opt-in is needed.
+- `desktopApp/.../main.kt` — v1 `application { }` hosting a v2 `Window` is the intended
+  shape: CMP 1.12.0 `ui-desktop` ships **no** `window.v2` application entry, and neither
+  `Application_desktopKt` nor `window.v2.Window_desktopKt`/`WindowState_desktopKt`
+  carries a `Deprecated` attribute (javap-verified).
+- `iosExport/.../MainViewController.kt` — bare `ComposeUIViewController { App() }` is
+  current; the `configure` overload is optional. `iosApp/iosApp/Info.plist` has
+  `CADisableMinimumFrameDurationOnPhone` (CMP crashes without it).
+  `ContentView.swift` uses `.ignoresSafeArea()` (all regions/edges) where the JetBrains
+  template uses `.ignoresSafeArea(.all, edges: .bottom)` — **not** a finding: the app's
+  `Scaffold`+`TopAppBar` defaults consume `systemBars`, so full-screen + Compose-side
+  insets is the coherent edge-to-edge setup and mirrors Android's `enableEdgeToEdge`.
+
 ## Verified current — do not re-litigate
 
 `collectAsStateWithLifecycle` everywhere (no bare `collectAsState`); theme flow
@@ -98,8 +139,24 @@ remembered on the use case then collected with `initialValue`; no
 `LaunchedEffect(Unit)`/`(true)`; `staticCompositionLocalOf` for `LocalNavigator` with
 the trade-off documented; every `Res`-generating module pins `packageOfResClass` and
 only `core:compose` sets `publicResClass = true`; `Icons.AutoMirrored` for mirroring
-glyphs; no CMP 1.12.0 deprecations hit (no `NativeCanvas`/`NativePaint`, no `SwingPanel`
-background param) and `desktopApp` already on the `ui.window.v2` API.
+glyphs; `desktopApp` already on the `ui.window.v2` API.
+
+**CMP 1.12.0 Migration Notes sweep (2026-09-06, complete).** The release body has
+exactly one `## Migration Notes` section with three items — `NativeCanvas`/`NativePaint`
+raised to `ERROR`; `SwingPanel(background=)` deprecated; `ComposePanel`/`ComposeWindow`/
+`ComposeDialog` needing `setPreferredSize` under infinite constraints. Grep-verified:
+none of those identifiers appear in hand-written source. Corroborated by
+`docs/2026-09-04-build-warnings-cleanup.md` — a full `clean allTests --rerun-tasks`
+on these exact pins produced **zero** `w:` lines from hand-written source, so no
+WARNING-level deprecation is being hit anywhere.
+
+**Theme currency (2026-09-06).** `core/ui/.../theme/Theme.kt` is clean:
+`MaterialTheme(colorScheme, typography, content)` is not deprecated in material3
+1.12.0-alpha03 (the 3-arg overload delegates to the `MotionScheme` one; javap-verified,
+no `Deprecated` attribute), and `isSystemInDarkTheme()` is real on every target —
+foundation's skiko actual delegates to `androidx.compose.ui.SystemThemeKt
+.isUiSystemInDarkTheme`, i.e. `LocalSystemTheme`. `MaterialExpressiveTheme` exists in
+this build but adopting it is a design choice, not a currency gap.
 
 **Deferred (out of bp-compose's lane):** `LaunchedEffect`-on-boolean snackbar
 signalling and lifecycle-unaware `Channel` event collection → rv-compose;

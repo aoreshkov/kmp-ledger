@@ -1,56 +1,53 @@
 ---
 name: test-stack-currency-notes
-description: Test-toolchain currency facts (coroutines-test, Compose MP v2 UI-test API, Kover). Content verified 2026-07-16 against CMP 1.11.1 / Kover 0.9.8 — BOTH PINS HAVE SINCE MOVED; re-derive before reuse
+description: Test-toolchain currency facts (coroutines-test, Compose MP v2 UI-test API, robolectric/junit/espresso). Every version claim is a dated observation verified 2026-09-06 against the artifacts — re-read the pins before reuse
 metadata:
   type: project
 ---
 
-> **STALE BASELINE — corrected 2026-09-06.** This note asserted "Compose MP 1.11.1 is
-> the latest stable" and "Kover 0.9.8 is the latest release". Both were true on
-> 2026-07-16 and are false now: the catalog pins **CMP 1.12.0** (stable, released
-> 2026-08-26) and **Kover 0.9.9**. Its old "How to apply" told the next run to diff
-> against those baselines instead of re-deriving — which is exactly how a stale number
-> survives an audit. **Read the pins from `gradle/libs.versions.toml` first; every
-> version claim below is a dated observation, not a current fact.**
+Test-stack currency facts. **Every version number below is a dated observation, not a
+standing fact.** Read `gradle/libs.versions.toml` first; where a pin differs from the
+version a claim names, treat that claim as unverified and re-derive it.
 
-Test-stack currency facts, last genuinely verified 2026-07-02 and re-verified
-2026-07-16 against the versions pinned *at that time*.
+## Verified 2026-09-06 (against the cached artifacts, not from recall)
 
-- **kotlinx-coroutines 1.11.0** (still the pinned version as of 2026-09-06, and still
-  latest stable at that date). Its only test-module change: advanced deprecation of the
-  `runTest(dispatchTimeout=...)` overloads to ERROR and removal of the long-ERROR
-  `TestCoroutineScope` APIs (PR #4604). This repo uses none of them.
-- **Compose MP v2 UI-test API** — verified against CMP 1.11.1; **not re-checked against
-  the pinned 1.12.0.** CMP 1.11.0 made the v2 test APIs the default and deprecated v1
-  `runComposeUiTest`/`runDesktopComposeUiTest`/`runSkikoComposeUiTest`. v2 lives in
-  `androidx.compose.ui.test.v2` (common) and `androidx.compose.ui.test.junit4.v2`
-  (Android rules: `createAndroidComposeRule` etc.), defaults to **StandardTestDispatcher**
-  (queued) rather than UnconfinedTestDispatcher, and adds an `effectContext` parameter.
-  The API was still `@ExperimentalTestApi` at 1.11.1 — **re-confirm on 1.12.0 before
-  asserting the opt-in is still required.**
-  Sources: https://kotlinlang.org/docs/multiplatform/whats-new-compose-111.html ,
-  https://kotlinlang.org/docs/multiplatform/compose-test.html ,
-  https://developer.android.com/develop/ui/compose/testing/migrate-v2
-- **The repo is already fully on v2** everywhere (common screen tests, DesktopUiTest's
-  `runDesktopComposeUiTest`, androidApp SmokeTest's `junit4.v2.createAndroidComposeRule`).
-  Structural, not version-dependent — do not re-flag a v1 to v2 migration.
-- coroutines-test still marks much of the module `@ExperimentalCoroutinesApi`, so the
-  blanket `@OptIn(ExperimentalCoroutinesApi::class)` on test classes using
-  `UnconfinedTestDispatcher`/`setMain` is required, not stale. (Verified for 1.11.0, the
-  pinned version — re-check only if that pin moves.)
-- Audit outcome 2026-07-02 and 2026-07-16: **zero upstream-currency gaps** in the test
-  suites. setMain paired with resetMain in every class; no legacy
-  `runBlockingTest`/`TestCoroutineDispatcher`; no real-time waits (uses `waitForIdle` /
-  `waitUntilExactlyOneExists`). This verdict predates the CMP 1.12.0 bump.
+- **CMP v2 UI-test API is STILL `@ExperimentalTestApi` at Compose Multiplatform 1.12.0.**
+  Evidence: `javap -v` on `org.jetbrains.compose.ui:ui-test-desktop:1.12.0` shows
+  `Landroidx/compose/ui/test/ExperimentalTestApi;` directly on
+  `androidx.compose.ui.test.v2.ComposeUiTest_skikoKt.runComposeUiTest` and on
+  `ComposeUiTest_desktopKt.runDesktopComposeUiTest`. The v2 signature is unchanged from
+  1.11.1: `(effectContext, runTestContext, testTimeout, block: suspend ComposeUiTest.() -> Unit)`,
+  default dispatcher **StandardTestDispatcher**. kotlinlang.org/docs/multiplatform/compose-test.html
+  still shows `@OptIn(ExperimentalTestApi::class)` + `v2.runComposeUiTest` as the recommended form.
+  → The repo's per-class `@OptIn(ExperimentalTestApi::class)` is **required**, not stale.
+- **coroutines-test 1.11.0**: `UnconfinedTestDispatcher()`, `Dispatchers.setMain`,
+  `Dispatchers.resetMain`, `TestScope.advanceUntilIdle/runCurrent` are all still
+  `@ExperimentalCoroutinesApi`. `TestCoroutineScheduler` and its `advanceUntilIdle()` are
+  NOT experimental. Only deprecations in the module are the `dispatchTimeoutMs` `runTest`
+  overloads (ERROR since 1.11.0) — unused here.
+- **Robolectric 4.16.1 tops out at SDK 36** (`DefaultSdkProvider` highest entry = 36 /
+  Android 16). So `@Config(sdk = [36])` in `core/test/.../PlatformComposeUiTest.android.kt`
+  is a live constraint, not stale, while `android-sdk-compile = 37`.
+  Robolectric **4.17-beta-1 (2026-07-15) is the release that adds SDK 37** — still beta as of
+  2026-09-06 (latest prerelease 4.17-beta-4, 2026-08-23; latest *stable* 4.16.1, 2026-01-21).
+  When 4.17 goes stable, the `@Config(sdk = [36])` pin and its comment can be dropped.
+- Latest-stable check 2026-09-06: kotlinx-coroutines **1.11.0** = pinned; CMP **1.12.0** =
+  pinned (released 25 Aug 2026); robolectric **4.16.1** = pinned; junit **4.13.2** = pinned
+  (final JUnit 4 release); espresso-core **3.7.0** = pinned; androidx.test.ext:junit **1.3.0**
+  = pinned; bcprov-jdk18on **1.85.2** = pinned. Whole test stack was at latest stable.
+- **Audit outcome 2026-09-06: zero upstream-currency gaps.** Repo is fully on the v2 test
+  API everywhere (common screen tests, `runDesktopComposeUiTest`, androidApp
+  `junit4.v2.createAndroidComposeRule`); `setMain` paired with `resetMain` in every class;
+  no `runBlockingTest`/`TestCoroutineDispatcher`/`Thread.sleep`/`delay` real-time waits;
+  only non-deprecated `kotlin.test` assertions (`assertEquals/True/False/Is/Null/NotNull/
+  NotEquals/Same/FailsWith`). Do not re-flag a v1→v2 migration; it is already done.
 
-**Why:** the previous version of this note is the clearest example in the repo of how a
-currency memory fails — it was accurate when written, framed dated observations as
-standing facts, and instructed the next run to trust them. A note that says "X is the
-latest" is wrong the moment X ships a successor.
+**Why:** an earlier version of this note framed dated observations as standing facts
+("CMP 1.11.1 is latest", "Kover 0.9.8 is latest") and told the next run to diff against
+those baselines — which is exactly how a stale number survives an audit.
 
-**How to apply:** read the pinned `compose-multiplatform`, `kotlinx-coroutines` and
-`kover` versions from `gradle/libs.versions.toml` and compare them to the versions each
-claim above names. Where they differ, treat that claim as **unverified** and re-derive it
-from the release notes or the pinned artifact's own sources before reusing it. When you
-re-derive one, correct this note in place — writes under `.claude/agent-memory/` are
-permitted.
+**How to apply:** re-read the pins, then re-derive any claim whose named version moved.
+Cheapest re-derivation path (used above): the Gradle cache under
+`$GRADLE_USER_HOME/caches/modules-2/files-2.1/` already holds the resolved jars/sources —
+`javap -v` on a class file shows opt-in markers directly, which beats reading docs prose.
+Correct this note in place when you re-derive; writes under `.claude/agent-memory/` are permitted.
