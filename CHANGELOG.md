@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `.mcp.json` now launches the `:desktopApp:hotMcpServer` endpoint through the Gradle wrapper JAR (`java -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain`) instead of `./gradlew`. MCP clients spawn the command without a shell, so the extensionless POSIX `gradlew` script could not be executed on Windows and the server failed to start; the wrapper JAR is the same entry point the scripts themselves exec and works unchanged on all three host platforms, needing only `java` on `PATH`. Windows contributors no longer have to register a `gradlew.bat` server locally, as 1.8.0 required.
+
 ## [1.8.0] - 2026-09-05
 
 ### Added

@@ -1,8 +1,11 @@
 {
   "mcpServers": {
     "compose-hot-reload": {
-      "command": "./gradlew",
+      "command": "java",
       "args": [
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
         "--no-daemon",
         "--quiet",
         "--console=plain",
