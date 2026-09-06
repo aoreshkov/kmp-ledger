@@ -1,16 +1,31 @@
 ---
 name: review-all
-description: Run BOTH review lenses over the whole project — the eleven rv-* house-rules specialists and the nine bp-* currency specialists — in parallel waves, then synthesize ONE prioritized, cross-deduplicated review document written to docs/full-review-YYYY-MM-DD.md (findings + a phased fix plan). Heavyweight (twenty subagents); for release gates / periodic full audits, not per-diff. Writes only that doc; makes no other code changes. Do not invoke automatically.
+description: Run BOTH review lenses over the project — the eleven rv-* house-rules specialists and the nine bp-* currency specialists — in parallel waves, then synthesize ONE prioritized, cross-deduplicated review document under docs/ (findings + a phased fix plan). Heavyweight (twenty subagents); for release gates, not per-diff. Do not invoke automatically.
 disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Bash, Agent, Write
+argument-hint: "[optional scope, e.g. 'core:data' | 'since last release' | 'just compose']"
+allowed-tools: Read, Grep, Glob, Bash(git ls-files*), Bash(git status*), Bash(git log*), Bash(git diff*), Agent, Write
 ---
+
+## Today
+!`date +%F`
+
+**First, read `${CLAUDE_PROJECT_DIR}/.claude/REVIEW-CONVENTIONS.md`** — it carries the
+shared scope, wave, synthesis, de-duplication and next-step rules this skill depends on.
 
 Run a **combined** full-project review across both lenses at once: the eleven `rv-*`
 house-rules specialists (`.claude/agents/review/`) **and** the nine `bp-*`
 upstream-currency specialists (`.claude/agents/currency/`), then merge everything into
 **one** prioritized, source-cited, cross-deduplicated review document. The skill's sole
-output is that document — `docs/full-review-YYYY-MM-DD.md`, holding the findings **and a
-phased plan to implement the fixes**; it makes **no other code changes**.
+output is that document — `docs/<today>-full-review.md` (use the date printed above),
+holding the findings **and a phased plan to implement the fixes**; it makes **no other
+code changes**.
+
+## Scope
+`$ARGUMENTS`
+
+If that is non-empty, scope the sweep to it (a module path, "since last release", a
+single domain like "just compose") and pass the scope verbatim into every spawn's
+prompt. If it is empty, review the whole repository.
 
 This is the union of `/review-house` (*"does the code obey this project's own
 rules?"*) and `/review-currency` (*"do the code and our rules still match the latest
@@ -42,12 +57,14 @@ synthesize only after all twenty return:
 Use each agent's family rule verbatim: the **`rv-*`** spawns get the house rule (report
 only correctness / project-rule gaps; severity, `file:line`, concrete fix), the
 **`bp-*`** spawns get the currency rule (report only upstream-currency gaps; severity,
-`file:line`, fix, **and source URL + version/date**; defer internal correctness to the
-`rv-*` pair). Neither invents findings when an area is sound.
+`file:line`, fix, **and source URL + version/date**; read the pins out of
+`gradle/libs.versions.toml` rather than asserting a version; defer internal correctness
+to the `rv-*` pair — the full contract is the `currency-findings-contract` skill
+preloaded into every `bp-*` agent). Neither invents findings when an area is sound.
 
 ## Synthesize — one review document
-Merge all twenty reports and **write `docs/full-review-YYYY-MM-DD.md`** (review date)
-per the *Synthesize — write the review document* section of
+Merge all twenty reports and **write `docs/<today>-full-review.md`** (the date printed
+above) per the *Synthesize — write the review document* section of
 `.claude/REVIEW-CONVENTIONS.md`. The doc has two parts: **(1) findings** in the three
 tiers (Critical / Should-fix / Optional), and **(2) a phased implementation plan** for
 the fixes (phases ordered by risk/value, each committable, with files + a `./gradlew`

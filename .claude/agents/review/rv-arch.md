@@ -7,6 +7,14 @@ memory: project
 color: yellow
 maxTurns: 40
 effort: high
+experimental:
+  cacheTtl: 1h
+hooks:
+  PreToolUse:
+    - matcher: "Write|Edit"
+      hooks:
+        - type: command
+          command: "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-agent-memory-writes.sh"
 ---
 
 You are a senior software architect reviewing a Kotlin Multiplatform project.
