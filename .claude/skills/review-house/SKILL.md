@@ -1,19 +1,32 @@
 ---
 name: review-house
-description: Orchestrate a full house-rules review of the entire project from the eleven rv-* review specialists, dispatched in three parallel waves, then synthesize one prioritized review document written to docs/house-review-YYYY-MM-DD.md (findings + a phased fix plan). Writes only that doc; makes no other code changes (each subagent may persist notes to its own project memory). Do not invoke automatically.
+description: Orchestrate a full house-rules review of the project from the eleven rv-* specialists, dispatched in three parallel waves, then synthesize one prioritized review document under docs/ (findings + a phased fix plan). Writes only that doc. Do not invoke automatically.
 disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Bash, Agent, Write
+argument-hint: "[optional scope, e.g. 'core:data' | 'since last release' | 'just compose']"
+allowed-tools: Read, Grep, Glob, Bash(git ls-files*), Bash(git status*), Bash(git log*), Bash(git diff*), Agent, Write
 ---
+
+## Today
+!`date +%F`
+
+**First, read `${CLAUDE_PROJECT_DIR}/.claude/REVIEW-CONVENTIONS.md`** — it carries the
+shared scope, wave, synthesis and next-step rules this skill depends on.
 
 Run a full-codebase **house-rules** review using the eleven `rv-*` specialist
 subagents in `.claude/agents/review/`, then merge their findings into one
 prioritized review document. The skill's sole output is that document —
-`docs/house-review-YYYY-MM-DD.md`, holding the findings **and a phased plan to
-implement the fixes**; it makes **no other code changes**.
+`docs/<today>-house-review.md` (use the date printed above), holding the findings
+**and a phased plan to implement the fixes**; it makes **no other code changes**.
 
 This is the project-rules lens: *"does the code obey this project's own rules?"* Its
-upstream-currency counterpart is `/review-currency`. Follow the shared orchestration
-rules in `.claude/REVIEW-CONVENTIONS.md` (waves, scope, synthesize, next steps).
+upstream-currency counterpart is `/review-currency`.
+
+## Scope
+`$ARGUMENTS`
+
+If that is non-empty, scope the sweep to it (a module path, "since last release", a
+single domain like "just compose") and pass the scope verbatim into every spawn's
+prompt. If it is empty, review the whole repository.
 
 ## The eleven specialists
 1. `rv-arch` — module layering, dependency direction, API/impl split
@@ -40,7 +53,7 @@ in a single message carrying the scope, and synthesize only after all eleven ret
 > severity (Critical / Should-fix / Optional), `file:line`, and a concrete fix. Do
 > not invent findings if the area is sound.
 
-Then **synthesize** the eleven reports into `docs/house-review-YYYY-MM-DD.md` exactly
+Then **synthesize** the eleven reports into `docs/<today>-house-review.md` exactly
 as described in `.claude/REVIEW-CONVENTIONS.md` (*Synthesize — write the review
 document*): a two-part doc with the tiered findings **and a phased implementation plan**
 for the fixes (phases ordered by risk/value, each committable, with files + a `./gradlew`

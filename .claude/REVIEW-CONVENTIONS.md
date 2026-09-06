@@ -6,7 +6,12 @@ subagents from `.claude/agents/` in parallel waves and merge their findings into
 prioritized review **document**. The skills' sole output is that document — a dated
 markdown file under `docs/` (see *Synthesize* below); they make **no other changes**
 to source, build, test, or config files (each subagent may persist notes to its own
-project memory). `review-house` is the project-rules lens, `review-currency` the
+project memory). That read-only posture is **enforced, not just asked for**: every
+`rv-*`/`bp-*` agent carries a `PreToolUse` hook
+(`.claude/hooks/guard-agent-memory-writes.sh`) that blocks any `Write`/`Edit` outside
+`.claude/agent-memory/`. If a specialist reports being blocked, it tried to edit
+something it shouldn't — record the proposed change as a finding.
+`review-house` is the project-rules lens, `review-currency` the
 upstream-currency lens, `review-all` runs both; see `.claude/agents/README.md` for the
 full agent roster and ownership matrix.
 
@@ -29,11 +34,22 @@ wording). The shared shape: report only real gaps; give **severity** (Critical /
 Should-fix / Optional), **`file:line`**, and a **concrete fix**; respect deliberate
 pinned project decisions; do not invent findings when an area is sound.
 
+## Handle partial specialist output
+A subagent that hits its `maxTurns` limit returns output the harness marks **partial**.
+Treat a partial return as *partially reviewed*, never as *clean*: name the sub-areas the
+specialist did not reach in the review document, under the specialist's own findings.
+Silence from a truncated agent is absence of evidence, not evidence of health. If a
+domain came back badly truncated, say so in the health summary and offer to re-run that
+one specialist.
+
 ## Synthesize — write the review document
 Merge all specialist reports into a single markdown document and **write it to**
-`docs/<lens>-review-YYYY-MM-DD.md`, using the review date and the lens prefix:
-`full-review-` for `/review-all`, `house-review-` for `/review-house`,
-`currency-review-` for `/review-currency`. Writing this one file **is** the skill's
+`docs/<today>-<lens>-review.md` — the date the skill injected, then the lens:
+`<today>-full-review.md` for `/review-all`, `<today>-house-review.md` for
+`/review-house`, `<today>-currency-review.md` for `/review-currency`. The
+**date-first** shape is the repo's `docs/` convention (`YYYY-MM-DD-<topic>.md`), so the
+directory sorts chronologically; older reviews use a legacy `<lens>-review-<date>.md`
+name — do not follow them. Writing this one file **is** the skill's
 deliverable — it is not a "code change"; do not edit any source, build, test, or config
 file. If a doc with that name already exists (a re-run on the same day), overwrite it.
 
