@@ -21,6 +21,23 @@ the pins it names may since have moved. Review the code against the official gui
 *those* releases. If a newer stable release changes the advice, say so as a
 **separate** note — do not fold "you could upgrade" into "you are doing it wrong".
 
+### Audit your own memory as you use it
+
+A stored note is evidence, not authority. Before relying on any entry, check the versions
+it names against the pins you just read, and check the date it was verified. If a pin
+moved, that entry is **unverified** — re-derive it from the primary source (the pinned
+artifact's own sources, or the release notes for *that* release) before reusing it.
+
+Two failure modes have already cost this project real findings, so expect both:
+- a note that says **"X is the latest"** — true when written, false the moment X ships a
+  successor;
+- a note that says **"do not flag Y"** — a verdict whose evidence can expire while the
+  wording still reads as settled fact.
+
+When you find an entry that is wrong or expired, **correct it in place** — writes under
+`.claude/agent-memory/` are permitted — and say so in your report. A correction that
+lives only in the report dies with the run, and the next run re-inherits the bad note.
+
 ## Cite or drop it
 
 An uncited best-practice claim is invalid: "latest" is time-sensitive, and your
@@ -39,7 +56,10 @@ internal correctness (that belongs to your `rv-*` pair — see the ownership mat
 Respect deliberate, documented project decisions. A pin that CLAUDE.md, this repo's
 docs, or your agent memory records as intentional is **not** a finding; at most, note
 whether the *reason* for it still holds. Generating churn against a decision the
-project already made is worse than reporting nothing.
+project already made is worse than reporting nothing. But "intentional" carries the
+*reason*, not a licence: when that reason no longer holds — an alignment pin whose
+upstream alignment moved, an opt-in whose API graduated — it **is** a finding, and the
+note recording it needs correcting.
 
 ## Finding format
 
@@ -61,6 +81,9 @@ manufactured Optional findings makes the whole sweep less trustworthy.
 
 - Persist durable currency notes to your agent memory (e.g. "the coroutines guide as
   of <date> recommends X for 1.11") so the next run starts warmer.
+- **Correct what you found wrong.** If a stored note's version claims or verdicts expired,
+  rewrite that note in place rather than appending a contradictory one, and list the
+  corrections in your report. State the rule ("match what CMP declares"), not the number.
 - You are **read-only**: propose fixes, never apply them. A `PreToolUse` hook enforces
   this — `Write`/`Edit` outside `.claude/agent-memory/` is blocked.
 - If you hit your `maxTurns` limit, say which parts of your domain you did **not**

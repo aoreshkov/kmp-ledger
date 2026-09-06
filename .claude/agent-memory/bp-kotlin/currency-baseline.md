@@ -1,24 +1,64 @@
 ---
 name: currency-baseline
-description: Baseline result of the Kotlin/coroutines upstream-currency audits (2026-06-26, re-audited 2026-07-02 and 2026-07-16) — what was checked and found current, so future audits can diff
+description: Baseline result of the Kotlin/coroutines upstream-currency audits (2026-06-26, re-audited 07-02, 07-16, 09-06) — what was checked and found current, so future audits can diff
 metadata:
   type: project
 ---
 
-Full-repo Kotlin-language + kotlinx.coroutines/Flow currency audits against pinned Kotlin 2.4.0 / Coroutines 1.11.0 / Serialization 1.11.0. Outcome all three times: code matches current official best practice — no Critical/Should-fix currency gaps.
+Full-repo Kotlin-language + kotlinx.coroutines/Flow currency audits against the pins in
+`gradle/libs.versions.toml`. Outcome all four times: no Critical/Should-fix currency gaps;
+one standing Optional (the stale `ExperimentalUuidApi` opt-in, see [[currency-optins]]).
 
-**Version currency confirmed 2026-07-16:** Kotlin 2.4.0 still latest stable (2.4.20 only in Beta1, planned Sep 2026 per kotlinlang.org/docs/releases.html + whatsnew-eap.html). kotlinx.coroutines 1.11.0 still latest stable per GitHub releases. kotlinx-serialization 1.11.0 pinned (aligned with the KMP release train). All three pins fully current — nothing newer to note. Between 2026-07-02 and 2026-07-16 NO `.kt` files changed (only dep bumps: Room 3.0.0 stable, Nav3 1.1.4, lifecycle 2.11.0-rc01), so the prior audit fully carries forward. Coroutines 1.11.0's one new deprecation (CoroutineDispatcher as context-key -> use ContinuationInterceptor) does NOT apply — repo has no `context[CoroutineDispatcher]` usage. No GlobalScope / runBlocking-in-main / manual Job() / `.values()`.
+**Rule, not numbers:** always re-read the pins, then re-derive "is the pin still the latest
+stable?" from the release feeds. Do not trust the sentence below on a later run.
 
-Patterns confirmed current (don't re-flag without a version bump or new upstream guidance):
-- `DataResult` + `Flow.asResult()` (map -> onStart emit Loading -> catch emit Error) — matches official Flow exception-transparency pattern.
-- ViewModels: `stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initial)`, `flatMapLatest` over a retry `MutableStateFlow`, `combine` for UI state, `Channel(BUFFERED) + receiveAsFlow()` for one-shot events, `collectAsStateWithLifecycle` in screens. All current.
-- Repository: `withContext(dispatchers.io)` for writes, `.flowOn(dispatchers.io)` for cold read flows; injectable `AppDispatchers` seam.
-- 2026-07-02 additions audited and current: `DataStoreSettingsRepository` (`catch` + `emit(emptyPreferences())` on okio `IOException` only, rethrow others — correct Flow exception transparency), `SettingsViewModel` (combine + stateIn), theme flow in `App()` via `collectAsStateWithLifecycle(initialValue = SYSTEM)`, `ThemeMode.entries` (not `values()`), Navigator/NavBackStack code, `SetThemeModeUseCase` via `runCatchingCancellable`.
-- Build: no explicit languageVersion/apiVersion (defaults, correct); `-Xexpect-actual-classes` applied only in the 4 modules with expect classes — still required in 2.4.0 (expect/actual classes NOT in the 2.4.0 stable-features list per whatsnew24.html, checked 2026-07-02).
-- Language: `data object` for stateless sealed cases, exhaustive `when` over sealed interfaces, no deprecated stdlib APIs.
+**Version currency observed 2026-09-06** (`gh api .../releases`, authoritative):
+- Kotlin: pin `2.4.0`. Latest **stable is 2.4.10** (2026-07-14) — a bug-fix for 2.4.0;
+  2.4.20 is at RC3 (2026-09-02), targeted Sep 2026. The pin is deliberate (the catalog
+  comment ties it to the IntelliJ IDEA plugin ceiling, same reason as AGP), so report the
+  2.4.x gap only as a *note*, never as a gap. **This supersedes the 2026-07-16 note that
+  said "2.4.0 is still latest stable, 2.4.20 only in Beta1" — that expired on 2026-07-14.**
+- kotlinx.coroutines: pin `1.11.0` (released 2026-05-08) — still the latest stable. Current.
+- kotlinx-serialization: pin `1.11.0` (2026-04-09) — latest stable; 1.12.0-RC (2026-09-04)
+  is prerelease only. Current.
 
-Kotlin 2.4.0 stabilized: context parameters, explicit backing fields, `@all` meta-target, Uuid API (except V4/V7 generation — see [[currency-optins]]). Explicit backing fields could replace `_uiState`/`asStateFlow()` in PostingEditViewModel, but the official coding conventions (checked 2026-07-02) still document the `_name` backing-property convention and `asStateFlow()` prevents downcasting where an explicit backing field exposes the MutableStateFlow instance — reported as Optional-only; do not push as churn. Same for `extraWarnings.set(true)` (`-Wextra`, since Kotlin 2.1) — offered as Optional build hardening, not a gap.
+Patterns confirmed current (don't re-flag without a pin bump or new upstream guidance):
+- `DataResult` + `Flow.asResult()` (map -> onStart emit Loading -> catch emit Error) — matches
+  the official Flow exception-transparency pattern.
+- ViewModels: `stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initial)`,
+  `flatMapLatest` over a retry `MutableStateFlow`, `combine` for UI state,
+  `Channel(BUFFERED) + receiveAsFlow()` for one-shot events, `collectAsStateWithLifecycle`
+  in screens, `_x` + `asStateFlow()` backing property. All current.
+- Repository: `withContext(dispatchers.io)` for writes, `.flowOn(dispatchers.io)` for cold
+  read flows; injectable `AppDispatchers` seam; common `Dispatchers.IO` (no opt-in needed).
+- `DataStoreSettingsRepository`: `catch` + `emit(emptyPreferences())` on okio `IOException`
+  only, rethrow others — correct Flow exception transparency.
+- Tests: `runTest`, `Dispatchers.setMain(UnconfinedTestDispatcher())` / `resetMain`,
+  `backgroundScope` for never-completing collectors (`EventCollect.kt`). Current idioms.
+- Language: `data object` for stateless sealed cases, exhaustive `when` over sealed
+  interfaces, `@JvmInline value class StartDestination`, `ThemeMode.entries` (not
+  `values()`). No `GlobalScope` / `runBlocking` / manual `Job()` / deprecated stdlib calls
+  (swept 2026-09-06: no `capitalize`/`toUpperCase()`/`sumBy`/`@Suppress("DEPRECATION")`).
+- Build: no explicit `languageVersion`/`apiVersion` (defaults, correct);
+  `extraWarnings.set(true)` is now ON in `ledger.kotlin.multiplatform` — the old Optional
+  suggestion is **done**, stop offering it. `-Xexpect-actual-classes` in the 4 modules with
+  expect classes is still required: expect/actual *classes* remain **Beta** in the KMP docs
+  (kotlinlang.org/docs/multiplatform-expect-actual.html, re-checked 2026-09-06).
+- Coroutines 1.11.0's one deprecation (CoroutineDispatcher as context key -> use
+  `ContinuationInterceptor`) does NOT apply: no `context[CoroutineDispatcher]` usage.
+- 1.11.0's new `SharedFlow.asFlow()` ("hide hot flow characteristics") is itself
+  `@ExperimentalCoroutinesApi`, so it is **not** a recommended replacement for the fakes'
+  `asStateFlow()` / `flow { emitAll(...) }`. Do not raise it as a finding.
 
-Out of lane (owned by rv-concurrency, not re-reviewed here): `runCatchingCancellable` cancellation correctness, asResult pipeline correctness. Note: as of coroutines 1.11.0 there is still no official stdlib/coroutines replacement for the runCatchingCancellable pattern (kotlinx.coroutines#1814 unresolved), so the custom helper remains the current best practice.
+Kotlin 2.4.0 stabilized: context parameters (except context arguments/callable refs),
+explicit backing fields, `@all` meta-target, the `kotlin.uuid.Uuid` API *except* the V4/V7
+**generation** functions. Explicit backing fields could replace `_uiState`/`asStateFlow()`
+in `PostingEditViewModel`, but kotlinlang.org/docs/coding-conventions.html still documents
+only the `_name` backing-property convention (re-checked 2026-09-06) and `asStateFlow()`
+prevents downcasting — Optional-only; do not push as churn.
 
-See [[currency-optins]] for the experimental opt-ins that are intentionally justified.
+Out of lane (owned by rv-concurrency): `runCatchingCancellable` cancellation correctness,
+`asResult` pipeline correctness. As of coroutines 1.11.0 there is still no official
+stdlib/coroutines replacement for the pattern (kotlinx.coroutines#1814 unresolved).
+
+See [[currency-optins]] for per-declaration opt-in status.
