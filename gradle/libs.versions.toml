@@ -11,7 +11,7 @@ android-sdk-target = "37"
 # Pinned for the same IntelliJ IDEA compatibility reason as the AGP version above.
 #noinspection GradleDependency,NewerVersionAvailable
 kotlin = "2.4.0"
-ksp = "2.3.9"
+ksp = "2.3.10"
 kover = "0.9.9"
 # Bundled with Compose Multiplatform 1.12.0; drives :desktopApp:hotRun and the
 # hotMcpServer endpoint. Runs on a JetBrains Runtime the plugin provisions itself.

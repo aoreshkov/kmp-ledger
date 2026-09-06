@@ -2,8 +2,13 @@ version: 2
 updates:
   # Keep GitHub Actions current. Dependabot updates both the pinned commit SHA
   # and the trailing "# vX" version comment, so SHA-pinning stays maintainable.
+  # `directories` (not `directory`) is what supports more than one path: a bare
+  # `directory: "/"` covers /.github/workflows and a root-level action.yml only,
+  # which silently left the repo's own composite action unscanned.
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories:
+      - "/"
+      - "/.github/actions/gradle-setup"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5

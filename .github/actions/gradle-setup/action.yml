@@ -2,19 +2,19 @@ name: gradle-setup
 description: "Setup Java and Gradle with caching"
 inputs:
   cache-disabled:
-    description: "Disable Gradle home caching for this job (e.g. the Windows desktop leg, where saves fail with a Path Validation Error)."
+    description: "Disable Gradle home caching for this job. No caller sets it today; kept as an escape hatch for a job whose cache is not worth storing."
     required: false
     default: "false"
 runs:
   using: "composite"
   steps:
     - name: Setup Java
-      uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5
+      uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6
       with:
         java-version: "21"
         distribution: "temurin"
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
+      uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
       with:
         cache-disabled: ${{ inputs.cache-disabled }}

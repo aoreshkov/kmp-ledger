@@ -193,13 +193,6 @@ jobs:
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
-        with:
-          # The Windows desktop build never saves its Gradle cache anyway:
-          # setup-gradle prunes the home for this narrow packaging task graph,
-          # then the granular saves fail with "Path Validation Error" (a known
-          # gradle/actions-on-Windows quirk). Disabling the cache on that leg
-          # removes 8 noisy warnings at no cost — the cache was never seeded.
-          cache-disabled: ${{ matrix.os == 'windows-latest' }}
 
       - name: Package Desktop App
         run: ./gradlew :desktopApp:packageDistributionForCurrentOS --no-configuration-cache
