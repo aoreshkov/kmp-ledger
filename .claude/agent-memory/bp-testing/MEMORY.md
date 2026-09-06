@@ -1,3 +1,3 @@
 # Memory Index
 
-- [Test-stack currency notes](test-stack-currency-notes.md) — v2 UI-test adoption + coroutines-test facts; the "CMP 1.11.1 / Kover 0.9.8 are latest" claims EXPIRED (now 1.12.0 / 0.9.9) — re-derive version claims before reuse
+- [Test-stack currency notes](test-stack-currency-notes.md) — v2 UI-test API confirmed still @ExperimentalTestApi at CMP 1.12.0; whole test stack at latest stable as of 2026-09-06; Robolectric SDK-37 lands in 4.17 (still beta)
