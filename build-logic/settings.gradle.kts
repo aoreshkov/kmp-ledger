@@ -1,6 +1,14 @@
 pluginManagement {
     repositories {
-        google()
+        // Content-filtered to match the root settings.gradle.kts: without this,
+        // every plugin and dependency lookup hits google() first.
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         gradlePluginPortal()
         mavenCentral()
     }
@@ -8,7 +16,13 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        google()
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
     }
     versionCatalogs {
