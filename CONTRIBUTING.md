@@ -32,9 +32,15 @@ JetBrains Runtime (hot reload needs its enhanced class redefinition) and caches 
 the project; normal builds are unaffected and keep using the daemon JDK.
 
 The same plugin exposes `:desktopApp:hotMcpServer`, an MCP endpoint that lets a coding
-agent reload, screenshot, read the semantic tree and drive the running app. `.mcp.json`
-wires it up for MCP clients that read that file. It invokes `./gradlew`, so on Windows
-register the server with the `gradlew.bat` form locally instead.
+agent reload, screenshot, read the semantic tree and drive the running app. It attaches to
+an app that is already running, so start one with `:desktopApp:hotRunAsync` first.
+
+`.mcp.json` wires the endpoint up for MCP clients that read that file. It starts the
+wrapper the way the `gradlew` scripts do internally — `java -classpath
+gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain` — rather than
+running `./gradlew`. MCP clients spawn the command without a shell, and `gradlew` is an
+extensionless POSIX script that Windows cannot execute; the wrapper JAR is identical on
+every platform and needs only `java` on `PATH`.
 
 ## Pull request expectations
 
