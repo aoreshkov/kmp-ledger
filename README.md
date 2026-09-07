@@ -185,13 +185,25 @@ plugins {
 }
 ```
 
-The compose convention plugin can also emit Compose compiler stability/skippability reports on demand:
+The compose convention plugin has an opt-in switch for the Compose compiler's
+stability/skippability reports:
 
 ```bash
 ./gradlew assemble -Pledger.composeCompilerReports=true
 ```
 
-Reports are written to each module's `build/compose_compiler/` directory and are off by default so normal builds aren't slowed.
+**This switch is known broken as of Kotlin 2.4.0** and produces no readable report — both
+destinations receive a single 0-byte file named after the Kotlin module instead of the
+documented `-classes.txt` / `-composables.txt` / `-module.json` files. To read a class's
+stability meanwhile, the compiler's synthetic `$stable` field says it directly (`0` = stable,
+`8` = unstable):
+
+```bash
+javap -p -c <module>/build/classes/kotlin/jvm/main/<Class>.class | grep -A2 'static {}'
+```
+
+Note that the stability configuration file is not a tracked task input, so editing
+`compose_stability.conf` leaves `compileKotlin*` UP-TO-DATE — measure with `--rerun-tasks`.
 
 ### 2. Feature API / Implementation split
 

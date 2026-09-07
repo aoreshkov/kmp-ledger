@@ -19,7 +19,6 @@ dependencies {
 
     // No local unit tests here: androidApp's only tests are instrumented (src/androidTest).
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
 }
 
