@@ -1,5 +1,5 @@
 public final class app/oreshkov/ledger/core/compose/LabeledFieldKt {
-	public static final fun LabeledField (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun LabeledField (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class app/oreshkov/ledger/core/compose/resources/ActualResourceCollectorsKt {

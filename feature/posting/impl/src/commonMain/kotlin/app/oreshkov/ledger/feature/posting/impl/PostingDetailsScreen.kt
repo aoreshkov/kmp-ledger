@@ -188,7 +188,11 @@ internal fun PostingDetailsContent(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        LabeledField(stringResource(Res.string.posting_details_field_narrative), posting.narrative, MaterialTheme.typography.titleLarge)
+                        LabeledField(
+                            label = stringResource(Res.string.posting_details_field_narrative),
+                            value = posting.narrative,
+                            style = MaterialTheme.typography.titleLarge
+                        )
                     }
                 }
             }
