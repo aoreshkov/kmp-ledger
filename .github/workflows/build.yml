@@ -167,8 +167,19 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Run instrumented tests on managed devices
-        run: ./gradlew :androidApp:ciGroupDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+      # One invocation per device, on purpose. A single invocation cannot run
+      # these two safely: the setup tasks install the same Android Emulator
+      # package into the one SDK directory and race there, and they create their
+      # AVD snapshots by booting the emulator *without* -read-only, which fails
+      # with "Another emulator instance is running" as soon as the other device
+      # is up. Splitting the run serialises both. Setup cannot be hoisted into
+      # its own step instead: the snapshot it produces lives in ~/.config/.android,
+      # outside the project tree, so the task re-runs rather than going UP-TO-DATE.
+      - name: Run instrumented tests on aospAtd30
+        run: ./gradlew :androidApp:aospAtd30DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+
+      - name: Run instrumented tests on google37
+        run: ./gradlew :androidApp:google37DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
 
       - name: Upload instrumented test reports
         if: always()

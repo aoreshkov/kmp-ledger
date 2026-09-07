@@ -88,12 +88,6 @@ android {
                     pageAlignment = ManagedVirtualDevice.PageAlignment.FORCE_16KB_PAGES
                 }
             }
-            groups {
-                create("ci") {
-                    targetDevices.add(localDevices["aospAtd30"])
-                    targetDevices.add(localDevices["google37"])
-                }
-            }
         }
     }
     compileOptions {
