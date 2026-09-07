@@ -19,8 +19,11 @@ dependencies {
 
     // No local unit tests here: androidApp's only tests are instrumented (src/androidTest).
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    // Nothing here calls Espresso directly; this only lifts the 3.5.0 that
+    // compose ui-test-junit4 brings, which cannot construct its event injector
+    // on API 37. See the version-catalog comment.
+    androidTestImplementation(libs.androidx.test.espresso.core)
 }
 
 android {

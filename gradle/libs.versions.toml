@@ -11,6 +11,8 @@ android-sdk-target = "37"
 # Pinned for the same IntelliJ IDEA compatibility reason as the AGP version above.
 #noinspection GradleDependency,NewerVersionAvailable
 kotlin = "2.4.0"
+# Pinned: 2.3.11 breaks AGP lint dependency validation. Suppressed on this line only.
+#noinspection GradleDependency,NewerVersionAvailable
 ksp = "2.3.10"
 kover = "0.9.9"
 # Bundled with Compose Multiplatform 1.12.0; drives :desktopApp:hotRun and the
@@ -45,7 +47,13 @@ logback = "1.6.3"
 
 # Test
 androidx-test-ext-junit = "1.3.0"
-androidx-test-espresso-core = "3.7.0"
+# Compose ui-test-junit4 drags espresso-core in at 3.5.0, whose
+# InputManagerEventInjectionStrategy eagerly reflects the hidden
+# InputManager.getInstance() at graph-construction time — the method is gone on
+# API 37, so every Compose test that idles through Espresso dies before it runs.
+# 3.7.0 reflects only below API 23 and uses Context.getSystemService above it.
+# Declared explicitly so the upgrade is visible instead of a resolution accident.
+androidx-test-espresso = "3.7.0"
 junit = "4.13.2"
 robolectric = "4.16.1"
 # Constraint-only: robolectric 4.16.1 pins bcprov 1.81 (GHSA-574f-3g2m-x479); remove once robolectric ships >= 1.84.
@@ -116,7 +124,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "compose-multiplatform" }
 compose-ui-test-junit4 = { module = "org.jetbrains.compose.ui:ui-test-junit4", version.ref = "compose-multiplatform" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
-androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso-core" }
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 junit = { module = "junit:junit", version.ref = "junit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }

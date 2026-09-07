@@ -10,7 +10,8 @@ import app.oreshkov.ledger.core.model.settings.ThemeMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import okio.IOException
+import androidx.datastore.core.IOException as DataStoreIOException
+import okio.IOException as OkioIOException
 
 internal class DataStoreSettingsRepository(
     private val dataStore: DataStore<Preferences>
@@ -19,7 +20,16 @@ internal class DataStoreSettingsRepository(
     override fun themeMode(): Flow<ThemeMode> = dataStore.data
         .catch { exception ->
             // DataStore guidance: recover from read IO errors by emitting empty prefs.
-            if (exception is IOException) emit(emptyPreferences()) else throw exception
+            // Two distinct types are needed. On Android/JVM both alias java.io.IOException,
+            // so either alone would do; on native they are disjoint hierarchies. okio's
+            // covers OkioStorage read failures, and CorruptionException extends DataStore's
+            // own IOException, which ReplaceFileCorruptionHandler rethrows when its
+            // replacement write also fails.
+            if (exception is OkioIOException || exception is DataStoreIOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
         }
         .map { preferences -> preferences[themeModeKey].toThemeMode() }
 

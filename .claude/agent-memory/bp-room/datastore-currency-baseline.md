@@ -1,71 +1,104 @@
 ---
 name: datastore-currency-baseline
-description: DataStore Preferences currency baseline for core:datastore — first audit 2026-09-06 against the pinned androidx-datastore 1.2.1; records what matches the KMP DataStore guide and the one artifact-choice gap
+description: DataStore Preferences currency baseline for core:datastore — re-verified 2026-09-07 against pinned androidx-datastore 1.2.1, with the artifact-graph and native-IOException facts settled from the published artifacts
 metadata:
   type: project
 ---
 
-First real audit of the DataStore half of this agent's remit: **2026-09-06**, against the
-pin `androidx-datastore = 1.2.1` (read from `gradle/libs.versions.toml`).
+DataStore half of this agent's remit. **Re-verified 2026-09-07** against the pin
+`androidx-datastore = 1.2.1` (read from `gradle/libs.versions.toml:28`).
 
 Sources read this round:
-- `developer.android.com/kotlin/multiplatform/datastore` — page last updated **2026-08-17**.
-- `developer.android.com/topic/libraries/architecture/datastore` — last updated **2026-08-27**.
-- `developer.android.com/jetpack/androidx/releases/datastore` — **1.2.1 stable 2026-03-11**
-  (no API/behaviour change vs 1.2.0, infra fixes only); 1.2.0 stable 2025-11-19. 1.2.1 is
-  the newest listed, so the pin sits on the latest stable. 1.2.x added `datastore-guava`,
-  Direct Boot (`createInDeviceProtectedStorage()` / `deviceProtectedDataStore()`),
-  `PreferencesFileSerializer`, a public `CorruptionHandler`, and a default constructor for
-  `ReplaceFileCorruptionHandler` — none of which changes this project's setup.
-- The pinned artifacts' own sources under the Gradle cache
-  (`...\modules-2\files-2.1\androidx.datastore\*\1.2.1\*-sources.jar`).
+- `developer.android.com/kotlin/multiplatform/datastore` — last updated **2026-08-17**.
+- `developer.android.com/jetpack/androidx/releases/datastore` — **1.2.1 (2026-03-11) is
+  still the newest stable**; no 1.2.2. Latest preview is **1.3.0-alpha10 (2026-07-29)**.
+- The published artifacts themselves, pulled from **Google Maven**
+  (`https://dl.google.com/dl/android/maven2/androidx/datastore/...`) — `.module` metadata,
+  `-sources.jar`, and the `.aar`/`.jar` class listings.
 
-**The single most useful thing verified this round — `createWithPath` is NOT stale.**
-The KMP guide's snippet builds the store per platform as
-`DataStoreFactory.create(storage = FileStorage(...))` on Android/JVM and
-`OkioStorage(FileSystem.SYSTEM, ...)` on iOS. The repo instead calls one shared
-`PreferenceDataStoreFactory.createWithPath { ... }` in commonMain. Reading the 1.2.1
-sources: the jvm/android actual of `createWithPath` delegates to
-`FileStorage(PreferencesFileSerializer)` and the native actual to
-`OkioStorage(FileSystem.SYSTEM, PreferencesSerializer)` — i.e. **exactly the storage the
-guide names, chosen per platform for you**. (The "default moved from OkioStorage to
-FileStorage" change is already inside the factory.) So the shared factory is equivalent to
-and simpler than the doc snippet. **Do not flag it, and do not propose rewriting
-`PreferencesDataStore.kt` into the guide's per-platform `Storage` form.**
+**Fetch artifacts from Google Maven, not Maven Central.** androidx is not on
+repo1.maven.org (404s). Also: enumerating the Gradle cache under
+`C:\work\settings\gradle\caches\modules-2\files-2.1\androidx.datastore` with `find`
+times out — go to the network instead, it is far faster.
 
-Also matching current guidance (do not flag):
-- `ReplaceFileCorruptionHandler { emptyPreferences() }` passed to the factory.
-- One `DataStore` instance per file: one `@Single` per platform actual, and the desktop UI
-  test builds its own store in a per-test temp dir. The docs' hard rule ("never more than
-  one instance for a given file in the same process; DataStore throws `IllegalStateException`")
-  is respected.
-- File name `ledger.preferences_pb` — the factory asserts the `preferences_pb` extension on
-  both jvm/android and native, so the name is load-bearing.
-- Reads: `dataStore.data` `Flow` + `.map`; writes: `edit {}`. No blocking reads anywhere.
-- Read-side `IOException` -> `emit(emptyPreferences())` — the documented recovery.
-- Per-platform paths: Android `filesDir` (matches the guide), iOS `NSDocumentDirectory`
-  (matches verbatim), JVM OS-aware app-data dirs (better than the guide's `java.io.tmpdir`,
-  and the guide itself says to prefer an app-support dir).
+## The 1.2.1 artifact graph (settled — this is the evidence for the artifact finding)
 
-**Open gap found (Optional): artifact choice.** `core/datastore/build.gradle.kts` (and the
-desktopApp test deps) declare the umbrella `androidx.datastore:datastore` +
-`androidx.datastore:datastore-preferences`, while the KMP guide's commonMain block names
-`datastore-core` + `datastore-preferences-core`. Verified from the sources jars that the
-umbrella artifacts are the `-core` ones plus delegate glue (`DataStoreDelegateUtils`,
-`PreferencesDataStoreDelegateUtils`, and on Android `PreferenceDataStoreDelegate`,
-`PreferenceDataStoreFile`, `SharedPreferencesMigration`) that this project never uses.
+From the `.module` metadata (`metadataApiElements`, i.e. commonMain):
+- `datastore-preferences-core` -> api: `datastore-core`, `datastore-core-okio`, `okio`,
+  kotlinx-serialization-core/protobuf.
+- `datastore` -> api: `datastore-core`, `datastore-core-okio`.
+- `datastore-preferences` -> api: **`datastore`** + **`datastore-preferences-core`**.
 
-**okio types in commonMain are legitimate here.** The code imports `okio.Path.Companion.toPath`
-and `okio.IOException` without declaring okio: `datastore-preferences-core` exposes okio as
-`api` (its `createWithPath` signature takes an `okio.Path`), so it is on the compile
-classpath either way. Platform mapping checked in the 1.2.1/okio 3.x sources:
-- jvm/android: `okio.IOException` *is* `java.io.IOException` (typealias), and
-  `androidx.datastore.core.IOException` is the same typealias -> one catch covers all.
-- native: `androidx.datastore.core.IOException` is its **own class extending `Exception`**,
-  unrelated to `okio.IOException`. Read failures on iOS come out of `OkioStorage` as
-  `okio.IOException` (covered), but `CorruptionException` extends the *datastore*
-  `IOException` and so is **not** covered on iOS if it ever escapes the corruption handler.
+Consequences, both verified by class-listing diff:
+- **`implementation(libs.androidx.datastore)` is 100% redundant** — `datastore-preferences`
+  api-depends on it. (This is a correction to the earlier note, which framed the finding
+  only as "umbrella vs `-core`" and missed the redundancy.)
+- Umbrella minus core, JVM: exactly one class each — `androidx/datastore/DataStoreDelegateUtils`
+  and `androidx/datastore/preferences/PreferencesDataStoreDelegateUtils`.
+- Umbrella minus core, Android AAR: `DataStoreDelegateKt`, `DataStoreFile`,
+  `DataStoreSingletonDelegate`, `OkioSerializerWrapper`, `migrations/SharedPreferencesMigration`,
+  `SharedPreferencesView`; and `PreferenceDataStoreDelegateKt`, `PreferenceDataStoreFile`,
+  `PreferenceDataStoreSingletonDelegate`, `SharedPreferencesMigrationKt`.
+- Grepped 2026-09-07: **nothing in the repo references any of them.** So swapping to
+  `datastore-preferences-core` alone compiles unchanged — `PreferenceDataStoreFactory.createWithPath`
+  lives in `datastore-preferences-core`, and `okio.Path` stays on the classpath because that
+  artifact exposes okio as `api`.
+
+## Native `IOException` mapping (settled — evidence for the catch-clause finding)
+
+From `datastore-core-1.2.1-sources.jar` / `datastore-core-jvm-1.2.1-sources.jar`:
+- `commonMain/androidx/datastore/core/Expect.kt:21`:
+  `expect open class IOException(message: String?, cause: Throwable?) : Exception`
+- `nativeMain/.../Actual.native.kt:25`: `actual open class IOException ... : Exception(...)`
+  — its **own class**, no relation to `okio.IOException`.
+- jvm actual: `actual typealias IOException = java.io.IOException` (and okio's jvm
+  `IOException` is the same typealias) -> on JVM/Android one catch covers everything.
+- `CorruptionException : IOException` (the *datastore* one), so on native it is **not**
+  caught by `catch (e: okio.IOException)`.
+- Escape path is real: `ReplaceFileCorruptionHandler`'s own KDoc — "If the handler
+  encounters an exception when attempting to replace data, the new exception is added as a
+  suppressed exception to the original exception and **the original exception is thrown**."
+
+Both types must be caught, because on native they are disjoint and each covers a different
+failure (okio -> `OkioStorage` read failures; datastore -> `CorruptionException`):
+
+```kotlin
+import androidx.datastore.core.IOException as DataStoreIOException
+import okio.IOException as OkioIOException
+// ...
+.catch { exception ->
+    if (exception is OkioIOException || exception is DataStoreIOException) {
+        emit(emptyPreferences())
+    } else {
+        throw exception
+    }
+}
+```
+On JVM the two aliases collapse to `java.io.IOException`; the doubled `is` check is legal
+and warning-free there (the subject is `Throwable`, so neither branch is statically true).
+
+## Matching current guidance — do not flag
+
+- **`createWithPath` is NOT stale.** The KMP guide builds per-platform `Storage`
+  (`FileStorage` on android/jvm, `OkioStorage` on iOS); `PreferenceDataStoreFactory.createWithPath`
+  picks *exactly those* per platform internally. The shared factory is equivalent and simpler.
+  **Never propose rewriting `PreferencesDataStore.kt` into the guide's per-platform form.**
+- `ReplaceFileCorruptionHandler { emptyPreferences() }` on the factory.
+- One instance per file: one `@Single` per platform actual; `core:datastore` jvmTest and
+  `desktopApp/src/test/.../DesktopUiTest.kt:47` each build their own store in a per-test
+  temp dir. No duplicate instance on one path anywhere.
+- `ledger.preferences_pb` — the factory asserts the `preferences_pb` extension on both
+  jvm/android and native, so the name is load-bearing.
+- `Flow` reads via `dataStore.data.map`, `edit {}` writes, no blocking reads.
+- Read-side recovery emits `emptyPreferences()` — the documented recovery.
+- Paths: Android `filesDir`, iOS `NSDocumentDirectory`, JVM OS-aware app-data dirs (better
+  than the guide's `java.io.tmpdir`).
+
+## Forward-looking (not a gap at 1.2.1)
+
+1.3.0-alpha07+ adds a `DataStore.Builder` API taking a `CoroutineContext` and recommends
+migrating off `DataStoreFactory`; also `datastore-tink` encryption, WASM/JS storage, and
+`createWithTracing`. All alpha — revisit only when 1.3.0 goes stable.
 
 **How to apply:** read the `androidx-datastore` pin before reusing anything here. If it is
-no longer 1.2.1, re-derive from that release's notes and the cached sources. Room has its
-own note: [[currency-baseline]].
+no longer 1.2.1, re-derive. Room has its own note: [[currency-baseline]].
