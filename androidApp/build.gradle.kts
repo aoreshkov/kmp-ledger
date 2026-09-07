@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -72,6 +73,19 @@ android {
                     device = "Pixel 2"
                     apiLevel = 30
                     systemImageSource = "aosp-atd"
+                }
+                // ATD images stop at API 30, so the target-SDK behaviour changes
+                // (edge-to-edge enforcement; the API 37 orientation/resizability
+                // changes, which have no opt-out) are unobservable there. AOSP
+                // ("default") images stop at API 36, so this one has to come from
+                // google_apis; 16 KB pages are forced because that is the only
+                // variant published from API 37.1 on, and it matches the hardware
+                // the app actually ships to.
+                create("google37") {
+                    device = "Pixel 9"
+                    apiLevel = 37
+                    systemImageSource = "google"
+                    pageAlignment = ManagedVirtualDevice.PageAlignment.FORCE_16KB_PAGES
                 }
             }
         }
