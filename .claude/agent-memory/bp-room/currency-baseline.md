@@ -1,11 +1,11 @@
 ---
 name: currency-baseline
-description: Room KMP currency baseline for core:database — re-verified against the pinned Room 3.0.2 on 2026-09-06 against the official KMP Room guide and the room3 release notes
+description: Room KMP currency baseline for core:database — re-verified 2026-09-07 against the pinned Room 3.0.2 / sqlite 2.7.0, the KMP Room guide and the room3 release notes
 metadata:
   type: project
 ---
 
-Room KMP layer (`core:database`) currency baseline. **Re-verified 2026-09-06 against the
+Room KMP layer (`core:database`) currency baseline. **Re-verified 2026-09-07 against the
 pin `androidx-room = 3.0.2` / `androidx-sqlite = 2.7.0`** (read from
 `gradle/libs.versions.toml`, not from this note).
 
@@ -72,3 +72,14 @@ Conflict-strategy *intent*, mapper correctness and the repository impl belong to
 differ from 3.0.2 / 2.7.0, re-derive from the release notes for *those* versions before
 reusing any verdict here, then correct this note in place. DataStore has its own note:
 [[datastore-currency-baseline]].
+
+**Re-check 2026-09-07 (one day on):** pins unchanged (`androidx-room = 3.0.2`,
+`androidx-sqlite = 2.7.0`); the room3 release notes still list **3.0.2 (2026-08-26) as the
+newest** — no 3.0.3, no 3.1.x. Everything above re-confirmed against the working tree.
+Two things newly verified this round, so they are not re-investigated next time:
+- `@Insert(onConflict = OnConflictStrategy.REPLACE)` in `PostingDao` is **current** —
+  in `room3-common-3.0.2` sources only `ROLLBACK` and `FAIL` carry `@Deprecated("Use ABORT
+  instead.")`; `REPLACE`, `ABORT`, `IGNORE`, `NONE` are not deprecated.
+- **No `@Transaction` anywhere in the repo, and none is needed**: every `PostingDao` method
+  is a single statement, and Room already wraps each in its own transaction. Do not raise a
+  missing-`@Transaction` finding unless a DAO method combining two statements appears.
