@@ -515,6 +515,27 @@ To release a new version:
 
 > **Note:** The release workflow includes a `verify-version` job that fails immediately if the pushed tag does not match `ledger.version.name` in `gradle.properties`. It also generates a `SHA256SUMS` file attached to the release and publishes a [SLSA build provenance attestation](https://slsa.dev) via `actions/attest`.
 
+### Verifying a release
+
+Every release carries a `SHA256SUMS` file and the matching attestation bundle,
+`SHA256SUMS.intoto.jsonl`. An attestation is only worth anything once someone checks it:
+
+```bash
+# 1. Confirm the downloaded binaries match the published checksums
+sha256sum -c SHA256SUMS
+
+# 2. Verify SLSA build provenance for a binary you downloaded.
+#    The attestation's subjects are the files listed *in* SHA256SUMS, so pass
+#    one of those files here — not SHA256SUMS itself.
+gh attestation verify ledger-1.8.0.msi --repo aoreshkov/kmp-ledger
+
+# Offline / air-gapped: verify against the bundle attached to the release
+# instead of the GitHub API.
+gh attestation verify ledger-1.8.0.msi \
+  --bundle SHA256SUMS.intoto.jsonl \
+  --repo aoreshkov/kmp-ledger
+```
+
 ### Android release signing
 
 Android release builds are **R8-minified with resource shrinking** (using the
