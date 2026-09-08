@@ -12,6 +12,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -20,6 +21,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import kotlinx.serialization.PolymorphicSerializer
 import app.oreshkov.ledger.core.domain.GetThemeModeUseCase
 import app.oreshkov.ledger.core.model.settings.ThemeMode
 import app.oreshkov.ledger.core.navigation.LocalNavigator
@@ -73,9 +75,22 @@ fun App() {
                 rememberNavBackStack(savedStateConfiguration, root)
             }
 
-            // Selected section. Plain remember: the section stacks themselves are restored
-            // across process death; only the selected tab resets to start, an acceptable root.
-            val currentTopLevel = remember { mutableStateOf<NavKey>(startDestination.key) }
+            // Selected section, restored across process death alongside the stacks above.
+            // PolymorphicSerializer stands in for nav3's NavKeySerializer, which is not in any
+            // released navigation3-runtime; the injected configuration already registers every
+            // NavKey polymorphically, which is what rememberNavBackStack above relies on too.
+            val currentTopLevel = rememberSerializable(
+                sectionRoots,
+                stateSerializer = PolymorphicSerializer(NavKey::class),
+                configuration = savedStateConfiguration,
+            ) { mutableStateOf<NavKey>(startDestination.key) }
+
+            // A restored key is NOT validated against the inputs above (rememberSerializable's
+            // own KDoc says so), so a section that no longer exists would blow up the Navigator's
+            // getValue lookup. Fall back to the start route instead.
+            if (currentTopLevel.value !in backStacks) {
+                currentTopLevel.value = startDestination.key
+            }
 
             val navigator = remember(backStacks) {
                 Navigator(
