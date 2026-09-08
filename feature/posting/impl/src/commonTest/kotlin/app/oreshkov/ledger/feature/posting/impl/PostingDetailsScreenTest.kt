@@ -3,20 +3,43 @@ package app.oreshkov.ledger.feature.posting.impl
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.test.waitUntilExactlyOneExists
+import app.oreshkov.ledger.core.domain.DeletePostingUseCase
+import app.oreshkov.ledger.core.domain.GetPostingUseCase
+import app.oreshkov.ledger.core.test.FakePostingRepository
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
 import app.oreshkov.ledger.core.test.posting
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalTestApi::class)
+@OptIn(ExperimentalTestApi::class, ExperimentalCoroutinesApi::class)
 class PostingDetailsScreenTest : PlatformComposeUiTest() {
+
+    // The VM-wired tests below drive viewModelScope, which dispatches on Main.
+    @BeforeTest
+    fun setUp() {
+        Dispatchers.setMain(StandardTestDispatcher())
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
 
     @Test
     fun errorState_showsErrorMessageAndRetryButton() = runComposeUiTest {
@@ -151,5 +174,60 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
             )
         }
         onNodeWithTag("loading").assertIsDisplayed()
+    }
+
+    @Test
+    fun deleteConfirmed_emitsDeletedEvent() = runComposeUiTest {
+        val repository = FakePostingRepository().apply { seed(posting()) }
+        val viewModel = PostingDetailsViewModel(
+            GetPostingUseCase(repository),
+            DeletePostingUseCase(repository),
+            postingId = "1",
+        )
+        var deleted = false
+
+        setContent {
+            PostingDetailsScreen(
+                onNavigateBack = {},
+                onEditClick = {},
+                onDeleted = { deleted = true },
+                viewModel = viewModel,
+            )
+        }
+
+        waitUntilExactlyOneExists(hasText("Groceries"))
+        onNodeWithContentDescription("Delete Posting").performClick()
+        onNodeWithText("Delete").performClick()
+
+        waitUntil { deleted }
+        assertEquals(listOf(posting()), repository.deletedPostings)
+    }
+
+    @Test
+    fun deleteFailure_showsSnackbar() = runComposeUiTest {
+        val repository = FakePostingRepository().apply { seed(posting()) }
+        val viewModel = PostingDetailsViewModel(
+            GetPostingUseCase(repository),
+            DeletePostingUseCase(repository),
+            postingId = "1",
+        )
+        var deleted = false
+
+        setContent {
+            PostingDetailsScreen(
+                onNavigateBack = {},
+                onEditClick = {},
+                onDeleted = { deleted = true },
+                viewModel = viewModel,
+            )
+        }
+
+        waitUntilExactlyOneExists(hasText("Groceries"))
+        repository.failNextWrite = true
+        onNodeWithContentDescription("Delete Posting").performClick()
+        onNodeWithText("Delete").performClick()
+
+        waitUntilExactlyOneExists(hasText("Failed to delete. Please try again."))
+        assertFalse(deleted, "a failed delete must not report the posting as deleted")
     }
 }
