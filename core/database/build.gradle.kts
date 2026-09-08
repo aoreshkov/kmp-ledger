@@ -1,7 +1,24 @@
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
 plugins {
     id("ledger.kotlin.multiplatform.koin")
     alias(libs.plugins.ksp)
     alias(libs.plugins.room3)
+}
+
+// Only hand-written code is measured here: the report excludes Room's `*_Impl*` KSP
+// output, which is otherwise ~96% of this module's bytecode. What is left is the
+// entity and the @Database declaration, so hold the line floor. No branch bound —
+// the module has no branches, and its real contract is the SQL inside @Query, which
+// coverage cannot see at all (PostingDaoTest is what guards that).
+kover {
+    reports {
+        verify {
+            rule("Database module coverage") {
+                minBound(90, CoverageUnit.LINE)
+            }
+        }
+    }
 }
 
 kotlin {
