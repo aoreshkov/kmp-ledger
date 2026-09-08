@@ -192,11 +192,24 @@ stability/skippability reports:
 ./gradlew assemble -Pledger.composeCompilerReports=true
 ```
 
-**This switch is known broken as of Kotlin 2.4.0** and produces no readable report — both
-destinations receive a single 0-byte file named after the Kotlin module instead of the
-documented `-classes.txt` / `-composables.txt` / `-module.json` files. To read a class's
-stability meanwhile, the compiler's synthetic `$stable` field says it directly (`0` = stable,
-`8` = unstable):
+Reports land in `<module>/build/compose_compiler/reports`, metrics in
+`.../metrics/<target>/<compilation>`.
+
+On Windows this needs a workaround, which the convention plugin applies for you while the switch
+is on. Kotlin 2.4.0 puts a `:` in the default module name (`Ledger.feature.posting:impl`), and the
+Compose compiler builds its report filenames from that name without sanitizing the colon — so NTFS
+files the report as an *alternate data stream* and leaves a 0-byte file named after the module.
+The plugin hands the compiler a colon-free module name for the duration of the reporting build, so
+the four report files appear under their documented names. Without that workaround the reports are
+still there and can be read directly:
+
+```powershell
+Get-Item <module>\build\compose_compiler\reports\* -Stream *
+Get-Content <that file> -Stream "impl-classes.txt" -Raw
+```
+
+For a quick check of one class, the compiler's synthetic `$stable` field says it directly
+(`0` = stable, `8` = unstable) without building a report at all:
 
 ```bash
 javap -p -c <module>/build/classes/kotlin/jvm/main/<Class>.class | grep -A2 'static {}'
