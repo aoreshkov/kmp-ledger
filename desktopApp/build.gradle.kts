@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.koin.compiler)
     alias(libs.plugins.compose.hot.reload)
+    alias(libs.plugins.kover)
 }
 
 dependencies {

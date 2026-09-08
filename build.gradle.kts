@@ -29,6 +29,12 @@ dependencies {
     kover(project(":feature:posting:impl"))
     kover(project(":feature:settings:api"))
     kover(project(":feature:settings:impl"))
+
+    // An app module, aggregated on purpose: DesktopUiTest boots the real App() over
+    // a real in-memory Room DB, DataStore, Koin graph and NavDisplay. Without this
+    // entry its execution data is discarded and none of the library code it
+    // exercises is credited.
+    kover(project(":desktopApp"))
 }
 
 kover {
@@ -38,12 +44,23 @@ kover {
                 classes(
                     "*ComposableSingletons*",
                     "*_Factory",
+                    // Room KSP output: the generated `*_Impl` DAO/database
+                    // implementations plus the `LedgerDatabaseConstructor` actual.
+                    // Generated code, same rationale as `*_Factory` (Koin) and
+                    // `$$serializer` (kotlinx.serialization) either side of it.
+                    "*_Impl*",
+                    "*DatabaseConstructor",
                     "*\$\$serializer",
                     // Compose `Res` accessors. Each module pins its own package via
                     // `packageOfResClass`, so this tracks `app.oreshkov.ledger.*.resources`
                     // rather than the `*.generated.resources` default.
                     "app.oreshkov.ledger.*.resources.*",
                     "*.compose.resources.*",
+                    // :desktopApp is aggregated above so DesktopUiTest's coverage
+                    // counts; its own entry points carry no logic, so they stay out
+                    // of the denominator.
+                    "app.oreshkov.ledger.MainKt",
+                    "app.oreshkov.ledger.LedgerApp",
                     // DI wiring lives in *.di packages; validated by Koin verify(),
                     // not by execution — exclude so coverage reflects real logic.
                     "*.di.*"
