@@ -28,8 +28,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.datastore)
-            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.androidx.datastore.core)
+            implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.kotlinx.coroutines.core)
             implementation(project(":core:common"))
             implementation(project(":core:domain"))
