@@ -552,13 +552,29 @@ sha256sum -c SHA256SUMS
 # 2. Verify SLSA build provenance for a binary you downloaded.
 #    The attestation's subjects are the files listed *in* SHA256SUMS, so pass
 #    one of those files here — not SHA256SUMS itself.
-gh attestation verify ledger-1.8.0.msi --repo aoreshkov/kmp-ledger
+#    --signer-workflow pins the identity to this repo's release workflow; with
+#    --repo alone, any workflow in the repo would satisfy the check.
+gh attestation verify ledger-1.8.0.msi \
+  --repo aoreshkov/kmp-ledger \
+  --signer-workflow aoreshkov/kmp-ledger/.github/workflows/release.yml
 
-# Offline / air-gapped: verify against the bundle attached to the release
-# instead of the GitHub API.
+# 3. Without the attestations API: verify against the bundle attached to the
+#    release. Sigstore trust material is still fetched over the network.
 gh attestation verify ledger-1.8.0.msi \
   --bundle SHA256SUMS.intoto.jsonl \
-  --repo aoreshkov/kmp-ledger
+  --repo aoreshkov/kmp-ledger \
+  --signer-workflow aoreshkov/kmp-ledger/.github/workflows/release.yml
+
+# 4. Fully offline: capture the Sigstore trusted root while still online, then
+#    verify with no network access at all. Regenerate trusted_root.jsonl
+#    whenever you import newly signed material — it carries no expiry, so a
+#    stale copy keeps accepting keys that have since been rotated or revoked.
+gh attestation trusted-root > trusted_root.jsonl   # online, ahead of time
+gh attestation verify ledger-1.8.0.msi \
+  --bundle SHA256SUMS.intoto.jsonl \
+  --custom-trusted-root trusted_root.jsonl \
+  --repo aoreshkov/kmp-ledger \
+  --signer-workflow aoreshkov/kmp-ledger/.github/workflows/release.yml
 ```
 
 ### Android release signing
