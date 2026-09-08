@@ -44,6 +44,10 @@ kover {
                 classes(
                     "*ComposableSingletons*",
                     "*_Factory",
+                    // Room KSP output (`*_Impl` DAO/database implementations and the
+                    // generated `LedgerDatabaseConstructor` actual).
+                    "*_Impl*",
+                    "*DatabaseConstructor",
                     "*\$\$serializer",
                     // Compose `Res` accessors; each module pins its own package via
                     // `packageOfResClass` under `app.oreshkov.ledger.*.resources`.
