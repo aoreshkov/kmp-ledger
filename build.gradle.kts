@@ -69,17 +69,21 @@ kover {
             }
         }
 
-        // Aggregate floors block regressions; branch stays modest (Compose synthetic
-        // branches). Per-module logic floors live in those modules' build files.
+        // Aggregate floors sit a few points under the actuals (98.88 line / 77.20
+        // branch / 98.50 instruction) so they block regressions without tripping on
+        // noise. Branch keeps wider headroom on purpose: 64% of the report's branches
+        // are Compose `$changed`/`$default` bitmask plumbing that re-shapes on a
+        // Compose compiler bump. Per-module logic floors live in those modules' build
+        // files.
         verify {
             rule("Aggregate line coverage") {
-                minBound(88, CoverageUnit.LINE)
+                minBound(95, CoverageUnit.LINE)
             }
             rule("Aggregate branch coverage") {
-                minBound(60, CoverageUnit.BRANCH)
+                minBound(70, CoverageUnit.BRANCH)
             }
             rule("Aggregate instruction coverage") {
-                minBound(84, CoverageUnit.INSTRUCTION)
+                minBound(95, CoverageUnit.INSTRUCTION)
             }
         }
     }
