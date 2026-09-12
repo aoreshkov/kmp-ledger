@@ -37,27 +37,12 @@ kotlin {
     }
 }
 
-// Koin compiler: full-graph validation doesn't honour the `providerOnly` flag the plugin itself
-// sets on a DSL `single<T> { … }` whose lambda builds T (KoinDSLTransformer sets it and
-// CallSiteValidator filters on it, but CompileSafetyValidator does not). It therefore walks T's
-// *constructor* and reports those parameters missing. Here that is test-only: DesktopUiTest's
-// `single<RoomDatabase.Builder<LedgerDatabase>> { … }` override yields false KOIN-D001 for
-// `klass` and `factory`. Those tests pass, so the graph is fine.
-//
-// This — not the multi-module false positive fixed in 1.1.0 — was always the real cause; the
-// earlier diagnosis blamed A3 for not seeing `PlatformDatabaseModule`'s platform `actual`, but
-// main source (`compileKotlin`, where that graph lives) compiles clean and the error names the
-// test's own `inMemoryDatabaseModule`.
-//
-// `compileSafety` is per-Gradle-project, so silencing the test compilation silences main too.
-// Acceptable: androidApp is an entry point with compile safety on and validates the identical
-// `BootstrapModule` closure, leaving only the JVM platform `actual`s uncovered at compile time,
-// and those are checked at runtime by core:bootstrap's KoinModuleVerificationTest. Remove once
-// the plugin honours `providerOnly` in the full-graph pass —
-// tracked at InsertKoinIO/koin-compiler-plugin#83.
-koinCompiler {
-    compileSafety = false
-}
+// Note — no `koinCompiler { compileSafety = false }` here any more. Plugin 1.1.0's
+// full-graph pass ignored the `providerOnly` flag on a DSL `single<T> { … }` whose
+// lambda builds T, so DesktopUiTest's in-memory `RoomDatabase.Builder` override drew
+// false KOIN-D001s for the builder's own constructor parameters. The escape hatch is
+// per-Gradle-project, so silencing the test compilation silenced main too. 1.2.1
+// compiles both source sets clean, so this entry point is compile-verified again.
 
 // Pin the Java side too: without this, compileJava targets whatever JDK runs the
 // Gradle daemon (IDEs may override gradle/gradle-daemon-jvm.properties with their

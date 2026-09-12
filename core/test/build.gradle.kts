@@ -39,8 +39,13 @@ kotlin {
 
 dependencies {
     constraints {
-        // robolectric 4.16.1 pins bcprov 1.81 (GHSA-574f-3g2m-x479, fixed in 1.84).
+        // Compose `ui-test-junit4` still declares espresso-core 3.5.0, whose
+        // InputManagerEventInjectionStrategy eagerly reflects the hidden
+        // InputManager.getInstance() at graph-construction time — gone on API 37,
+        // so `Espresso.onIdle` kills every Robolectric Compose test. 3.7.0 reflects
+        // only below API 23 and uses Context.getSystemService above it. Latent until
+        // Robolectric 4.17 let these tests actually run on SDK 37.
         // api scope so the constraint propagates to every consumer's unit-test classpath.
-        "androidMainApi"(libs.bouncycastle.bcprov)
+        "androidMainApi"(libs.androidx.test.espresso.core)
     }
 }
