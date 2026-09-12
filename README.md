@@ -62,12 +62,12 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 | Kotlin | 2.4.0 | Language and compiler |
 | Kotlin Gradle Plugin | 2.4.0 | Build tooling |
 | Compose Multiplatform | 1.12.0 | Shared UI (Android, iOS, Desktop) |
-| Room 3 / SQLite | 3.0.2 / 2.7.0 | Local database with KMP support |
+| Room 3 / SQLite | 3.0.3 / 2.7.1 | Local database with KMP support |
 | AndroidX DataStore (Preferences) | 1.2.1 | Multiplatform key-value persistence (theme preference) |
 | Navigation 3 | 1.1.7 (runtime) / 1.1.1 (ui) | Type-safe declarative navigation |
 | Material3 Adaptive Navigation Suite | 1.12.0-alpha03 | Adaptive top-level nav (bottom bar / rail / drawer) |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
-| Kermit | 2.1.0 | Kotlin Multiplatform logging |
+| Kermit | 2.2.0 | Kotlin Multiplatform logging |
 | Kover | 0.9.9 | Kotlin Multiplatform code coverage |
 | SLF4J / Logback | 2.0.19 / 1.6.3 | Desktop logging implementation |
 | Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
