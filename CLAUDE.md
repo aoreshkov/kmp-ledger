@@ -96,15 +96,15 @@ Three composable Gradle plugins — modules declare one of these instead of conf
 | Technology | Version |
 |---|---|
 | Kotlin | 2.4.0 |
-| Compose Multiplatform | 1.12.0 |
+| Compose Multiplatform | 1.12.1 |
 | Koin | 4.2.2 |
 | Room | 3.0.3 |
-| Navigation 3 | 1.1.7 (runtime) / 1.1.1 (ui) |
+| Navigation 3 | 1.1.7 (runtime) / 1.1.2 (ui) |
 | AndroidX DataStore | 1.2.1 |
 | Coroutines | 1.11.0 |
-| Kover | 0.9.9 |
+| Kover | 0.9.11 |
 
-Material3 and Material3 Adaptive are pinned to prerelease versions (`androidx-material3 = "1.12.0-alpha03"`, `androidx-adaptive = "1.3.0-beta02"`) on purpose: those are the exact coordinates Compose Multiplatform 1.12.0 declares itself aligned to. They are not debt to pay down, and moving either to a "stable" number would de-align the stack. Re-check the alignment table in the Compose Multiplatform release notes on every CM bump.
+Material3 and Material3 Adaptive are pinned to prerelease versions (`androidx-material3 = "1.12.0-alpha03"`, `androidx-adaptive = "1.3.0-rc01"`) on purpose: those are the exact coordinates Compose Multiplatform 1.12.1 declares itself aligned to. They are not debt to pay down, and moving either to a "stable" number would de-align the stack. Re-check the alignment table in the Compose Multiplatform release notes on every CM bump.
 
 AGP is pinned to the version the bundled IntelliJ IDEA plugin supports (the reason is commented in `gradle/libs.versions.toml`), and that pin now carries an expiry. `./gradlew help --warning-mode all` reports 5 configuration-phase deprecations — *"Using a Project object as a dependency notation … will fail with an error in Gradle 10"* — every one attributed to `com.android.internal.*` and none to this repo's own build scripts, so there is nothing here to fix. It is a constraint instead: **do not move to Gradle 10 while AGP is held at the IDEA ceiling.** When IDEA raises its ceiling and AGP is bumped, re-run that command and confirm the count is zero before evaluating Gradle 10.
 

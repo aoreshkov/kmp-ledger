@@ -11,11 +11,9 @@ android-sdk-target = "37"
 # Pinned for the same IntelliJ IDEA compatibility reason as the AGP version above.
 #noinspection GradleDependency,NewerVersionAvailable
 kotlin = "2.4.0"
-# Pinned: 2.3.11 breaks AGP lint dependency validation. Suppressed on this line only.
-#noinspection GradleDependency,NewerVersionAvailable
-ksp = "2.3.10"
-kover = "0.9.9"
-# Bundled with Compose Multiplatform 1.12.0; drives :desktopApp:hotRun and the
+ksp = "2.3.12"
+kover = "0.9.11"
+# Bundled with Compose Multiplatform 1.12.x; drives :desktopApp:hotRun and the
 # hotMcpServer endpoint. Runs on a JetBrains Runtime the plugin provisions itself.
 compose-hot-reload = "1.2.0"
 
@@ -23,14 +21,14 @@ compose-hot-reload = "1.2.0"
 androidx-activity = "1.13.0"
 androidx-lifecycle = "2.11.0"
 androidx-navigation3-runtime = "1.1.7"
-androidx-navigation3-ui = "1.1.1"
-androidx-adaptive = "1.3.0-beta02"
+androidx-navigation3-ui = "1.1.2"
+androidx-adaptive = "1.3.0-rc01"
 androidx-room = "3.0.3"
 androidx-sqlite = "2.7.1"
 androidx-datastore = "1.2.1"
 
 # Compose
-compose-multiplatform = "1.12.0"
+compose-multiplatform = "1.12.1"
 compose-material-icons = "1.7.3"
 androidx-material3 = "1.12.0-alpha03"
 
@@ -41,9 +39,9 @@ kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.11.0"
 kotlinx-binary-compatibility-validator = "0.18.2"
 kermit = "2.2.0"
-slf4j = "2.0.19"
-slf4j-android = "2.0.17-0"
-logback = "1.6.3"
+slf4j = "2.0.20"
+slf4j-android = "2.0.20-0"
+logback = "1.6.5"
 
 # Test
 androidx-test-ext-junit = "1.3.0"

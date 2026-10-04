@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgraded Compose Multiplatform to 1.12.1 (from 1.12.0). Material3 Adaptive moves to 1.3.0-rc01 (from 1.3.0-beta02) and JetBrains `navigation3-ui` to 1.1.2 (from 1.1.1), because those are the coordinates the 1.12.1 release declares itself aligned to. Material3 stays on 1.12.0-alpha03 and `navigation3-runtime` on 1.1.7, which that table also names. Every `org.jetbrains.compose` artifact resolves to a single 1.12.1.
+- Lifted the KSP pin: upgraded to 2.3.12 (from 2.3.10), and dropped the pin comment and its `#noinspection`. 2.3.12 ships the upstream fix for the implicit KSP → Android-KMP lint task dependency that made 2.3.11 unusable here. The three-task graph that failed on 2.3.11 with 16 validation problems (`kspAndroidHostTest` plus the two `androidHostTest` lint tasks in `core:database`) now reports none.
+- Upgraded Kover to 0.9.11 (from 0.9.9). This skips 0.9.10, whose test-task change 0.9.11 reverts.
+- Upgraded Logback to 1.6.5 (from 1.6.3), which fixes CVE-2026-104721 in `MDCBasedDiscriminator`. The project configures no MDC discriminator, so the flaw was not reachable here, but `logback-classic` ships on the desktop runtime classpath. Upgraded SLF4J to 2.0.20 (from 2.0.19) and `slf4j-android` to 2.0.20-0 (from 2.0.17-0), so the Android binding no longer lags the API it binds.
+
 ## [1.9.0] - 2026-09-18
 
 ### Added
