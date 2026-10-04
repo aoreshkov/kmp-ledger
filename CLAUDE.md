@@ -95,7 +95,7 @@ Three composable Gradle plugins — modules declare one of these instead of conf
 
 | Technology | Version |
 |---|---|
-| Kotlin | 2.4.0 |
+| Kotlin | 2.4.20 |
 | Compose Multiplatform | 1.12.1 |
 | Koin | 4.2.2 |
 | Room | 3.0.3 |

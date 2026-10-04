@@ -59,8 +59,8 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 
 | Library | Version | Role |
 |---|---|---|
-| Kotlin | 2.4.0 | Language and compiler |
-| Kotlin Gradle Plugin | 2.4.0 | Build tooling |
+| Kotlin | 2.4.20 | Language and compiler |
+| Kotlin Gradle Plugin | 2.4.20 | Build tooling |
 | Compose Multiplatform | 1.12.1 | Shared UI (Android, iOS, Desktop) |
 | Room 3 / SQLite | 3.0.3 / 2.7.1 | Local database with KMP support |
 | AndroidX DataStore (Preferences) | 1.2.1 | Multiplatform key-value persistence (theme preference) |

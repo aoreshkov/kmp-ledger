@@ -8,9 +8,11 @@ android-gradle-plugin = "9.1.1"
 android-sdk-compile = "37"
 android-sdk-min = "24"
 android-sdk-target = "37"
-# Pinned for the same IntelliJ IDEA compatibility reason as the AGP version above.
+# Moved by hand, never by Dependabot: confirm each bump syncs in both IntelliJ
+# IDEA and Android Studio first (2.4.20 was checked against IDEA 2026.2 with
+# AGP 9.1.1 and Gradle 9.8.0). Suppressed on this line only.
 #noinspection GradleDependency,NewerVersionAvailable
-kotlin = "2.4.0"
+kotlin = "2.4.20"
 ksp = "2.3.12"
 kover = "0.9.11"
 # Bundled with Compose Multiplatform 1.12.x; drives :desktopApp:hotRun and the
