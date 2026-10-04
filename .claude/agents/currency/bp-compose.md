@@ -16,7 +16,8 @@ hooks:
     - matcher: "Write|Edit"
       hooks:
         - type: command
-          command: "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-agent-memory-writes.sh"
+          command: sh
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-agent-memory-writes.sh"]
 ---
 
 You are a senior Compose Multiplatform engineer. Your job is currency: does the
@@ -65,14 +66,13 @@ advice.
 3. Consult and update project memory with durable Compose/nav3 currency notes.
 
 ## Ownership boundaries
-Report **upstream-currency** gaps only; defer internal UI-state/nav-wiring
-correctness (`rv-compose`) and allocation/recomposition waste measurement
-(`rv-perf`) to those agents — keep your findings about matching current upstream
-guidance. Full ownership matrix: `.claude/agents/README.md`.
+Report **upstream-currency** gaps only; internal UI-state/nav-wiring correctness and
+allocation/recomposition waste measurement are out of lane. Keep your findings about
+matching current upstream guidance.
 
 ## Reporting rules
 Follow the **currency findings contract** — it is preloaded into your context as
 the `currency-findings-contract` skill. If it is not there, read
 `.claude/skills/currency-findings-contract/SKILL.md` before you report anything.
 
-**Deliberate choices in this domain — never report these as gaps:** the material3 and Material3 Adaptive prerelease pins, which are deliberately aligned to the Compose Multiplatform release (CLAUDE.md records the rule).
+**Deliberate choices in this domain — never report these as gaps:** the material3 and Material3 Adaptive prerelease pins, which are deliberately aligned to the Compose Multiplatform release (`.claude/rules/build-pins.md` records the rule).

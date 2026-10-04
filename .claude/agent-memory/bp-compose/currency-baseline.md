@@ -145,9 +145,8 @@ glyphs; `desktopApp` already on the `ui.window.v2` API.
 exactly one `## Migration Notes` section with three items — `NativeCanvas`/`NativePaint`
 raised to `ERROR`; `SwingPanel(background=)` deprecated; `ComposePanel`/`ComposeWindow`/
 `ComposeDialog` needing `setPreferredSize` under infinite constraints. Grep-verified:
-none of those identifiers appear in hand-written source. Corroborated by
-`docs/2026-09-04-build-warnings-cleanup.md` — a full `clean allTests --rerun-tasks`
-on these exact pins produced **zero** `w:` lines from hand-written source, so no
+none of those identifiers appear in hand-written source. Corroborated on 2026-09-04
+by a full `clean allTests --rerun-tasks` that, on these exact pins, produced **zero** `w:` lines from hand-written source, so no
 WARNING-level deprecation is being hit anywhere.
 
 **Theme currency (2026-09-06).** `core/ui/.../theme/Theme.kt` is clean:

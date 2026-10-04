@@ -1,103 +1,77 @@
-# Agent roster & ownership matrix
+# Agent roster
 
-This project's subagents come in **two families**, grouped into subfolders. Claude
-Code discovers agents recursively and identifies them only by their `name`
-frontmatter, so the subfolder is purely organizational — it does not change how an
-agent is invoked.
+This project's subagents are the nine **`bp-*` upstream-currency auditors** in
+`agents/currency/`, orchestrated by `/review-currency`. Each asks one question of its
+domain: *"Do the code and our rules still match the latest official upstream guidance?"*
+They have `Read, Grep, Glob, Bash, WebSearch, WebFetch`. Claude Code discovers agents
+recursively and identifies them only by their `name` frontmatter, so the subfolder is
+purely organizational.
 
-| Family | Folder | Tools | Lens | Orchestrated by |
-|---|---|---|---|---|
-| **Review** (`rv-*`) | `agents/review/` | `Read, Grep, Glob, Bash` (no web) | *"Does the code obey this project's own rules?"* | `/review-house` |
-| **Currency** (`bp-*`) | `agents/currency/` | `+ WebSearch, WebFetch` | *"Do the code and our rules still match the latest official upstream guidance?"* | `/review-currency` |
+House-rules correctness ("does the code obey this project's own rules?") is **out of
+lane** for this family. It is reviewed outside this repo's config, against the rules in
+`CLAUDE.md`.
 
-All agents share the same posture: **read-only review** (they propose fixes, make no
+All agents share the same posture: **read-only review** (they propose fixes and make no
 code edits), `model: opus`, `memory: project`, `maxTurns: 40`, `effort: high`,
 `experimental.cacheTtl: 1h`.
 
 ## Two standing rules for this family
 
 **1. Read-only is enforced, not asked for.** `memory: project` makes the harness grant
-`Write`/`Edit` even though `tools:` omits them — otherwise the agent could not persist
-memory. So every agent carries a `PreToolUse` hook, matcher `"Write|Edit"`, running
-`.claude/hooks/guard-agent-memory-writes.sh`: a write under `.claude/agent-memory/`
-passes, anything else is blocked (exit 2) with a reason telling the agent to report the
+`Write`/`Edit` even though `tools:` omits them; otherwise the agent could not persist
+memory. So every agent carries a `PreToolUse` hook with matcher `"Write|Edit"` that runs
+`.claude/hooks/guard-agent-memory-writes.sh`. A write under `.claude/agent-memory/`
+passes. Anything else is blocked (exit 2), with a reason telling the agent to report the
 change as a finding instead. The hook lives in **agent frontmatter, not
-`settings.json`**, so it is active only while a review subagent runs and never
-constrains the main session. Agent-level hooks require trusting the folder containing
-the agent file. Do **not** "simplify" this to `disallowedTools: Write, Edit` — that
-would break `memory: project`.
+`settings.json`**, so it is active only while a currency subagent runs and never
+constrains the main session. Agent-level hooks require trusting the folder that contains
+the agent file. Do **not** "simplify" this to `disallowedTools: Write, Edit`, which would
+break `memory: project`.
 
 **2. Never hardcode what you can read from the repo.** An agent prompt must not assert a
-library version, a module name, or a target list. It names the *source* —
-`gradle/libs.versions.toml`, `gradle/wrapper/gradle-wrapper.properties`, `build-logic/`
-— and instructs the agent to read it. Copies of these facts rot silently: an audit on
-2026-09-06 found `bp-compose`, `bp-room` and `bp-testing` measuring the code against
-version pins that were ten weeks out of date, while `bp-gradle` and `bp-android` — the
-two that derived their versions — were still correct.
+library version, a module name, a target list, a sanctioned exception or an exclusion
+list. It names the *source*
+(`gradle/libs.versions.toml`, `gradle/wrapper/gradle-wrapper.properties`,
+`build-logic/`, or the `CLAUDE.md` section that owns a rule) and instructs the agent to
+read it. Copies of these facts rot silently:
+an audit on 2026-09-06 found `bp-compose`, `bp-room` and `bp-testing` measuring the code
+against version pins that were ten weeks out of date. `bp-gradle` and `bp-android`, the
+two that derived their versions, were still correct. Project facts rot the same way: on
+2026-10-04, `bp-koin` still listed a `compileSafety = false` workaround that had been
+removed a release earlier.
 
-The `bp-*` family also shares one reporting contract, factored into the
-`currency-findings-contract` skill and preloaded via each agent's `skills:` frontmatter
-rather than copy-pasted into nine bodies. Each `bp-*` body keeps only its own
-domain-specific *deliberate choices* line. The `rv-*` reporting rules are genuinely
-per-domain and stay inline.
+The family shares one reporting contract. It lives in the `currency-findings-contract`
+skill, which each agent preloads through its `skills:` frontmatter, rather than being
+copy-pasted into nine bodies. Each body keeps only its own domain-specific *deliberate
+choices* line.
 
-## Pairing / ownership matrix
+## Domains
 
-Each row is one domain. Where both a review and a currency agent exist, they are
-**paired**: the `rv-*` agent owns project-rules correctness, the `bp-*` agent owns
-upstream currency for the same files. When findings overlap, the currency agent
-defers the internal-correctness call to its review pair.
+| Domain | Agent | Color |
+|---|---|---|
+| Kotlin + coroutines | `bp-kotlin` | purple |
+| KMP structure / Swift export | `bp-kmp` | pink |
+| Compose + Navigation 3 | `bp-compose` | green |
+| Room / DataStore | `bp-room` | cyan |
+| Koin / DI | `bp-koin` | orange |
+| Gradle / build | `bp-gradle` | blue |
+| CI / supply chain | `bp-ci` | red |
+| Android platform | `bp-android` | yellow |
+| Testing | `bp-testing` | yellow |
 
-| Domain | Review (`rv-*`) | Currency (`bp-*`) | Shared color |
-|---|---|---|---|
-| Architecture / layering | `rv-arch` | — | yellow |
-| Kotlin + coroutines | `rv-concurrency` | `bp-kotlin` | purple |
-| KMP structure / Swift export | `rv-kmp` | `bp-kmp` | pink |
-| Compose + Navigation 3 | `rv-compose` | `bp-compose` | green |
-| Room / DataStore / data layer | `rv-data` | `bp-room` | cyan |
-| Koin / DI | `rv-di` | `bp-koin` | orange |
-| Gradle / build | `rv-build` | `bp-gradle` | blue |
-| CI / supply chain | `rv-ci` | `bp-ci` | red |
-| Android platform | — | `bp-android` | — |
-| Testing | `rv-testing` | `bp-testing` | yellow |
-| Security | `rv-security` | — | — |
-| Performance | `rv-perf` | — | — |
-
-## Color scheme
-A **paired domain shares one hue** so the pairing reads at a glance in `/agents`:
-purple (Kotlin), green (Compose), cyan (Room), orange (Koin), blue (Gradle), red (CI),
-pink (KMP), yellow (Testing). With eight paired domains the eight available hues are
-now fully consumed by pairs, so hue is **no longer a unique pairing signal** — the four
-remaining single-family agents (`rv-arch`, `rv-security`, `rv-perf`, `bp-android`)
-reuse hues, and **the matrix above is the authoritative source of pairing**, not the
-color. Treat the shared hue as a convenience, not a guarantee.
-
-## Coverage asymmetry (deliberate — do not "fill the gaps" blindly)
-A few domains are single-family on purpose:
-- **`rv-`only** (`rv-arch`, `rv-security`, `rv-perf`): house-judgment / correctness
-  lenses with little fast-moving upstream "currency" to track. Android privacy
-  currency is covered by `bp-android`; Kotlin/coroutine currency by `bp-kotlin`.
-- **`bp-`only** (`bp-android`): a platform-currency lens whose project-rules angle is
-  already covered by `rv-arch` / `rv-ci`.
-
-Add a new agent only when a domain genuinely needs the *other* lens — not for symmetry
-alone.
+Where two domains touch the same files, the boundary is stated in each body's
+*Ownership boundaries* section (for example, CI workflows belong to `bp-ci`, the build
+system to `bp-gradle`).
 
 ## Memory
 Each agent has `memory: project`, stored at `.claude/agent-memory/<name>/` (keyed by
 `name`, not by folder). Renaming an agent means renaming its memory dir too.
 
 ## Adding or renaming an agent
-1. Put the file in the right family folder; set a unique `name` (the identity).
-2. Add it to this matrix and to the orchestrating skill's specialist list
-   (`/review-house` or `/review-currency`), **and** to `/review-all`'s roster.
-3. If it has a pair, give both the same color and note the lane boundary here rather
-   than restating it in each agent body. Check the pair reference in **both** bodies —
-   a stale one (`bp-ci` pointed at `rv-build` for ten weeks) silently breaks the
-   cross-lens de-duplication rule.
-4. Copy the shared frontmatter block (`model`, `memory`, `maxTurns`, `effort`,
-   `experimental`, `hooks`) from a sibling; for a `bp-*` agent also add
-   `skills: [currency-findings-contract]`.
-5. Keep the `description` short — it loads at every session start, while the body
-   loads only when the agent runs. Target the ~220–260 char band the existing agents
-   sit in, and put sources, checklists and boundaries in the body.
+1. Put the file in `agents/currency/` and set a unique `name` (that is its identity).
+2. Add it to the table above and to `/review-currency`'s specialist list and waves.
+3. Copy the shared frontmatter block (`model`, `memory`, `maxTurns`, `effort`,
+   `experimental`, `hooks`, `skills: [currency-findings-contract]`) from a sibling.
+4. Keep the `description` short. It loads at every session start, while the body loads
+   only when the agent runs. Aim for the ~220–260 character band the existing agents sit
+   in, and put sources, checklists and boundaries in the body.

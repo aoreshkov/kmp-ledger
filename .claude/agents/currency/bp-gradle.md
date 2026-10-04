@@ -16,7 +16,8 @@ hooks:
     - matcher: "Write|Edit"
       hooks:
         - type: command
-          command: "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-agent-memory-writes.sh"
+          command: sh
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-agent-memory-writes.sh"]
 ---
 
 You are a senior build engineer. Your job is currency: does the Gradle build
@@ -59,9 +60,9 @@ for those versions; note newer-stable changes separately.
 3. Consult and update project memory with durable Gradle currency notes.
 
 ## Ownership boundaries
-Report **upstream-currency** gaps only; defer internal correctness of the convention
-plugins, Kover wiring, and target config to your review-family pair `rv-build`, and
-CI workflow hardening to `bp-ci`. Full ownership matrix: `.claude/agents/README.md`.
+Report **upstream-currency** gaps only; internal correctness of the convention plugins,
+Kover wiring and target config is out of lane, and CI workflow hardening belongs to
+`bp-ci`. Roster: `.claude/agents/README.md`.
 
 ## Reporting rules
 Follow the **currency findings contract** — it is preloaded into your context as

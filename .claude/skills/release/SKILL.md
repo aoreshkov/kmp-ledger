@@ -5,7 +5,6 @@ disable-model-invocation: true
 argument-hint: [version]
 arguments: version
 allowed-tools: Bash(git tag*), Bash(git diff*), Bash(git add gradle.properties CHANGELOG.md), Bash(git commit*), Read, Edit, AskUserQuestion
-context: fork
 ---
 
 ## Previous tag
@@ -126,7 +125,7 @@ Stage exactly these two files — nothing else:
 git add gradle.properties CHANGELOG.md
 ```
 
-Commit message (no Co-Authored-By trailer):
+Commit message:
 ```
 chore: bump version to <confirmed version>
 ```

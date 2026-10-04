@@ -44,9 +44,10 @@ https://insert-koin.io/docs/setup/compiler-plugin/ , https://insert-koin.io/docs
 
 **Known 1.1.0 bug affecting this repo — don't re-diagnose.** Full-graph validation ignores the
 `providerOnly` flag on a DSL `single<T> { … }` whose lambda builds `T`, so it walks `T`'s
-constructor and reports those params missing. `desktopApp` keeps `compileSafety = false` for this
+constructor and reports those params missing. Under 1.1.0 `desktopApp` needed `compileSafety = false` for this
 (DesktopUiTest's `RoomDatabase.Builder` override). NOT the multi-module false positive 1.0.2/1.1.0
-fixed. Upstream InsertKoinIO/koin-compiler-plugin#83; `docs/2026-08-01-koin-compiler-1.1.0-upgrade.md`.
+fixed. Upstream InsertKoinIO/koin-compiler-plugin#83. **1.2.1 fixed it:** the workaround
+is removed and all three entry points are compile-verified (`desktopApp/build.gradle.kts`).
 
 **Compiler plugin, not KSP** (`io.insert-koin.compiler.plugin`, applied in
 `build-logic/src/main/kotlin/ledger.kotlin.multiplatform.koin.gradle.kts`). KSP args like
