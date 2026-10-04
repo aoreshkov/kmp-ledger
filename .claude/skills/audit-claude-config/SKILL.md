@@ -25,7 +25,7 @@ user explicitly asks where to save it.
 
 Enumerate and read what exists today:
 - `git ls-files '.claude/agents/**/*.md' '.claude/skills/*/SKILL.md'` (agents live in
-  family subfolders `agents/review/` and `agents/currency/`, so recurse; plus untracked:
+  family subfolders such as `agents/currency/`, so recurse; plus untracked:
   `Glob .claude/agents/**` and `.claude/skills/**`).
 - Read every agent and skill file. Record each one's frontmatter fields and values
   (`name`, `description`, `tools`, `model`, `memory`, `color`, `maxTurns`, `effort`,
@@ -60,7 +60,8 @@ Spawn the **`claude-code-guide`** subagent (it has WebSearch/WebFetch). Its task
 >    scopes, multi-agent orchestration / concurrency, when to use a **hook vs a
 >    skill vs CLAUDE.md** (deterministic guardrail vs request), and the
 >    skills-vs-subagents-vs-slash-commands decision framework.
-> 5. Any fields or guidance that are NEW or CHANGED versus mid-2026.
+> 5. Any fields or guidance that are NEW or CHANGED since the previous audit report
+>    (if the user has one).
 > Where the docs are silent, say "not documented" rather than guessing.
 
 If a `claude-code-guide` agent from this session is still running or recently
@@ -100,5 +101,4 @@ Print the top findings and ask the user which to apply:
   confirm each edit landed and report what changed.
 - **stop** — leave all config untouched; the report stands on its own.
 
-Never commit. If the user wants a commit afterward, follow the project's `commit`
-conventions (conventional message, no `Co-Authored-By` trailer).
+Never commit. If the user wants a commit afterward, use a conventional commit message.

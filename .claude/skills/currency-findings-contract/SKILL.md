@@ -1,7 +1,6 @@
 ---
 name: currency-findings-contract
-description: The shared reporting contract for the bp-* upstream-currency specialists. Preloaded into each bp-* subagent via its `skills:` frontmatter; not invocable directly.
-disable-model-invocation: true
+description: Internal — preloaded by the bp-* currency subagents through their `skills:` frontmatter. Never invoke it in the main conversation. Holds their shared reporting contract.
 user-invocable: false
 ---
 
@@ -50,10 +49,12 @@ reach a source, report the finding as unverified rather than as fact.
 
 Only **upstream-currency** gaps — places where the code diverges from current
 official best practice for the pinned version. Not house-style preferences, not
-internal correctness (that belongs to your `rv-*` pair — see the ownership matrix in
-`.claude/agents/README.md`), and not speculative refactors.
+internal correctness (house-rules review is out of your lane), and not speculative
+refactors.
 
-Respect deliberate, documented project decisions. A pin that CLAUDE.md, this repo's
+Respect deliberate, documented project decisions. They live in `CLAUDE.md` and in the
+area rules under `.claude/rules/` (build pins, Kover, Compose stability, resources,
+Room); read the ones for your domain before you judge. A pin that CLAUDE.md, this repo's
 docs, or your agent memory records as intentional is **not** a finding; at most, note
 whether the *reason* for it still holds. Generating churn against a decision the
 project already made is worse than reporting nothing. But "intentional" carries the
@@ -76,6 +77,13 @@ For each finding give, in this order:
 Say so plainly. **Invent nothing.** A short "this area matches current guidance as of
 <date>, verified against <source>" is a complete and valuable report — padding it with
 manufactured Optional findings makes the whole sweep less trustworthy.
+
+## Your memory is public
+
+`.claude/agent-memory/` is committed and published with this open-source repo. Never
+write `docs/` paths (that folder is private), local filesystem paths, private repo
+names, or email addresses into it. Record the fact itself and the date it was
+verified, not a pointer to where it was written down.
 
 ## Before you finish
 

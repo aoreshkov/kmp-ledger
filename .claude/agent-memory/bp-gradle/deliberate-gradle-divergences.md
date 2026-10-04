@@ -11,8 +11,8 @@ mention as "intentional" — never raise as Should-fix.
 - **Explicit per-target `jvmTarget = JVM_21` instead of `jvmToolchain(21)`/Java toolchain.**
   Set on base plugin `jvm()`, `androidApp`, `desktopApp`. Reproducibility comes from the
   daemon being pinned to JDK 21 (`gradle/gradle-daemon-jvm.properties` →
-  `toolchainVersion=21`) plus CI Temurin 21. Decision recorded in
-  `docs/full-review-2026-06-23.md` (C1/S1) and rv-build memory [[jvm-target-config]]. 21 is
+  `toolchainVersion=21`) plus CI Temurin 21. Decided in the
+  2026-06-23 full review. 21 is
   a hard ceiling (daemon JDK).
 - **material3 and adaptive are pinned to prerelease versions on purpose.** The rule, not
   the number: they must be *the exact coordinates Compose Multiplatform declares alignment

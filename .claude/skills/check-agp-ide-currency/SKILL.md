@@ -17,8 +17,9 @@ project's actual pins and present a dated report **inline** (in the conversation
 The governing fact: **IntelliJ IDEA's bundled Android plugin lags the AGP release
 train and lags Android Studio**, so IDEA is almost always the binding constraint —
 the highest AGP that opens in both IDEs equals the IDEA ceiling. This project
-deliberately pins AGP to that ceiling (see the `agp-pinned-to-idea-ceiling` project
-memory). This skill re-validates that pin whenever the IDEs or AGP move.
+deliberately pins AGP to that ceiling (see `.claude/rules/build-pins.md` and the
+comment above `android-gradle-plugin` in `gradle/libs.versions.toml`). This skill
+re-validates that pin whenever the IDEs or AGP move.
 
 This skill **makes no changes on its own** — it researches, reports, and then offers
 to apply a bump. It never commits or pushes. Do not persist the report to a file
@@ -31,8 +32,8 @@ unless the user asks.
 - `gradle/libs.versions.toml` → `android-gradle-plugin`, `kotlin`, and `ksp`.
 - `gradle/wrapper/gradle-wrapper.properties` → the Gradle wrapper `distributionUrl`
   version.
-- The `agp-pinned-to-idea-ceiling` project memory (the last-recorded IDEA AGP ceiling
-  and the rationale) and `material3-version-pin` if relevant. Treat memory as a
+- `.claude/rules/build-pins.md` and the catalog comment (the rationale), plus any
+  project memory that records the last-verified IDEA ceiling. Treat both as a
   point-in-time baseline to reconcile against live data — not as current truth.
 
 ### 2. Research the latest — live, do not trust memory
@@ -110,7 +111,7 @@ here?"**
   its matching `<kotlin>-<n>` build and may touch `compose-compiler` — call those out
   before editing. Remind the user that any public-API surface change then needs
   `./gradlew apiDump` + committed `*/api/` dumps (BCV), and that commit/push follow the
-  project's own `commit` conventions — never commit or push from here.
+  conventional commit style — never commit or push from here.
 - **stop** — leave everything untouched; the report stands on its own.
 
 Whenever the established IDEA ceiling differs from what the `agp-pinned-to-idea-ceiling`

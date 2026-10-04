@@ -48,8 +48,8 @@ version below as a **dated observation**, not a standing fact — re-read
 - **Swift-export dead config (Optional, still present)**: `iosExport/build.gradle.kts` declares
   `binaries.framework { baseName = "LedgerBinary" }` on both iOS targets; nothing consumes it
   (Xcode only calls `embedSwiftExportForXcode`) and Kotlin 2.4.0 removed the consumable
-  configurations that exposed Apple frameworks as outgoing artifacts (KT-74503). Tracked as O3
-  in docs/best-practices-review-2026-06-26-outstanding.md.
+  configurations that exposed Apple frameworks as outgoing artifacts (KT-74503). Open as an
+  Optional item since the 2026-06-26 review.
   **Corrected 2026-09-06:** the previously noted inert `swiftExport { }` block in
   `core/bootstrap/build.gradle.kts` is **gone** — that file no longer contains it. Do not
   re-report it.

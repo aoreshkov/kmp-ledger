@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# PreToolUse guard for the rv-*/bp-* review specialists.
+# PreToolUse guard for the bp-* review specialists.
 #
 # The review agents advertise a read-only posture, but `memory: project` makes the
 # harness grant them Write/Edit so they can persist notes. This hook keeps both:
