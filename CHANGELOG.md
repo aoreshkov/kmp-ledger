@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-10-05
+
 ### Changed
 - Upgraded Compose Multiplatform to 1.12.1 (from 1.12.0). Material3 Adaptive moves to 1.3.0-rc01 (from 1.3.0-beta02) and JetBrains `navigation3-ui` to 1.1.2 (from 1.1.1), because those are the coordinates the 1.12.1 release declares itself aligned to. Material3 stays on 1.12.0-alpha03 and `navigation3-runtime` on 1.1.7, which that table also names. Every `org.jetbrains.compose` artifact resolves to a single 1.12.1.
 - Lifted the KSP pin: upgraded to 2.3.12 (from 2.3.10), and dropped the pin comment and its `#noinspection`. 2.3.12 ships the upstream fix for the implicit KSP → Android-KMP lint task dependency that made 2.3.11 unusable here. The three-task graph that failed on 2.3.11 with 16 validation problems (`kspAndroidHostTest` plus the two `androidHostTest` lint tasks in `core:database`) now reports none.
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded Logback to 1.6.5 (from 1.6.3), which fixes CVE-2026-104721 in `MDCBasedDiscriminator`. The project configures no MDC discriminator, so the flaw was not reachable here, but `logback-classic` ships on the desktop runtime classpath. Upgraded SLF4J to 2.0.20 (from 2.0.19) and `slf4j-android` to 2.0.20-0 (from 2.0.17-0), so the Android binding no longer lags the API it binds.
 - Upgraded Kotlin to 2.4.20 (from 2.4.0). This brings the build back toward the officially tested matrix: Kotlin 2.4.0 is tested only up to AGP 9.1.0 and Gradle 9.5.0, while 2.4.20 covers AGP up to 9.3.1, which includes the pinned 9.1.1. The project was confirmed to build in IntelliJ IDEA 2026.2 on this exact Kotlin/AGP/Gradle set. The klib and JVM API dumps are unchanged, and Compose stability inference is unaffected. AGP stays at 9.1.1, IDEA's current ceiling. The Kotlin pin comment now records that Kotlin moves by hand after an IDE sync check, rather than being held at the IDE ceiling, and Dependabot still leaves it alone.
 - Upgraded the Gradle wrapper to 9.8.0 (from 9.7.1) through the `wrapper` task, so the distribution checksum, `gradle-wrapper.jar` and `gradlew.bat` (which gains 9.8.0's safety-net preamble) move together.
+- Bumped pinned GitHub Actions: `gradle/actions/wrapper-validation` and `gradle/actions/dependency-submission` (v6, newer commit), `github/codeql-action/upload-sarif` v4.38.2.
 
 ## [1.9.0] - 2026-09-18
 
@@ -272,7 +275,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.9.1...HEAD
+[1.9.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.6.5...v1.7.0
