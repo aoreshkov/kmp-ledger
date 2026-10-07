@@ -28,6 +28,11 @@ kotlin {
             api(project(":core:common"))
             api(project(":core:domain"))
         }
+        // AppStateRestorationTest needs a real StringResource for a TopLevelDestination label;
+        // core:ui has no resources, and test-source-set resources never reach host tests.
+        getByName("androidHostTest").dependencies {
+            implementation(project(":core:compose"))
+        }
     }
 }
 
