@@ -109,6 +109,21 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
     }
 
     @Test
+    fun saveButton_isDisabled_whileSaving() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Editing(narrative = "Groceries", isSaving = true),
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Save").assertIsNotEnabled()
+    }
+
+    @Test
     fun errorState_showsErrorMessage() = runComposeUiTest {
         setContent {
             PostingEditContent(

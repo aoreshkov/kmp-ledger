@@ -41,10 +41,12 @@ sealed interface app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState 
 
 sealed interface app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState|null[0]
     final class Editing : app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing|null[0]
-        constructor <init>(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.<init>|<init>(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean){}[0]
+        constructor <init>(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.<init>|<init>(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
 
         final val isEditMode // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isEditMode|{}isEditMode[0]
             final fun <get-isEditMode>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isEditMode.<get-isEditMode>|<get-isEditMode>(){}[0]
+        final val isSaving // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isSaving|{}isSaving[0]
+            final fun <get-isSaving>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isSaving.<get-isSaving>|<get-isSaving>(){}[0]
         final val isValid // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isValid|{}isValid[0]
             final fun <get-isValid>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isValid.<get-isValid>|<get-isValid>(){}[0]
         final val narrative // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.narrative|{}narrative[0]
@@ -60,7 +62,8 @@ sealed interface app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { /
         final fun component2(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component2|component2(){}[0]
         final fun component3(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component3|component3(){}[0]
         final fun component4(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component4|component4(){}[0]
-        final fun copy(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.copy|copy(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean){}[0]
+        final fun component5(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component5|component5(){}[0]
+        final fun copy(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.copy|copy(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.toString|toString(){}[0]

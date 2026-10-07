@@ -103,7 +103,7 @@ internal fun PostingEditContent(
                     if (uiState is PostingEditUiState.Editing) {
                         TextButton(
                             onClick = onSaveClick,
-                            enabled = uiState.isValid
+                            enabled = uiState.isValid && !uiState.isSaving
                         ) {
                             Text(stringResource(Res.string.posting_edit_save))
                         }

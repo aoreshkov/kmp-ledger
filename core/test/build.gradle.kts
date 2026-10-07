@@ -22,7 +22,8 @@ kotlin {
             api(project(":core:domain"))
             api(project(":core:common"))
             implementation(libs.compose.runtime)
-            implementation(libs.kotlinx.coroutines.core)
+            // api: coroutines types (Flow, CompletableDeferred) are part of the fakes' public API.
+            api(libs.kotlinx.coroutines.core)
         }
         androidMain.dependencies {
             api(libs.robolectric)
