@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -26,6 +27,7 @@ sealed interface PostingEditUiState {
         val narrative: String = "",
         val narrativeTouched: Boolean = false,
         val saveError: Boolean = false,
+        val isSaving: Boolean = false,
     ) : PostingEditUiState {
         val narrativeError: Boolean get() = narrativeTouched && narrative.isBlank()
         val isValid: Boolean get() = narrative.isNotBlank()
@@ -82,23 +84,23 @@ class PostingEditViewModel(
     fun onNarrativeChange(newValue: String) = updateEditing { it.copy(narrative = newValue, narrativeTouched = true) }
 
     fun savePosting() {
-        updateEditing {
-            it.copy(
-                narrativeTouched = true,
-                saveError = false,
-            )
+        val previous = _uiState.getAndUpdate { state ->
+            if (state !is PostingEditUiState.Editing || state.isSaving) state
+            else state.copy(narrativeTouched = true, saveError = false, isSaving = state.isValid)
         }
-        val editing = _uiState.value as? PostingEditUiState.Editing ?: return
-        if (!editing.isValid) return
+        // Re-entry guard: a second tap while a save is in flight must not start another
+        // write (in create mode that inserts a duplicate row and navigates back twice).
+        if (previous !is PostingEditUiState.Editing || previous.isSaving || !previous.isValid) return
 
         viewModelScope.launch {
             savePostingUseCase(
                 id = postingId,
-                narrative = editing.narrative
+                narrative = previous.narrative
             ).onSuccess {
+                // isSaving stays true: the screen is navigating away, so Save stays disabled.
                 _navigationEvent.send(Unit)
             }.onFailure {
-                updateEditing { it.copy(saveError = true) }
+                updateEditing { it.copy(saveError = true, isSaving = false) }
             }
         }
     }

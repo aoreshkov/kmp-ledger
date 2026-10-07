@@ -10,11 +10,13 @@ public final class app/oreshkov/ledger/core/test/FakePostingRepository : app/ore
 	public final fun getShouldThrowOnGetAll ()Z
 	public final fun getShouldThrowOnGetById ()Z
 	public final fun getUpdatedPostings ()Ljava/util/List;
+	public final fun getWriteGate ()Lkotlinx/coroutines/CompletableDeferred;
 	public fun insertPosting (Lapp/oreshkov/ledger/core/model/data/NewPosting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun seed ([Lapp/oreshkov/ledger/core/model/data/Posting;)V
 	public final fun setFailNextWrite (Z)V
 	public final fun setShouldThrowOnGetAll (Z)V
 	public final fun setShouldThrowOnGetById (Z)V
+	public final fun setWriteGate (Lkotlinx/coroutines/CompletableDeferred;)V
 	public fun updatePosting (Lapp/oreshkov/ledger/core/model/data/Posting;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

@@ -4,6 +4,7 @@ import app.oreshkov.ledger.core.common.util.randomUuidString
 import app.oreshkov.ledger.core.domain.repository.PostingRepository
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.model.data.NewPosting
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emitAll
@@ -23,21 +24,33 @@ class FakePostingRepository : PostingRepository {
 
     var failNextWrite: Boolean = false
 
-    override suspend fun insertPosting(posting: NewPosting) {
+    /**
+     * Opt-in suspension point: while set, every write suspends on it before running, so a
+     * test can hold a write in flight (e.g. to tap Save again) and release it with
+     * [CompletableDeferred.complete].
+     */
+    var writeGate: CompletableDeferred<Unit>? = null
+
+    private suspend fun beforeWrite() {
+        writeGate?.await()
         if (failNextWrite) { failNextWrite = false; error("DB error") }
+    }
+
+    override suspend fun insertPosting(posting: NewPosting) {
+        beforeWrite()
         insertedPostings += posting
         _postings.update { it + Posting(randomUuidString(), posting.narrative) }
     }
 
     override suspend fun deletePosting(id: String) {
-        if (failNextWrite) { failNextWrite = false; error("DB error") }
+        beforeWrite()
         val posting = _postings.value.find { it.id == id }
         if (posting != null) deletedPostings += posting
         _postings.update { it.filterNot { c -> c.id == id } }
     }
 
     override suspend fun updatePosting(posting: Posting) {
-        if (failNextWrite) { failNextWrite = false; error("DB error") }
+        beforeWrite()
         updatedPostings += posting
         _postings.update { list -> list.map { if (it.id == posting.id) posting else it } }
     }

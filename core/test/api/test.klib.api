@@ -29,6 +29,9 @@ final class app.oreshkov.ledger.core.test/FakePostingRepository : app.oreshkov.l
     final var shouldThrowOnGetById // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetById|{}shouldThrowOnGetById[0]
         final fun <get-shouldThrowOnGetById>(): kotlin/Boolean // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetById.<get-shouldThrowOnGetById>|<get-shouldThrowOnGetById>(){}[0]
         final fun <set-shouldThrowOnGetById>(kotlin/Boolean) // app.oreshkov.ledger.core.test/FakePostingRepository.shouldThrowOnGetById.<set-shouldThrowOnGetById>|<set-shouldThrowOnGetById>(kotlin.Boolean){}[0]
+    final var writeGate // app.oreshkov.ledger.core.test/FakePostingRepository.writeGate|{}writeGate[0]
+        final fun <get-writeGate>(): kotlinx.coroutines/CompletableDeferred<kotlin/Unit>? // app.oreshkov.ledger.core.test/FakePostingRepository.writeGate.<get-writeGate>|<get-writeGate>(){}[0]
+        final fun <set-writeGate>(kotlinx.coroutines/CompletableDeferred<kotlin/Unit>?) // app.oreshkov.ledger.core.test/FakePostingRepository.writeGate.<set-writeGate>|<set-writeGate>(kotlinx.coroutines.CompletableDeferred<kotlin.Unit>?){}[0]
 
     final fun getAllPostings(): kotlinx.coroutines.flow/Flow<kotlin.collections/List<app.oreshkov.ledger.core.model.data/Posting>> // app.oreshkov.ledger.core.test/FakePostingRepository.getAllPostings|getAllPostings(){}[0]
     final fun getPostingById(kotlin/String): kotlinx.coroutines.flow/Flow<app.oreshkov.ledger.core.model.data/Posting?> // app.oreshkov.ledger.core.test/FakePostingRepository.getPostingById|getPostingById(kotlin.String){}[0]
