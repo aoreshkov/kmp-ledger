@@ -131,6 +131,46 @@ class PostingEditViewModelTest {
     }
 
     @Test
+    fun savePosting_inEditMode_whileSaveInFlight_isIgnored() = runTest {
+        // An update cannot duplicate a row, so count writes instead: a second update
+        // re-stamps the row and would be pushed again by anything that tracks changes.
+        repo.seed(posting(id = "1", narrative = "Groceries"))
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "1")
+        vm.uiState.first { it is PostingEditUiState.Editing }
+        val writeGate = CompletableDeferred<Unit>()
+        repo.writeGate = writeGate
+        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
+        vm.onNarrativeChange("Rent")
+
+        vm.savePosting()
+        vm.savePosting()
+        writeGate.complete(Unit)
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(listOf(posting(id = "1", narrative = "Rent")), repo.updatedPostings)
+        assertEquals(1, events.size)
+    }
+
+    @Test
+    fun savePosting_afterFailure_canBeRetried() = runTest {
+        // The guard must release on failure in practice, not just flip the flag.
+        repo.failNextWrite = true
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
+        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
+        vm.onNarrativeChange("Groceries")
+        vm.savePosting()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue((vm.uiState.value as PostingEditUiState.Editing).saveError)
+
+        vm.savePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(listOf(newPosting(narrative = "Groceries")), repo.insertedPostings)
+        assertEquals(1, events.size)
+        assertFalse((vm.uiState.value as PostingEditUiState.Editing).saveError)
+    }
+
+    @Test
     fun savePosting_withInvalidInput_isNoOp() = runTest {
         // Blank narrative is invalid: savePosting() must early-return without navigating.
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
@@ -147,8 +187,8 @@ class PostingEditViewModelTest {
 
     @Test
     fun savePosting_whenNotEditing_isNoOp() = runTest {
-        // Defensive guard: when the screen isn't in Editing (here NotFound), both the
-        // updateEditing(else) and the `as? Editing ?: return` paths must no-op.
+        // Defensive guard: when the screen isn't in Editing (here NotFound), savePosting()
+        // must leave the state untouched and return before launching a write.
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "non-existent")
         vm.uiState.first { it is PostingEditUiState.NotFound }
         val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)

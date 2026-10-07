@@ -161,7 +161,10 @@ internal fun PostingEditContent(
                 OutlinedTextField(
                     value = uiState.narrative,
                     onValueChange = onNarrativeChange,
-                    label = { Text(stringResource(Res.string.posting_edit_field_narrative)) },
+                    // The save persists the text as it was at tap time, then navigates
+                    // away; edits made meanwhile would be silently dropped.
+                    readOnly = uiState.isSaving,
+                    label ={ Text(stringResource(Res.string.posting_edit_field_narrative)) },
                     isError = uiState.narrativeError,
                     supportingText = if (uiState.narrativeError) {
                         { Text(stringResource(Res.string.posting_edit_error_narrative_required)) }
