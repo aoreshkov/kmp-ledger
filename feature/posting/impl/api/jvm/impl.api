@@ -18,7 +18,7 @@ public final class app/oreshkov/ledger/feature/posting/impl/ComposableSingletons
 	public fun <init> ()V
 	public final fun getLambda$-1658397871$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-1968871250$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1650577409$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1565767938$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$1967629582$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$1988341968$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$226767803$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;

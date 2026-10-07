@@ -1,7 +1,10 @@
 package app.oreshkov.ledger.feature.posting.impl
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -121,6 +124,36 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
             )
         }
         onNodeWithText("Save").assertIsNotEnabled()
+    }
+
+    @Test
+    fun narrativeField_isReadOnly_whileSaving() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Editing(narrative = "Groceries", isSaving = true),
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Groceries").assert(SemanticsMatcher.expectValue(SemanticsProperties.IsEditable, false))
+    }
+
+    @Test
+    fun narrativeField_isEditable_whenNotSaving() = runComposeUiTest {
+        setContent {
+            PostingEditContent(
+                uiState = PostingEditUiState.Editing(narrative = "Groceries"),
+                snackbarHostState = SnackbarHostState(),
+                onNavigateBack = {},
+                onNarrativeChange = {},
+                onSaveClick = {},
+                onRetry = {}
+            )
+        }
+        onNodeWithText("Groceries").assert(SemanticsMatcher.expectValue(SemanticsProperties.IsEditable, true))
     }
 
     @Test
