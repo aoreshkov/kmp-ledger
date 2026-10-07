@@ -29,6 +29,7 @@ public final class app/oreshkov/ledger/feature/settings/impl/SettingsViewModel :
 	public static final field $stable I
 	public fun <init> (Lapp/oreshkov/ledger/core/domain/GetThemeModeUseCase;Lapp/oreshkov/ledger/core/domain/SetThemeModeUseCase;)V
 	public final fun getUiState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun onSaveErrorShown ()V
 	public final fun onThemeModeChange (Lapp/oreshkov/ledger/core/model/settings/ThemeMode;)V
 }
 

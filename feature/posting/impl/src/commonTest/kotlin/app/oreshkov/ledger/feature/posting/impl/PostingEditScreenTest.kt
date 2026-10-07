@@ -1,6 +1,9 @@
 package app.oreshkov.ledger.feature.posting.impl
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
@@ -286,6 +289,30 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
     }
 
     @Test
+    fun saveError_isNotReshown_afterReenteringComposition() = runComposeUiTest {
+        // Leaving and re-entering composition stands in for a rotation or a section
+        // switch: the ViewModel (and its UI state) outlives the screen's composition.
+        val repo = FakePostingRepository().apply { failNextWrite = true }
+        val viewModel = PostingEditViewModel(GetPostingUseCase(repo), SavePostingUseCase(repo), null)
+        var showScreen by mutableStateOf(true)
+        setContent {
+            if (showScreen) PostingEditScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        onNodeWithText("Narrative").performTextInput("Groceries")
+        onNodeWithText("Save").performClick()
+        waitUntilExactlyOneExists(hasText("Failed to save. Please try again."))
+        mainClock.advanceTimeBy(SNACKBAR_TIMEOUT_MILLIS)
+        onNodeWithText("Failed to save. Please try again.").assertDoesNotExist()
+
+        showScreen = false
+        waitForIdle()
+        showScreen = true
+        waitForIdle()
+
+        onNodeWithText("Failed to save. Please try again.").assertDoesNotExist()
+    }
+
+    @Test
     fun loadingState_showsProgressIndicator() = runComposeUiTest {
         setContent {
             PostingEditContent(
@@ -298,5 +325,10 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
             )
         }
         onNodeWithTag("loading").assertIsDisplayed()
+    }
+
+    private companion object {
+        /** Past SnackbarDuration.Short (4 s) plus its exit animation. */
+        const val SNACKBAR_TIMEOUT_MILLIS = 6_000L
     }
 }

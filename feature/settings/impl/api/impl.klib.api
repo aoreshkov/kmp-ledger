@@ -32,6 +32,7 @@ final class app.oreshkov.ledger.feature.settings.impl/SettingsViewModel : androi
     final val uiState // app.oreshkov.ledger.feature.settings.impl/SettingsViewModel.uiState|{}uiState[0]
         final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.settings.impl/SettingsUiState> // app.oreshkov.ledger.feature.settings.impl/SettingsViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
 
+    final fun onSaveErrorShown() // app.oreshkov.ledger.feature.settings.impl/SettingsViewModel.onSaveErrorShown|onSaveErrorShown(){}[0]
     final fun onThemeModeChange(app.oreshkov.ledger.core.model.settings/ThemeMode) // app.oreshkov.ledger.feature.settings.impl/SettingsViewModel.onThemeModeChange|onThemeModeChange(app.oreshkov.ledger.core.model.settings.ThemeMode){}[0]
 }
 

@@ -1,7 +1,10 @@
 package app.oreshkov.ledger.feature.settings.impl
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
@@ -119,5 +122,33 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         onNodeWithTag("theme_dark").performClick()
 
         onNodeWithText("Failed to save. Please try again.").assertIsDisplayed()
+    }
+
+    @Test
+    fun screen_doesNotReshowSnackbar_afterReenteringComposition() = runComposeUiTest {
+        // Leaving and re-entering composition stands in for a rotation or a section
+        // switch: the ViewModel (and its UI state) outlives the screen's composition.
+        val repo = FakeSettingsRepository(initial = ThemeMode.SYSTEM).apply { failNextWrite = true }
+        val viewModel = SettingsViewModel(GetThemeModeUseCase(repo), SetThemeModeUseCase(repo))
+        var showScreen by mutableStateOf(true)
+        setContent {
+            if (showScreen) SettingsScreen(onNavigateBack = {}, viewModel = viewModel)
+        }
+        onNodeWithTag("theme_dark").performClick()
+        onNodeWithText("Failed to save. Please try again.").assertIsDisplayed()
+        mainClock.advanceTimeBy(SNACKBAR_TIMEOUT_MILLIS)
+        onNodeWithText("Failed to save. Please try again.").assertDoesNotExist()
+
+        showScreen = false
+        waitForIdle()
+        showScreen = true
+        waitForIdle()
+
+        onNodeWithText("Failed to save. Please try again.").assertDoesNotExist()
+    }
+
+    private companion object {
+        /** Past SnackbarDuration.Short (4 s) plus its exit animation. */
+        const val SNACKBAR_TIMEOUT_MILLIS = 6_000L
     }
 }

@@ -148,6 +148,7 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingEditViewModel
 	public final fun getNavigationEvent ()Lkotlinx/coroutines/flow/Flow;
 	public final fun getUiState ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun onNarrativeChange (Ljava/lang/String;)V
+	public final fun onSaveErrorShown ()V
 	public final fun retry ()V
 	public final fun savePosting ()V
 }

@@ -55,8 +55,13 @@ fun PostingEditScreen(
     val errorMessage = stringResource(Res.string.posting_edit_error_save_failed)
 
     val saveError = (uiState as? PostingEditUiState.Editing)?.saveError == true
+    // The error lives in UI state, so a re-entered composition (rotation, section switch)
+    // would show it again; consume it only after the snackbar has actually been shown.
     LaunchedEffect(saveError) {
-        if (saveError) snackbarHostState.showSnackbar(errorMessage)
+        if (saveError) {
+            snackbarHostState.showSnackbar(errorMessage)
+            viewModel.onSaveErrorShown()
+        }
     }
 
     LaunchedEffect(viewModel) {

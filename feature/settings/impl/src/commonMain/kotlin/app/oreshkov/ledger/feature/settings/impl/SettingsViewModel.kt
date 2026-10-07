@@ -43,4 +43,9 @@ class SettingsViewModel(
             setThemeModeUseCase(mode).onFailure { _saveError.value = true }
         }
     }
+
+    /** Consumes the save error once its snackbar has been shown, so it is not shown again. */
+    fun onSaveErrorShown() {
+        _saveError.value = false
+    }
 }

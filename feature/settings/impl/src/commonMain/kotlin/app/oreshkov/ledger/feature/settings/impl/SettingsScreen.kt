@@ -50,8 +50,13 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val errorMessage = stringResource(Res.string.settings_save_failed)
 
+    // The error lives in UI state, so a re-entered composition (rotation, section switch)
+    // would show it again; consume it only after the snackbar has actually been shown.
     LaunchedEffect(uiState.saveError) {
-        if (uiState.saveError) snackbarHostState.showSnackbar(errorMessage)
+        if (uiState.saveError) {
+            snackbarHostState.showSnackbar(errorMessage)
+            viewModel.onSaveErrorShown()
+        }
     }
 
     SettingsContent(
