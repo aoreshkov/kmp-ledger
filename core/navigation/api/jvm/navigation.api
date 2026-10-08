@@ -15,6 +15,7 @@ public final class app/oreshkov/ledger/core/navigation/Navigator {
 	public final fun getEntries ()Ljava/util/List;
 	public final fun getStartRoute ()Landroidx/navigation3/runtime/NavKey;
 	public final fun goBack ()V
+	public final fun goBack (Landroidx/navigation3/runtime/NavKey;)V
 	public final fun goTo (Landroidx/navigation3/runtime/NavKey;)V
 	public final fun switchTopLevel (Landroidx/navigation3/runtime/NavKey;)V
 }

@@ -40,6 +40,16 @@ class Navigator(
     }
 
     /**
+     * [goBack] on behalf of the screen showing [from], and only while it is the current top entry.
+     * A screen's second request (a double tap during the exit transition, or a tap racing a
+     * state-driven navigation) then finds another entry on top and does nothing, instead of
+     * popping the screen beneath. System back keeps the unkeyed [goBack].
+     */
+    fun goBack(from: NavKey) {
+        if (currentStack.lastOrNull() == from) goBack()
+    }
+
+    /**
      * Selects a top-level section, preserving that section's back stack. Re-selecting the section
      * that is already current (while drilled in) resets it to its root.
      */

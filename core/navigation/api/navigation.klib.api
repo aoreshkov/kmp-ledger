@@ -21,6 +21,7 @@ final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledg
 
     final fun canGoBack(): kotlin/Boolean // app.oreshkov.ledger.core.navigation/Navigator.canGoBack|canGoBack(){}[0]
     final fun goBack() // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(){}[0]
+    final fun goBack(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(androidx.navigation3.runtime.NavKey){}[0]
     final fun goTo(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.goTo|goTo(androidx.navigation3.runtime.NavKey){}[0]
     final fun switchTopLevel(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.switchTopLevel|switchTopLevel(androidx.navigation3.runtime.NavKey){}[0]
 }
