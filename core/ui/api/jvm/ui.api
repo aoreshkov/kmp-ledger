@@ -2,13 +2,6 @@ public final class app/oreshkov/ledger/core/ui/AppKt {
 	public static final fun App (Landroidx/compose/runtime/Composer;I)V
 }
 
-public final class app/oreshkov/ledger/core/ui/ComposableSingletons$AppKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/core/ui/ComposableSingletons$AppKt;
-	public fun <init> ()V
-	public final fun getLambda$-2143290179$Ledger_core_ui ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1212473848$Ledger_core_ui ()Lkotlin/jvm/functions/Function2;
-}
-
 public final class app/oreshkov/ledger/core/ui/di/AppModule {
 	public static final field $stable I
 	public fun <init> ()V

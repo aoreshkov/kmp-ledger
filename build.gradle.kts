@@ -95,6 +95,29 @@ apiValidation {
     // Koin/Kotlin compiler bump, so they are not stable public API worth tracking.
     ignoredPackages.add("org.koin.plugin.hints")
 
+    // The Compose compiler hoists capture-free composable lambdas into a
+    // `ComposableSingletons$<File>Kt` holder. Its getters are internal (note the
+    // module-mangled `getLambda$<key>$Ledger_<module>` names), but the class carries no
+    // Kotlin metadata, so the JVM dump sees it as public; klib dumps already omit it.
+    // A key re-hashes when the call that owns the lambda changes (e.g. an argument added
+    // beside it), failing apiCheck with no real API change. BCV matches exact names only (no wildcards), so each holder is
+    // listed. A new file with such a lambda shows up in the next jvm dump diff: add it
+    // here instead of committing it. Safe while no public inline function takes a
+    // composable lambda (an inlined call site would reference the holder).
+    ignoredClasses.addAll(
+        listOf(
+            "app.oreshkov.ledger.ComposableSingletons\$MainKt",
+            "app.oreshkov.ledger.core.navigation.ComposableSingletons\$LocalAccountActionKt",
+            "app.oreshkov.ledger.core.ui.ComposableSingletons\$AppKt",
+            "app.oreshkov.ledger.feature.posting.impl.ComposableSingletons\$PostingDetailsScreenKt",
+            "app.oreshkov.ledger.feature.posting.impl.ComposableSingletons\$PostingEditScreenKt",
+            "app.oreshkov.ledger.feature.posting.impl.ComposableSingletons\$PostingListScreenKt",
+            "app.oreshkov.ledger.feature.posting.impl.di.ComposableSingletons\$PostingModuleKt",
+            "app.oreshkov.ledger.feature.settings.impl.ComposableSingletons\$SettingsScreenKt",
+            "app.oreshkov.ledger.feature.settings.impl.di.ComposableSingletons\$SettingsModuleKt",
+        )
+    )
+
     @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
     klib {
         enabled = true

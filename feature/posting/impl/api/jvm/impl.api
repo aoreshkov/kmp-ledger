@@ -1,39 +1,3 @@
-public final class app/oreshkov/ledger/feature/posting/impl/ComposableSingletons$PostingDetailsScreenKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/impl/ComposableSingletons$PostingDetailsScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-1947795814$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-274058530$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-923904518$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1402964797$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$499723915$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$562656132$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$622627852$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$766465430$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$766726668$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$808464006$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-}
-
-public final class app/oreshkov/ledger/feature/posting/impl/ComposableSingletons$PostingEditScreenKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/impl/ComposableSingletons$PostingEditScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-1658397871$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-1968871250$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1565767938$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1967629582$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1988341968$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$226767803$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-}
-
-public final class app/oreshkov/ledger/feature/posting/impl/ComposableSingletons$PostingListScreenKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/impl/ComposableSingletons$PostingListScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-1739904673$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-860574378$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-944212326$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1613596555$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$41286328$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function3;
-}
-
 public final class app/oreshkov/ledger/feature/posting/impl/PostingDetailsScreenKt {
 	public static final fun PostingDetailsScreen (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsViewModel;Landroidx/compose/runtime/Composer;I)V
 }
@@ -205,14 +169,6 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingListViewModel
 
 public final class app/oreshkov/ledger/feature/posting/impl/di/AppOreshkovLedgerFeaturePostingImplDiPostingModuleModuleKt {
 	public static final fun module (Lapp/oreshkov/ledger/feature/posting/impl/di/PostingModule;)Lorg/koin/core/module/Module;
-}
-
-public final class app/oreshkov/ledger/feature/posting/impl/di/ComposableSingletons$PostingModuleKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/feature/posting/impl/di/ComposableSingletons$PostingModuleKt;
-	public fun <init> ()V
-	public final fun getLambda$1021511295$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function4;
-	public final fun getLambda$834223459$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function4;
-	public final fun getLambda$907583959$Ledger_feature_posting_impl ()Lkotlin/jvm/functions/Function4;
 }
 
 public final class app/oreshkov/ledger/feature/posting/impl/di/PostingModule {

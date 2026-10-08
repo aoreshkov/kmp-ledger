@@ -1,10 +1,3 @@
-public final class app/oreshkov/ledger/ComposableSingletons$MainKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/ComposableSingletons$MainKt;
-	public fun <init> ()V
-	public final fun getLambda$18003959$Ledger_desktopApp ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$574834339$Ledger_desktopApp ()Lkotlin/jvm/functions/Function3;
-}
-
 public final class app/oreshkov/ledger/LedgerApp {
 	public static final field $stable I
 	public fun <init> ()V
