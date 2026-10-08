@@ -81,11 +81,15 @@ class PostingDaoTest {
 
     @Test
     fun hardDeleteRemovesRowEntirely() = runTest {
-        val posting = PostingEntity(id = "1", narrative = "Groceries", isDeleted = true)
-        dao.insert(posting)
-        dao.hardDeleteById(posting.id)
+        // Both rows are pending tombstones, so each would show up in every read below unless
+        // it is really gone; the survivor proves the delete is scoped to the given id.
+        dao.insert(PostingEntity(id = "1", narrative = "Groceries", isDeleted = true, pendingSync = true))
+        dao.insert(PostingEntity(id = "2", narrative = "Survivor", isDeleted = true, pendingSync = true))
+        dao.hardDeleteById("1")
 
-        assertTrue(dao.getPendingSync().isEmpty())
+        // getByIds includes tombstones, so an empty hit means the row itself is gone.
+        assertEquals(listOf("2"), dao.getByIds(listOf("1", "2")).map { it.id })
+        assertEquals(listOf("2"), dao.getPendingSync().map { it.id })
     }
 
     @Test

@@ -89,6 +89,29 @@ class NavigatorTest {
     }
 
     @Test
+    fun goBack_inDrilledNonStartSection_popsWithinThatSection() {
+        // Popping must win over the fall-back-to-start branch while the section has depth.
+        nav.switchTopLevel(settings)
+        nav.goTo(TestKey("settings-detail"))
+        nav.goBack()
+        assertEquals(settings, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, settings), nav.entries)
+    }
+
+    @Test
+    fun switchTopLevel_preservesDrilledNonStartSectionStack() {
+        nav.switchTopLevel(settings)
+        nav.goTo(TestKey("settings-detail"))
+        nav.switchTopLevel(home)
+        assertEquals<List<NavKey>>(listOf(home), nav.entries)
+        nav.switchTopLevel(settings)
+        assertEquals<List<NavKey>>(
+            listOf(home, settings, TestKey("settings-detail")),
+            nav.entries,
+        )
+    }
+
+    @Test
     fun switchTopLevel_toAnotherSection_concatenatesStartThenCurrent() {
         nav.switchTopLevel(settings)
         nav.goTo(TestKey("settings-detail"))
