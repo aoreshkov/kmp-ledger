@@ -23,6 +23,7 @@ import app.oreshkov.ledger.core.domain.GetPostingUseCase
 import app.oreshkov.ledger.core.domain.SavePostingUseCase
 import app.oreshkov.ledger.core.test.FakePostingRepository
 import app.oreshkov.ledger.core.test.PlatformComposeUiTest
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -310,6 +311,53 @@ class PostingEditScreenTest : PlatformComposeUiTest() {
         waitForIdle()
 
         onNodeWithText("Failed to save. Please try again.").assertDoesNotExist()
+    }
+
+    @Test
+    fun save_navigatesBackExactlyOnce() = runComposeUiTest {
+        // The callback here does not pop, so the screen stays composed with isSaved set:
+        // that must not keep re-triggering navigation.
+        val repo = FakePostingRepository()
+        val viewModel = PostingEditViewModel(GetPostingUseCase(repo), SavePostingUseCase(repo), null)
+        var navigations = 0
+        setContent {
+            PostingEditScreen(onNavigateBack = { navigations++ }, viewModel = viewModel)
+        }
+
+        onNodeWithText("Narrative").performTextInput("Groceries")
+        onNodeWithText("Save").performClick()
+        waitUntil { navigations > 0 }
+        waitForIdle()
+
+        assertEquals(1, navigations)
+    }
+
+    @Test
+    fun saveCompletedWhileScreenAway_navigatesBackOnReturn() = runComposeUiTest {
+        // The save finishes while no composition is observing (rotation, section switch).
+        // A one-off event could be lost in that window; UI state is still there on return.
+        val repo = FakePostingRepository()
+        val writeGate = CompletableDeferred<Unit>()
+        repo.writeGate = writeGate
+        val viewModel = PostingEditViewModel(GetPostingUseCase(repo), SavePostingUseCase(repo), null)
+        var showScreen by mutableStateOf(true)
+        var navigations = 0
+        setContent {
+            if (showScreen) PostingEditScreen(onNavigateBack = { navigations++ }, viewModel = viewModel)
+        }
+        onNodeWithText("Narrative").performTextInput("Groceries")
+        onNodeWithText("Save").performClick()
+
+        showScreen = false
+        waitForIdle()
+        writeGate.complete(Unit)
+        waitUntil { (viewModel.uiState.value as PostingEditUiState.Editing).isSaved }
+        assertEquals(0, navigations)
+
+        showScreen = true
+        waitForIdle()
+
+        assertEquals(1, navigations)
     }
 
     @Test

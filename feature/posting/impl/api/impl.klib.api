@@ -8,13 +8,19 @@
 // Library unique name: <Ledger.feature.posting:impl>
 sealed interface app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState|null[0]
     final class Success : app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success|null[0]
-        constructor <init>(app.oreshkov.ledger.core.model.data/Posting) // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.<init>|<init>(app.oreshkov.ledger.core.model.data.Posting){}[0]
+        constructor <init>(app.oreshkov.ledger.core.model.data/Posting, kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.<init>|<init>(app.oreshkov.ledger.core.model.data.Posting;kotlin.Boolean;kotlin.Boolean){}[0]
 
+        final val deleteError // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.deleteError|{}deleteError[0]
+            final fun <get-deleteError>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.deleteError.<get-deleteError>|<get-deleteError>(){}[0]
+        final val isDeleted // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.isDeleted|{}isDeleted[0]
+            final fun <get-isDeleted>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.isDeleted.<get-isDeleted>|<get-isDeleted>(){}[0]
         final val posting // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.posting|{}posting[0]
             final fun <get-posting>(): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.posting.<get-posting>|<get-posting>(){}[0]
 
         final fun component1(): app.oreshkov.ledger.core.model.data/Posting // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.component1|component1(){}[0]
-        final fun copy(app.oreshkov.ledger.core.model.data/Posting = ...): app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.copy|copy(app.oreshkov.ledger.core.model.data.Posting){}[0]
+        final fun component2(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.component2|component2(){}[0]
+        final fun component3(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.component3|component3(){}[0]
+        final fun copy(app.oreshkov.ledger.core.model.data/Posting = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.copy|copy(app.oreshkov.ledger.core.model.data.Posting;kotlin.Boolean;kotlin.Boolean){}[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState.Success.toString|toString(){}[0]
@@ -41,10 +47,12 @@ sealed interface app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState 
 
 sealed interface app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState|null[0]
     final class Editing : app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing|null[0]
-        constructor <init>(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.<init>|<init>(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
+        constructor <init>(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.<init>|<init>(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
 
         final val isEditMode // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isEditMode|{}isEditMode[0]
             final fun <get-isEditMode>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isEditMode.<get-isEditMode>|<get-isEditMode>(){}[0]
+        final val isSaved // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isSaved|{}isSaved[0]
+            final fun <get-isSaved>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isSaved.<get-isSaved>|<get-isSaved>(){}[0]
         final val isSaving // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isSaving|{}isSaving[0]
             final fun <get-isSaving>(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isSaving.<get-isSaving>|<get-isSaving>(){}[0]
         final val isValid // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.isValid|{}isValid[0]
@@ -63,7 +71,8 @@ sealed interface app.oreshkov.ledger.feature.posting.impl/PostingEditUiState { /
         final fun component3(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component3|component3(){}[0]
         final fun component4(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component4|component4(){}[0]
         final fun component5(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component5|component5(){}[0]
-        final fun copy(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.copy|copy(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
+        final fun component6(): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.component6|component6(){}[0]
+        final fun copy(kotlin/Boolean = ..., kotlin/String = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.copy|copy(kotlin.Boolean;kotlin.String;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // app.oreshkov.ledger.feature.posting.impl/PostingEditUiState.Editing.toString|toString(){}[0]
@@ -128,22 +137,17 @@ final class app.oreshkov.ledger.feature.posting.impl.di/PostingModule { // app.o
 final class app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel : androidx.lifecycle/ViewModel { // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel|null[0]
     constructor <init>(app.oreshkov.ledger.core.domain/GetPostingUseCase, app.oreshkov.ledger.core.domain/DeletePostingUseCase, kotlin/String) // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.<init>|<init>(app.oreshkov.ledger.core.domain.GetPostingUseCase;app.oreshkov.ledger.core.domain.DeletePostingUseCase;kotlin.String){}[0]
 
-    final val deleteFailedEvent // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deleteFailedEvent|{}deleteFailedEvent[0]
-        final fun <get-deleteFailedEvent>(): kotlinx.coroutines.flow/Flow<kotlin/Unit> // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deleteFailedEvent.<get-deleteFailedEvent>|<get-deleteFailedEvent>(){}[0]
-    final val deletedEvent // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deletedEvent|{}deletedEvent[0]
-        final fun <get-deletedEvent>(): kotlinx.coroutines.flow/Flow<kotlin/Unit> // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deletedEvent.<get-deletedEvent>|<get-deletedEvent>(){}[0]
     final val uiState // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.uiState|{}uiState[0]
         final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.posting.impl/PostingDetailsUiState> // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
 
     final fun deletePosting() // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.deletePosting|deletePosting(){}[0]
+    final fun onDeleteErrorShown() // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.onDeleteErrorShown|onDeleteErrorShown(){}[0]
     final fun retry() // app.oreshkov.ledger.feature.posting.impl/PostingDetailsViewModel.retry|retry(){}[0]
 }
 
 final class app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel : androidx.lifecycle/ViewModel { // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel|null[0]
     constructor <init>(app.oreshkov.ledger.core.domain/GetPostingUseCase, app.oreshkov.ledger.core.domain/SavePostingUseCase, kotlin/String?) // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.<init>|<init>(app.oreshkov.ledger.core.domain.GetPostingUseCase;app.oreshkov.ledger.core.domain.SavePostingUseCase;kotlin.String?){}[0]
 
-    final val navigationEvent // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.navigationEvent|{}navigationEvent[0]
-        final fun <get-navigationEvent>(): kotlinx.coroutines.flow/Flow<kotlin/Unit> // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.navigationEvent.<get-navigationEvent>|<get-navigationEvent>(){}[0]
     final val uiState // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.uiState|{}uiState[0]
         final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.posting.impl/PostingEditUiState> // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
 
