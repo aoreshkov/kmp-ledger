@@ -1,10 +1,3 @@
-public final class app/oreshkov/ledger/feature/settings/impl/ComposableSingletons$SettingsScreenKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/feature/settings/impl/ComposableSingletons$SettingsScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-578580448$Ledger_feature_settings_impl ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$179674304$Ledger_feature_settings_impl ()Lkotlin/jvm/functions/Function2;
-}
-
 public final class app/oreshkov/ledger/feature/settings/impl/SettingsScreenKt {
 	public static final fun SettingsScreen (Lkotlin/jvm/functions/Function0;Lapp/oreshkov/ledger/feature/settings/impl/SettingsViewModel;Landroidx/compose/runtime/Composer;I)V
 }
@@ -35,12 +28,6 @@ public final class app/oreshkov/ledger/feature/settings/impl/SettingsViewModel :
 
 public final class app/oreshkov/ledger/feature/settings/impl/di/AppOreshkovLedgerFeatureSettingsImplDiSettingsModuleModuleKt {
 	public static final fun module (Lapp/oreshkov/ledger/feature/settings/impl/di/SettingsModule;)Lorg/koin/core/module/Module;
-}
-
-public final class app/oreshkov/ledger/feature/settings/impl/di/ComposableSingletons$SettingsModuleKt {
-	public static final field INSTANCE Lapp/oreshkov/ledger/feature/settings/impl/di/ComposableSingletons$SettingsModuleKt;
-	public fun <init> ()V
-	public final fun getLambda$1775039160$Ledger_feature_settings_impl ()Lkotlin/jvm/functions/Function4;
 }
 
 public final class app/oreshkov/ledger/feature/settings/impl/di/SettingsModule {

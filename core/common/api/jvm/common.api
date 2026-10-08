@@ -67,10 +67,6 @@ public final class app/oreshkov/ledger/core/common/result/RunCatchingCancellable
 	public static final fun runCatchingCancellable (Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class app/oreshkov/ledger/core/common/util/PlatformLogWriter_jvmKt {
-	public static final fun getPlatformLogWriters ()Ljava/util/List;
-}
-
 public final class app/oreshkov/ledger/core/common/util/UuidKt {
 	public static final fun randomUuidString ()Ljava/lang/String;
 }

@@ -15,4 +15,4 @@ private class Slf4jWriter : LogWriter() {
     }
 }
 
-actual fun getPlatformLogWriters(): List<LogWriter> = listOf(Slf4jWriter())
+internal actual fun getPlatformLogWriters(): List<LogWriter> = listOf(Slf4jWriter())

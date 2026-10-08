@@ -48,6 +48,9 @@ every platform and needs only `java` on `PATH`.
   which includes tests, binary-compatibility validation, and Kover coverage floors.
 - **Public API changes** require regenerated dumps: run `./gradlew apiDump` and commit
   the updated `<module>/api/` files alongside the code change, or `apiCheck` fails.
+  One exception: if a JVM dump gains a compiler-generated `ComposableSingletons$<File>Kt`
+  class, add it to `ignoredClasses` in the root `build.gradle.kts` instead of
+  committing it.
 - **Tests use fakes, not mocks** — see `core:test` (`FakePostingRepository`,
   `FakeSettingsRepository`) for the pattern. No mocking libraries.
 - **Architecture rules** (layering, feature api/impl split, Koin annotations vs DSL
