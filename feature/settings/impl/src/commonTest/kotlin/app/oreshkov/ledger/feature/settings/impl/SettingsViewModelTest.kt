@@ -7,6 +7,7 @@ import app.oreshkov.ledger.core.test.FakeSettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -15,6 +16,8 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
@@ -44,5 +47,20 @@ class SettingsViewModelTest {
         vm.onThemeModeChange(ThemeMode.LIGHT)
 
         assertEquals(ThemeMode.LIGHT, repo.themeMode().first())
+    }
+
+    @Test
+    fun onSaveErrorShown_clearsSaveError_withoutAThemeChange() = runTest {
+        val vm = SettingsViewModel(getThemeModeUseCase, setThemeModeUseCase)
+        // Keep the WhileSubscribed stateIn active so uiState.value tracks the sources.
+        backgroundScope.launch(testDispatcher) { vm.uiState.collect {} }
+        repo.failNextWrite = true
+        vm.onThemeModeChange(ThemeMode.DARK)
+        assertTrue(vm.uiState.value.saveError)
+
+        vm.onSaveErrorShown()
+
+        assertFalse(vm.uiState.value.saveError)
+        assertEquals(ThemeMode.SYSTEM, vm.uiState.value.themeMode)
     }
 }

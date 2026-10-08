@@ -148,6 +148,7 @@ final class app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel : andr
         final fun <get-uiState>(): kotlinx.coroutines.flow/StateFlow<app.oreshkov.ledger.feature.posting.impl/PostingEditUiState> // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.uiState.<get-uiState>|<get-uiState>(){}[0]
 
     final fun onNarrativeChange(kotlin/String) // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.onNarrativeChange|onNarrativeChange(kotlin.String){}[0]
+    final fun onSaveErrorShown() // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.onSaveErrorShown|onSaveErrorShown(){}[0]
     final fun retry() // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.retry|retry(){}[0]
     final fun savePosting() // app.oreshkov.ledger.feature.posting.impl/PostingEditViewModel.savePosting|savePosting(){}[0]
 }

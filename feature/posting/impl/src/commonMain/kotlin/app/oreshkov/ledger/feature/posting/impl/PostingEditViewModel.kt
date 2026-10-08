@@ -105,6 +105,9 @@ class PostingEditViewModel(
         }
     }
 
+    /** Consumes the save error once its snackbar has been shown, so it is not shown again. */
+    fun onSaveErrorShown() = updateEditing { it.copy(saveError = false) }
+
     private fun updateEditing(block: (PostingEditUiState.Editing) -> PostingEditUiState.Editing) {
         _uiState.update { if (it is PostingEditUiState.Editing) block(it) else it }
     }

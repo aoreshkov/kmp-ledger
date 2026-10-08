@@ -227,6 +227,22 @@ class PostingEditViewModelTest {
     }
 
     @Test
+    fun onSaveErrorShown_clearsSaveError_andKeepsTheDraft() = runTest {
+        repo.failNextWrite = true
+        val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
+        vm.onNarrativeChange("Groceries")
+        vm.savePosting()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertTrue((vm.uiState.value as PostingEditUiState.Editing).saveError)
+
+        vm.onSaveErrorShown()
+
+        val state = vm.uiState.value as PostingEditUiState.Editing
+        assertFalse(state.saveError)
+        assertEquals("Groceries", state.narrative)
+    }
+
+    @Test
     fun retry_reloadsAfterError() = runTest {
         repo.shouldThrowOnGetById = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "1")

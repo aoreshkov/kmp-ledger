@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,7 +93,8 @@ internal fun PostingDetailsContent(
     onDeleteClick: () -> Unit,
     onRetry: () -> Unit,
 ) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
+    // Saveable: MainActivity is recreated on rotation, and the open confirmation must survive it.
+    var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     val isSuccess = uiState is PostingDetailsUiState.Success
 
