@@ -3,6 +3,9 @@ package app.oreshkov.ledger.core.navigation
 import androidx.compose.runtime.MutableState
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 /**
  * Holds one [NavBackStack] per top-level section (keyed by the section's start route) and tracks the
@@ -55,14 +58,25 @@ class Navigator(
         if (currentStack.lastOrNull() == from) goBack()
     }
 
+    private val _reselections = MutableSharedFlow<NavKey>(extraBufferCapacity = 1)
+
+    /**
+     * Section roots re-selected in the navigation bar, for the screen on show to scroll to its top.
+     * Unlike a ViewModel outcome this is meant only for whatever is composed at that moment, so a
+     * signal with no collector, or one that overflows the buffer, is dropped rather than replayed.
+     */
+    val reselections: SharedFlow<NavKey> = _reselections.asSharedFlow()
+
     /**
      * Selects a top-level section, preserving that section's back stack. Re-selecting the section
-     * that is already current (while drilled in) resets it to its root.
+     * that is already current leaves its stack alone and signals [reselections] instead, as the
+     * Navigation 3 multiple-back-stacks recipe does: resetting to the root would turn a double tap
+     * on another section into "switch, then discard the stack the switch just restored", unsaved
+     * edits included.
      */
     fun switchTopLevel(destination: NavKey) {
         if (currentTopLevel == destination) {
-            val stack = backStacks.getValue(destination)
-            while (stack.size > 1) stack.removeAt(stack.lastIndex)
+            _reselections.tryEmit(destination)
         } else {
             currentTopLevel = destination
         }

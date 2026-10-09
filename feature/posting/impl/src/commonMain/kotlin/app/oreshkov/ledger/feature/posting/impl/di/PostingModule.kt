@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
+import androidx.compose.runtime.remember
 import app.oreshkov.ledger.core.data.di.DataModule
 import app.oreshkov.ledger.core.domain.di.DomainModule
 import app.oreshkov.ledger.core.navigation.LocalNavigator
@@ -16,6 +17,8 @@ import app.oreshkov.ledger.feature.posting.impl.PostingEditScreen
 import app.oreshkov.ledger.feature.posting.impl.PostingListScreen
 import app.oreshkov.ledger.feature.posting.impl.resources.Res
 import app.oreshkov.ledger.feature.posting.impl.resources.posting_nav_label
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -46,9 +49,14 @@ val postingNavigationModule = module {
         metadata = ListDetailSceneStrategy.listPane()
     ) {
         val navigator = LocalNavigator.current
+        // Remembered so the list's collector is not restarted on every recomposition.
+        val scrollToTopRequests = remember(navigator) {
+            navigator.reselections.filter { it == PostingList }.map { }
+        }
         PostingListScreen(
             onNavigateToEdit = { id -> navigator.goTo(PostingEdit(id)) },
             onNavigateToDetails = { id -> navigator.goTo(PostingDetail(id)) },
+            scrollToTopRequests = scrollToTopRequests,
             viewModel = koinViewModel()
         )
     }

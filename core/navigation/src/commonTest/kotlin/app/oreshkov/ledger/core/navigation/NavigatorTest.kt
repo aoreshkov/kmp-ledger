@@ -3,6 +3,11 @@ package app.oreshkov.ledger.core.navigation
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -198,17 +203,52 @@ class NavigatorTest {
     }
 
     @Test
-    fun switchTopLevel_toCurrentSectionWhileDrilledIn_resetsToRoot() {
+    fun switchTopLevel_toCurrentSectionWhileDrilledIn_keepsStackAndSignalsReselect() = runTest {
+        val reselections = collectReselections()
         nav.switchTopLevel(settings)
         nav.goTo(TestKey("settings-detail"))
         nav.switchTopLevel(settings)
         assertEquals(settings, nav.currentTopLevel)
-        assertEquals<List<NavKey>>(listOf(home, settings), nav.entries)
+        assertEquals<List<NavKey>>(listOf(home, settings, TestKey("settings-detail")), nav.entries)
+        assertEquals<List<NavKey>>(listOf(settings), reselections)
     }
 
     @Test
-    fun switchTopLevel_toCurrentSectionAtRoot_isNoOp() {
+    fun switchTopLevel_toCurrentSectionAtRoot_keepsStackAndSignalsReselect() = runTest {
+        val reselections = collectReselections()
         nav.switchTopLevel(home)
         assertEquals<List<NavKey>>(listOf(home), nav.entries)
+        assertEquals<List<NavKey>>(listOf(home), reselections)
+    }
+
+    @Test
+    fun switchTopLevel_doubleTapOnDrilledSection_preservesItsStack() = runTest {
+        // A double tap on another section's item: the first tap switches, the second lands on
+        // the now-current section and must not discard the stack the first one restored.
+        val reselections = collectReselections()
+        nav.goTo(TestKey("edit"))
+        nav.switchTopLevel(settings)
+        nav.switchTopLevel(home)
+        nav.switchTopLevel(home)
+        assertEquals(home, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, TestKey("edit")), nav.entries)
+        assertEquals<List<NavKey>>(listOf(home), reselections)
+    }
+
+    @Test
+    fun switchTopLevel_toAnotherSection_doesNotSignalReselect() = runTest {
+        val reselections = collectReselections()
+        nav.switchTopLevel(settings)
+        nav.switchTopLevel(home)
+        assertTrue(reselections.isEmpty())
+    }
+
+    /** Collects [Navigator.reselections] eagerly, so each signal is recorded as it is emitted. */
+    private fun TestScope.collectReselections(): List<NavKey> {
+        val received = mutableListOf<NavKey>()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            nav.reselections.toList(received)
+        }
+        return received
     }
 }

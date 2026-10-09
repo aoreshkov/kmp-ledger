@@ -13,6 +13,7 @@ public final class app/oreshkov/ledger/core/navigation/Navigator {
 	public final fun getBackStacks ()Ljava/util/Map;
 	public final fun getCurrentTopLevel ()Landroidx/navigation3/runtime/NavKey;
 	public final fun getEntries ()Ljava/util/List;
+	public final fun getReselections ()Lkotlinx/coroutines/flow/SharedFlow;
 	public final fun getStartRoute ()Landroidx/navigation3/runtime/NavKey;
 	public final fun goBack ()V
 	public final fun goBack (Landroidx/navigation3/runtime/NavKey;)V
