@@ -5,13 +5,11 @@ import androidx.lifecycle.viewModelScope
 import app.oreshkov.ledger.core.common.result.runCatchingCancellable
 import app.oreshkov.ledger.core.domain.GetPostingUseCase
 import app.oreshkov.ledger.core.domain.SavePostingUseCase
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
@@ -28,6 +26,8 @@ sealed interface PostingEditUiState {
         val narrativeTouched: Boolean = false,
         val saveError: Boolean = false,
         val isSaving: Boolean = false,
+        /** The posting was persisted; the screen leaves as soon as it sees this. */
+        val isSaved: Boolean = false,
     ) : PostingEditUiState {
         val narrativeError: Boolean get() = narrativeTouched && narrative.isBlank()
         val isValid: Boolean get() = narrative.isNotBlank()
@@ -46,9 +46,6 @@ class PostingEditViewModel(
         else PostingEditUiState.Editing()
     )
     val uiState: StateFlow<PostingEditUiState> = _uiState.asStateFlow()
-
-    private val _navigationEvent = Channel<Unit>(Channel.BUFFERED)
-    val navigationEvent = _navigationEvent.receiveAsFlow()
 
     init {
         loadPosting()
@@ -97,8 +94,10 @@ class PostingEditViewModel(
                 id = postingId,
                 narrative = previous.narrative
             ).onSuccess {
+                // State, not a one-off event: a screen that is not composed right now
+                // (rotation, section switch) still sees it on return and leaves.
                 // isSaving stays true: the screen is navigating away, so Save stays disabled.
-                _navigationEvent.send(Unit)
+                updateEditing { it.copy(isSaved = true) }
             }.onFailure {
                 updateEditing { it.copy(saveError = true, isSaving = false) }
             }

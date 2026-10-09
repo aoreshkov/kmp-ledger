@@ -6,7 +6,10 @@ import app.oreshkov.ledger.core.test.FakePostingRepository
 import app.oreshkov.ledger.core.test.posting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -70,71 +73,101 @@ class PostingDetailsViewModelTest {
     }
 
     @Test
-    fun deletePosting_emitsDeletedEventOnSuccess() = runTest {
+    fun deletePosting_onSuccess_marksDeleted_andKeepsShowingThePosting() = runTest {
         repo.seed(posting())
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        val vm = subscribedViewModel()
         vm.uiState.first { it is PostingDetailsUiState.Success }
-        val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
 
         vm.deletePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertEquals(1, events.size)
+        assertEquals(listOf(posting()), repo.deletedPostings)
+        // The load flow now reports the row missing; the screen must not flash NotFound
+        // while it navigates away.
+        assertEquals(PostingDetailsUiState.Success(posting(), isDeleted = true), vm.uiState.value)
     }
 
     @Test
     fun deletePosting_whenNotSuccess_isNoOp() = runTest {
-        // NotFound (not Success): deletePosting() must early-return without emitting.
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "non-existent")
+        // NotFound (not Success): deletePosting() must early-return without a write.
+        val vm = subscribedViewModel(postingId = "non-existent")
         vm.uiState.first { it is PostingDetailsUiState.NotFound }
-        val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
 
         vm.deletePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertTrue(events.isEmpty())
+        assertTrue(repo.deletedPostings.isEmpty())
+        assertIs<PostingDetailsUiState.NotFound>(vm.uiState.value)
     }
 
     @Test
-    fun deletePosting_whenDeleteFails_doesNotEmitEvent() = runTest {
-        // Success state, but the delete fails: the event is only sent onSuccess.
+    fun deletePosting_whenDeleteFails_setsDeleteError_andDoesNotMarkDeleted() = runTest {
         repo.seed(posting())
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        val vm = subscribedViewModel()
         vm.uiState.first { it is PostingDetailsUiState.Success }
-        val events = backgroundScope.collectToList(vm.deletedEvent, testDispatcher)
 
         repo.failNextWrite = true
         vm.deletePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertTrue(events.isEmpty())
+        assertEquals(PostingDetailsUiState.Success(posting(), deleteError = true), vm.uiState.value)
     }
 
     @Test
-    fun deletePosting_whenDeleteFails_emitsDeleteFailedEvent() = runTest {
-        // Success state, but the delete fails: the failure event fires for user feedback.
+    fun onDeleteErrorShown_clearsDeleteError() = runTest {
         repo.seed(posting())
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
+        val vm = subscribedViewModel()
         vm.uiState.first { it is PostingDetailsUiState.Success }
-        val failures = backgroundScope.collectToList(vm.deleteFailedEvent, testDispatcher)
+        repo.failNextWrite = true
+        vm.deletePosting()
+        testDispatcher.scheduler.advanceUntilIdle()
 
+        vm.onDeleteErrorShown()
+
+        assertEquals(PostingDetailsUiState.Success(posting()), vm.uiState.value)
+    }
+
+    @Test
+    fun deletePosting_afterFailure_canBeRetried() = runTest {
+        repo.seed(posting())
+        val vm = subscribedViewModel()
+        vm.uiState.first { it is PostingDetailsUiState.Success }
+        repo.failNextWrite = true
+        vm.deletePosting()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        vm.deletePosting()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(listOf(posting()), repo.deletedPostings)
+        assertEquals(PostingDetailsUiState.Success(posting(), isDeleted = true), vm.uiState.value)
+    }
+
+    @Test
+    fun deletePosting_afterDeleted_isNoOp() = runTest {
+        repo.seed(posting())
+        val vm = subscribedViewModel()
+        vm.uiState.first { it is PostingDetailsUiState.Success }
+        vm.deletePosting()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // The fake records only deletes that find a row, so detect a second write by
+        // whether it consumes a pending failure instead.
         repo.failNextWrite = true
         vm.deletePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertEquals(1, failures.size)
+        assertTrue(repo.failNextWrite, "a deleted posting must not be deleted again")
+        assertEquals(PostingDetailsUiState.Success(posting(), isDeleted = true), vm.uiState.value)
     }
 
-    @Test
-    fun deletePosting_onSuccess_doesNotEmitDeleteFailedEvent() = runTest {
-        repo.seed(posting())
-        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, "1")
-        vm.uiState.first { it is PostingDetailsUiState.Success }
-        val failures = backgroundScope.collectToList(vm.deleteFailedEvent, testDispatcher)
-
-        vm.deletePosting()
-
-        testDispatcher.scheduler.advanceUntilIdle()
-        assertTrue(failures.isEmpty())
+    /**
+     * Keeps [PostingDetailsViewModel.uiState] subscribed, as the screen does, so its
+     * `WhileSubscribed` upstream keeps running and `uiState.value` stays current.
+     */
+    private fun TestScope.subscribedViewModel(postingId: String = "1"): PostingDetailsViewModel {
+        val vm = PostingDetailsViewModel(getPostingUseCase, deletePostingUseCase, postingId)
+        backgroundScope.launch(testDispatcher) { vm.uiState.collect() }
+        return vm
     }
 }

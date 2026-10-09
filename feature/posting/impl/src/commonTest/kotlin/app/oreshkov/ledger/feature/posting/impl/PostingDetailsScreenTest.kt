@@ -1,6 +1,9 @@
 package app.oreshkov.ledger.feature.posting.impl
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
@@ -177,20 +180,22 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
     }
 
     @Test
-    fun deleteConfirmed_emitsDeletedEvent() = runComposeUiTest {
+    fun deleteConfirmed_navigatesAwayExactlyOnce() = runComposeUiTest {
+        // The callback here does not pop, so the screen stays composed with isDeleted set:
+        // that must not keep re-triggering navigation, nor fall through to "not found".
         val repository = FakePostingRepository().apply { seed(posting()) }
         val viewModel = PostingDetailsViewModel(
             GetPostingUseCase(repository),
             DeletePostingUseCase(repository),
             postingId = "1",
         )
-        var deleted = false
+        var navigations = 0
 
         setContent {
             PostingDetailsScreen(
                 onNavigateBack = {},
                 onEditClick = {},
-                onDeleted = { deleted = true },
+                onDeleted = { navigations++ },
                 viewModel = viewModel,
             )
         }
@@ -199,8 +204,12 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         onNodeWithContentDescription("Delete Posting").performClick()
         onNodeWithText("Delete").performClick()
 
-        waitUntil { deleted }
+        waitUntil { navigations > 0 }
+        waitForIdle()
+        assertEquals(1, navigations)
         assertEquals(listOf(posting()), repository.deletedPostings)
+        onNodeWithText("Groceries").assertIsDisplayed()
+        onNodeWithText("Posting not found.").assertDoesNotExist()
     }
 
     @Test
@@ -229,5 +238,47 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
 
         waitUntilExactlyOneExists(hasText("Failed to delete. Please try again."))
         assertFalse(deleted, "a failed delete must not report the posting as deleted")
+    }
+
+    @Test
+    fun deleteFailure_isNotReshown_afterReenteringComposition() = runComposeUiTest {
+        // Leaving and re-entering composition stands in for a rotation or a section
+        // switch: the ViewModel (and its UI state) outlives the screen's composition.
+        val repository = FakePostingRepository().apply { seed(posting()) }
+        val viewModel = PostingDetailsViewModel(
+            GetPostingUseCase(repository),
+            DeletePostingUseCase(repository),
+            postingId = "1",
+        )
+        var showScreen by mutableStateOf(true)
+        setContent {
+            if (showScreen) {
+                PostingDetailsScreen(
+                    onNavigateBack = {},
+                    onEditClick = {},
+                    onDeleted = {},
+                    viewModel = viewModel,
+                )
+            }
+        }
+        waitUntilExactlyOneExists(hasText("Groceries"))
+        repository.failNextWrite = true
+        onNodeWithContentDescription("Delete Posting").performClick()
+        onNodeWithText("Delete").performClick()
+        waitUntilExactlyOneExists(hasText("Failed to delete. Please try again."))
+        mainClock.advanceTimeBy(SNACKBAR_TIMEOUT_MILLIS)
+        onNodeWithText("Failed to delete. Please try again.").assertDoesNotExist()
+
+        showScreen = false
+        waitForIdle()
+        showScreen = true
+        waitUntilExactlyOneExists(hasText("Groceries"))
+
+        onNodeWithText("Failed to delete. Please try again.").assertDoesNotExist()
+    }
+
+    private companion object {
+        /** Past SnackbarDuration.Short (4 s) plus its exit animation. */
+        const val SNACKBAR_TIMEOUT_MILLIS = 6_000L
     }
 }

@@ -31,13 +31,18 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingDetailsUiStat
 
 public final class app/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success : app/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState {
 	public static final field $stable I
-	public fun <init> (Lapp/oreshkov/ledger/core/model/data/Posting;)V
+	public fun <init> (Lapp/oreshkov/ledger/core/model/data/Posting;ZZ)V
+	public synthetic fun <init> (Lapp/oreshkov/ledger/core/model/data/Posting;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lapp/oreshkov/ledger/core/model/data/Posting;
-	public final fun copy (Lapp/oreshkov/ledger/core/model/data/Posting;)Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success;
-	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success;Lapp/oreshkov/ledger/core/model/data/Posting;ILjava/lang/Object;)Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success;
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun copy (Lapp/oreshkov/ledger/core/model/data/Posting;ZZ)Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success;Lapp/oreshkov/ledger/core/model/data/Posting;ZZILjava/lang/Object;)Lapp/oreshkov/ledger/feature/posting/impl/PostingDetailsUiState$Success;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeleteError ()Z
 	public final fun getPosting ()Lapp/oreshkov/ledger/core/model/data/Posting;
 	public fun hashCode ()I
+	public final fun isDeleted ()Z
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -45,9 +50,8 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingDetailsViewMo
 	public static final field $stable I
 	public fun <init> (Lapp/oreshkov/ledger/core/domain/GetPostingUseCase;Lapp/oreshkov/ledger/core/domain/DeletePostingUseCase;Ljava/lang/String;)V
 	public final fun deletePosting ()V
-	public final fun getDeleteFailedEvent ()Lkotlinx/coroutines/flow/Flow;
-	public final fun getDeletedEvent ()Lkotlinx/coroutines/flow/Flow;
 	public final fun getUiState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun onDeleteErrorShown ()V
 	public final fun retry ()V
 }
 
@@ -61,15 +65,16 @@ public abstract interface class app/oreshkov/ledger/feature/posting/impl/Posting
 public final class app/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing : app/oreshkov/ledger/feature/posting/impl/PostingEditUiState {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (ZLjava/lang/String;ZZZ)V
-	public synthetic fun <init> (ZLjava/lang/String;ZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLjava/lang/String;ZZZZ)V
+	public synthetic fun <init> (ZLjava/lang/String;ZZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Z
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Z
 	public final fun component4 ()Z
 	public final fun component5 ()Z
-	public final fun copy (ZLjava/lang/String;ZZZ)Lapp/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing;
-	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing;ZLjava/lang/String;ZZZILjava/lang/Object;)Lapp/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing;
+	public final fun component6 ()Z
+	public final fun copy (ZLjava/lang/String;ZZZZ)Lapp/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing;
+	public static synthetic fun copy$default (Lapp/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing;ZLjava/lang/String;ZZZZILjava/lang/Object;)Lapp/oreshkov/ledger/feature/posting/impl/PostingEditUiState$Editing;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getNarrative ()Ljava/lang/String;
 	public final fun getNarrativeError ()Z
@@ -77,6 +82,7 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingEditUiState$E
 	public final fun getSaveError ()Z
 	public fun hashCode ()I
 	public final fun isEditMode ()Z
+	public final fun isSaved ()Z
 	public final fun isSaving ()Z
 	public final fun isValid ()Z
 	public fun toString ()Ljava/lang/String;
@@ -109,7 +115,6 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingEditUiState$N
 public final class app/oreshkov/ledger/feature/posting/impl/PostingEditViewModel : androidx/lifecycle/ViewModel {
 	public static final field $stable I
 	public fun <init> (Lapp/oreshkov/ledger/core/domain/GetPostingUseCase;Lapp/oreshkov/ledger/core/domain/SavePostingUseCase;Ljava/lang/String;)V
-	public final fun getNavigationEvent ()Lkotlinx/coroutines/flow/Flow;
 	public final fun getUiState ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun onNarrativeChange (Ljava/lang/String;)V
 	public final fun onSaveErrorShown ()V

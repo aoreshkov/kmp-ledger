@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -66,12 +67,24 @@ fun PostingDetailsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val deleteFailedMessage = stringResource(Res.string.posting_details_delete_failed)
 
-    LaunchedEffect(viewModel) {
-        viewModel.deletedEvent.collect { onDeleted() }
+    val success = uiState as? PostingDetailsUiState.Success
+
+    val isDeleted = success?.isDeleted == true
+    val currentOnDeleted by rememberUpdatedState(onDeleted)
+    // No acknowledgement back to the ViewModel: leaving pops this entry and clears its
+    // ViewModel, so the flag cannot trigger a second navigation.
+    LaunchedEffect(isDeleted) {
+        if (isDeleted) currentOnDeleted()
     }
 
-    LaunchedEffect(viewModel) {
-        viewModel.deleteFailedEvent.collect { snackbarHostState.showSnackbar(deleteFailedMessage) }
+    val deleteError = success?.deleteError == true
+    // The error lives in UI state, so a re-entered composition (rotation, section switch)
+    // would show it again; consume it only after the snackbar has actually been shown.
+    LaunchedEffect(deleteError) {
+        if (deleteError) {
+            snackbarHostState.showSnackbar(deleteFailedMessage)
+            viewModel.onDeleteErrorShown()
+        }
     }
 
     PostingDetailsContent(

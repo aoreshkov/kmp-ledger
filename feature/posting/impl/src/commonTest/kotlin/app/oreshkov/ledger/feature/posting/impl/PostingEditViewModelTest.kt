@@ -78,15 +78,14 @@ class PostingEditViewModelTest {
     }
 
     @Test
-    fun savePosting_emitsNavigationEventOnSuccess() = runTest {
+    fun savePosting_onSuccess_marksSaved() = runTest {
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Groceries")
 
         vm.savePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertEquals(1, events.size)
+        assertTrue(vm.isSaved)
         assertEquals(listOf(newPosting(narrative = "Groceries")), repo.insertedPostings)
         assertEquals(listOf("Groceries"), repo.getAllPostings().first().map { it.narrative })
     }
@@ -98,7 +97,6 @@ class PostingEditViewModelTest {
         repo.seed(posting(id = "1", narrative = "Groceries"))
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "1")
         vm.uiState.first { it is PostingEditUiState.Editing }
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Rent")
 
         vm.savePosting()
@@ -106,7 +104,7 @@ class PostingEditViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(listOf(posting(id = "1", narrative = "Rent")), repo.getAllPostings().first())
         assertTrue(repo.insertedPostings.isEmpty())
-        assertEquals(1, events.size)
+        assertTrue(vm.isSaved)
     }
 
     @Test
@@ -115,7 +113,6 @@ class PostingEditViewModelTest {
         val writeGate = CompletableDeferred<Unit>()
         repo.writeGate = writeGate
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Groceries")
 
         vm.savePosting()
@@ -125,7 +122,7 @@ class PostingEditViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(1, repo.getAllPostings().first().size)
-        assertEquals(1, events.size)
+        assertTrue(vm.isSaved)
         // Success keeps isSaving: the screen is leaving and Save must stay disabled.
         assertTrue((vm.uiState.value as PostingEditUiState.Editing).isSaving)
     }
@@ -139,7 +136,6 @@ class PostingEditViewModelTest {
         vm.uiState.first { it is PostingEditUiState.Editing }
         val writeGate = CompletableDeferred<Unit>()
         repo.writeGate = writeGate
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Rent")
 
         vm.savePosting()
@@ -148,7 +144,7 @@ class PostingEditViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(listOf(posting(id = "1", narrative = "Rent")), repo.updatedPostings)
-        assertEquals(1, events.size)
+        assertTrue(vm.isSaved)
     }
 
     @Test
@@ -156,7 +152,6 @@ class PostingEditViewModelTest {
         // The guard must release on failure in practice, not just flip the flag.
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Groceries")
         vm.savePosting()
         testDispatcher.scheduler.advanceUntilIdle()
@@ -166,20 +161,19 @@ class PostingEditViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(listOf(newPosting(narrative = "Groceries")), repo.insertedPostings)
-        assertEquals(1, events.size)
+        assertTrue(vm.isSaved)
         assertFalse((vm.uiState.value as PostingEditUiState.Editing).saveError)
     }
 
     @Test
     fun savePosting_withInvalidInput_isNoOp() = runTest {
-        // Blank narrative is invalid: savePosting() must early-return without navigating.
+        // Blank narrative is invalid: savePosting() must early-return without saving.
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
 
         vm.savePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertTrue(events.isEmpty())
+        assertFalse(vm.isSaved)
         val state = vm.uiState.value as PostingEditUiState.Editing
         assertFalse(state.isValid)
         assertTrue(state.narrativeError)
@@ -191,12 +185,11 @@ class PostingEditViewModelTest {
         // must leave the state untouched and return before launching a write.
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, "non-existent")
         vm.uiState.first { it is PostingEditUiState.NotFound }
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
 
         vm.savePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
-        assertTrue(events.isEmpty())
+        assertFalse(vm.isSaved)
         assertIs<PostingEditUiState.NotFound>(vm.uiState.value)
     }
 
@@ -214,14 +207,13 @@ class PostingEditViewModelTest {
     fun savePosting_setsSaveErrorOnFailure() = runTest {
         repo.failNextWrite = true
         val vm = PostingEditViewModel(getPostingUseCase, savePostingUseCase, null)
-        val events = backgroundScope.collectToList(vm.navigationEvent, testDispatcher)
         vm.onNarrativeChange("Groceries")
         vm.savePosting()
 
         testDispatcher.scheduler.advanceUntilIdle()
         val state = vm.uiState.value as PostingEditUiState.Editing
         assertTrue(state.saveError)
-        assertTrue(events.isEmpty())
+        assertFalse(vm.isSaved)
         // The guard must release on failure, or the user could never retry the save.
         assertFalse(state.isSaving)
     }
@@ -256,3 +248,6 @@ class PostingEditViewModelTest {
         assertIs<PostingEditUiState.Editing>(state)
     }
 }
+
+private val PostingEditViewModel.isSaved: Boolean
+    get() = (uiState.value as? PostingEditUiState.Editing)?.isSaved == true
