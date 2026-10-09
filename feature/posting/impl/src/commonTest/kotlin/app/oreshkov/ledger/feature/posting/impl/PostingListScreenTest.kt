@@ -13,6 +13,8 @@ import app.oreshkov.ledger.core.test.posting
 import app.oreshkov.ledger.core.test.postings
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
@@ -89,6 +91,40 @@ class PostingListScreenTest : PlatformComposeUiTest() {
         }
         onNodeWithText("Groceries").performClick()
         assertEquals("1", clickedPostingId)
+    }
+
+    @Test
+    fun clickingAdd_whileNotResumed_isDropped() = runComposeUiTest {
+        var addClicked = false
+        setContent {
+            NotResumed {
+                PostingListContent(
+                    uiState = PostingListUiState.Empty,
+                    onAddClick = { addClicked = true },
+                    onPostingClick = {},
+                    onRetry = {}
+                )
+            }
+        }
+        onNodeWithContentDescription("Add Posting").performClick()
+        assertFalse(addClicked)
+    }
+
+    @Test
+    fun clickingPosting_whileNotResumed_isDropped() = runComposeUiTest {
+        var clickedPostingId: String? = null
+        setContent {
+            NotResumed {
+                PostingListContent(
+                    uiState = PostingListUiState.Success(listOf(posting())),
+                    onAddClick = {},
+                    onPostingClick = { clickedPostingId = it },
+                    onRetry = {}
+                )
+            }
+        }
+        onNodeWithText("Groceries").performClick()
+        assertNull(clickedPostingId)
     }
 
     @Test

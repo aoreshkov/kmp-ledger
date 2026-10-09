@@ -28,6 +28,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class, ExperimentalCoroutinesApi::class)
@@ -162,6 +163,27 @@ class PostingDetailsScreenTest : PlatformComposeUiTest() {
         onNodeWithContentDescription("Edit Posting").performClick()
 
         assertEquals("42", editClickedId)
+    }
+
+    @Test
+    fun successState_clickingEdit_whileNotResumed_isDropped() = runComposeUiTest {
+        var editClickedId: String? = null
+        setContent {
+            NotResumed {
+                PostingDetailsContent(
+                    uiState = PostingDetailsUiState.Success(posting(id = "42")),
+                    snackbarHostState = SnackbarHostState(),
+                    onNavigateBack = {},
+                    onEditClick = { id -> editClickedId = id },
+                    onDeleteClick = {},
+                    onRetry = {}
+                )
+            }
+        }
+
+        onNodeWithContentDescription("Edit Posting").performClick()
+
+        assertNull(editClickedId)
     }
 
     @Test
