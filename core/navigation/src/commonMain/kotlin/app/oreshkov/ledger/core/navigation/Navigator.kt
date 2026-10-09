@@ -23,9 +23,15 @@ class Navigator(
     private val currentStack: NavBackStack<NavKey>
         get() = backStacks.getValue(currentTopLevel)
 
-    /** Drill into the current section. */
+    /**
+     * Drill into the current section; a no-op while [destination] is already the top entry. A repeat
+     * tap would otherwise push a second entry with the same content key, sharing the first one's
+     * ViewModel and saved state, so the user must press back twice. In the two-pane list-detail
+     * layout the scene never transitions, so a lifecycle guard such as `dropUnlessResumed` cannot
+     * catch this; only the back stack can.
+     */
     fun goTo(destination: NavKey) {
-        currentStack.add(destination)
+        if (currentStack.lastOrNull() != destination) currentStack.add(destination)
     }
 
     fun canGoBack(): Boolean = currentStack.size > 1 || currentTopLevel != startRoute
