@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import app.oreshkov.ledger.core.model.data.Posting
 import app.oreshkov.ledger.core.navigation.LocalAccountAction
 import app.oreshkov.ledger.feature.posting.impl.resources.Res
@@ -68,7 +69,7 @@ internal fun PostingListContent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddClick) {
+            FloatingActionButton(onClick = dropUnlessResumed(block = onAddClick)) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.posting_list_add_content_description))
             }
         }
@@ -113,7 +114,7 @@ internal fun PostingListContent(
 @Composable
 private fun PostingListItem(posting: Posting, onClick: (String) -> Unit) {
     Card(
-        onClick = { onClick(posting.id) },
+        onClick = dropUnlessResumed { onClick(posting.id) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

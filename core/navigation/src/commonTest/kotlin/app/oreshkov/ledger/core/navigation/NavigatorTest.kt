@@ -57,6 +57,30 @@ class NavigatorTest {
     }
 
     @Test
+    fun goTo_currentTop_isNoOp() {
+        // Re-tapping the selected row in the two-pane layout must not stack a duplicate entry.
+        val detail = TestKey("detail")
+        nav.goTo(detail)
+        nav.goTo(detail)
+        assertEquals<List<NavKey>>(listOf(home, detail), nav.entries)
+    }
+
+    @Test
+    fun goTo_sameKeyNotOnTop_appends() {
+        val detail = TestKey("detail")
+        nav.goTo(detail)
+        nav.goTo(TestKey("edit"))
+        nav.goTo(detail)
+        assertEquals<List<NavKey>>(listOf(home, detail, TestKey("edit"), detail), nav.entries)
+    }
+
+    @Test
+    fun goTo_sectionRoot_isNoOp() {
+        nav.goTo(home)
+        assertEquals<List<NavKey>>(listOf(home), nav.entries)
+    }
+
+    @Test
     fun goBack_popsWithinCurrentSection() {
         nav.goTo(TestKey("detail"))
         nav.goBack()

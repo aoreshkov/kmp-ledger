@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import app.oreshkov.ledger.core.compose.LabeledField
 import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
 import app.oreshkov.ledger.core.compose.resources.back_content_description
@@ -154,7 +155,7 @@ internal fun PostingDetailsContent(
         },
         floatingActionButton = {
             if (isSuccess) {
-                FloatingActionButton(onClick = { onEditClick(uiState.posting.id) }) {
+                FloatingActionButton(onClick = dropUnlessResumed { onEditClick(uiState.posting.id) }) {
                     Icon(Icons.Default.Edit, contentDescription = stringResource(Res.string.posting_details_edit_content_description))
                 }
             }
