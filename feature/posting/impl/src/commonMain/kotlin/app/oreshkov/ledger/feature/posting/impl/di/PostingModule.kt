@@ -60,9 +60,9 @@ val postingNavigationModule = module {
         // ViewModel identity is scoped to this back-stack entry by
         // rememberViewModelStoreNavEntryDecorator (see App.kt); no manual key needed.
         PostingDetailsScreen(
-            onNavigateBack = { navigator.goBack() },
+            onNavigateBack = { navigator.goBack(from = route) },
             onEditClick = { id -> navigator.goTo(PostingEdit(id)) },
-            onDeleted = { navigator.goBack() },
+            onDeleted = { navigator.goBack(from = route) },
             viewModel = koinViewModel(
                 parameters = { parametersOf(route.id) }
             )
@@ -74,7 +74,7 @@ val postingNavigationModule = module {
     ) { route ->
         val navigator = LocalNavigator.current
         PostingEditScreen(
-            onNavigateBack = { navigator.goBack() },
+            onNavigateBack = { navigator.goBack(from = route) },
             viewModel = koinViewModel(
                 parameters = { parametersOf(route.id) }
             )

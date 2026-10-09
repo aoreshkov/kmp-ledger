@@ -78,6 +78,58 @@ class NavigatorTest {
     }
 
     @Test
+    fun goBackFrom_topEntry_pops() {
+        val detail = TestKey("detail")
+        nav.goTo(detail)
+        nav.goBack(from = detail)
+        assertEquals<List<NavKey>>(listOf(home), nav.entries)
+    }
+
+    @Test
+    fun goBackFrom_repeated_popsOnlyOnce() {
+        // A double tap on the edit screen's back arrow must not also pop the details screen.
+        val detail = TestKey("detail")
+        val edit = TestKey("edit")
+        nav.goTo(detail)
+        nav.goTo(edit)
+        nav.goBack(from = edit)
+        nav.goBack(from = edit)
+        assertEquals<List<NavKey>>(listOf(home, detail), nav.entries)
+    }
+
+    @Test
+    fun goBackFrom_entryNotOnTop_isNoOp() {
+        val detail = TestKey("detail")
+        val edit = TestKey("edit")
+        nav.goTo(detail)
+        nav.goTo(edit)
+        nav.goBack(from = detail)
+        assertEquals<List<NavKey>>(listOf(home, detail, edit), nav.entries)
+    }
+
+    @Test
+    fun goBackFrom_entryInAnotherSection_isNoOp() {
+        val detail = TestKey("detail")
+        nav.goTo(detail)
+        nav.switchTopLevel(settings)
+        nav.goBack(from = detail)
+        assertEquals(settings, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, detail, settings), nav.entries)
+    }
+
+    @Test
+    fun goBackFrom_sectionRoot_returnsToStartSectionOnce() {
+        // The repeat must not pop what the start section was drilled into.
+        val detail = TestKey("detail")
+        nav.goTo(detail)
+        nav.switchTopLevel(settings)
+        nav.goBack(from = settings)
+        nav.goBack(from = settings)
+        assertEquals(home, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, detail), nav.entries)
+    }
+
+    @Test
     fun switchTopLevel_preservesOtherSectionStack() {
         // Drill into the start section, then leave and come back.
         nav.goTo(TestKey("a"))

@@ -35,10 +35,10 @@ val settingsNavigationModule = module {
         )
     }
 
-    navigation<SettingsHome> {
+    navigation<SettingsHome> { route ->
         val navigator = LocalNavigator.current
         SettingsScreen(
-            onNavigateBack = { navigator.goBack() },
+            onNavigateBack = { navigator.goBack(from = route) },
             viewModel = koinViewModel()
         )
     }
