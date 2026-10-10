@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -21,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,12 +38,15 @@ import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_empty
 import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_error
 import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_retry
 import app.oreshkov.ledger.feature.posting.impl.resources.posting_list_title
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PostingListScreen(
     onNavigateToEdit: (String?) -> Unit,
     onNavigateToDetails: (String) -> Unit,
+    scrollToTopRequests: Flow<Unit>,
     viewModel: PostingListViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,6 +56,7 @@ fun PostingListScreen(
         onAddClick = { onNavigateToEdit(null) },
         onPostingClick = onNavigateToDetails,
         onRetry = viewModel::retry,
+        scrollToTopRequests = scrollToTopRequests,
     )
 }
 
@@ -60,7 +66,13 @@ internal fun PostingListContent(
     onAddClick: () -> Unit,
     onPostingClick: (String) -> Unit,
     onRetry: () -> Unit,
+    scrollToTopRequests: Flow<Unit> = emptyFlow(),
 ) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(listState, scrollToTopRequests) {
+        scrollToTopRequests.collect { listState.animateScrollToItem(0) }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -97,6 +109,7 @@ internal fun PostingListContent(
                 )
                 is PostingListUiState.Success -> {
                     LazyColumn(
+                        state = listState,
                         modifier = Modifier.fillMaxSize().testTag("posting_list"),
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)

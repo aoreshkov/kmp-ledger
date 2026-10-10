@@ -4,6 +4,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -110,5 +111,36 @@ class DesktopUiTest {
         onNodeWithText("Postings").performClick()
 
         onNodeWithText("Add Posting").assertExists()
+    }
+
+    @Test
+    fun inProgressPostingSurvivesDoubleTapOnItsSection() = runDesktopComposeUiTest {
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(
+                        postingNavigationModule,
+                        settingsNavigationModule,
+                        inMemoryDatabaseModule,
+                        testDataStoreModule,
+                    )
+                }
+            ) {
+                App()
+            }
+        }
+
+        // Type a draft, hop to Settings, then double-tap Postings: the second tap re-selects the
+        // section it just restored, which must not discard the add screen or its draft.
+        onNodeWithContentDescription("Add Posting").performClick()
+        onNodeWithText("Narrative").performTextInput("Unsaved draft")
+
+        onNodeWithText("Settings").performClick()
+        onNodeWithText("Postings").performClick()
+        onNodeWithText("Postings").performClick()
+
+        onNodeWithText("Add Posting").assertExists()
+        onNodeWithText("Unsaved draft").assertExists()
     }
 }

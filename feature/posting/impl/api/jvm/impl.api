@@ -123,7 +123,7 @@ public final class app/oreshkov/ledger/feature/posting/impl/PostingEditViewModel
 }
 
 public final class app/oreshkov/ledger/feature/posting/impl/PostingListScreenKt {
-	public static final fun PostingListScreen (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lapp/oreshkov/ledger/feature/posting/impl/PostingListViewModel;Landroidx/compose/runtime/Composer;I)V
+	public static final fun PostingListScreen (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/Flow;Lapp/oreshkov/ledger/feature/posting/impl/PostingListViewModel;Landroidx/compose/runtime/Composer;I)V
 }
 
 public abstract interface class app/oreshkov/ledger/feature/posting/impl/PostingListUiState {

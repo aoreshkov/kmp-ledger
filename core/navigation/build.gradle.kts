@@ -10,6 +10,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.androidx.navigation3.runtime)
+            // SharedFlow type exposed by Navigator.reselections.
+            api(libs.kotlinx.coroutines.core)
             // ImageVector type carried by TopLevelDestination.
             implementation(libs.compose.ui)
         }

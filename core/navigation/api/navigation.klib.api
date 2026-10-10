@@ -13,6 +13,8 @@ final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledg
         final fun <get-backStacks>(): kotlin.collections/Map<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavBackStack<androidx.navigation3.runtime/NavKey>> // app.oreshkov.ledger.core.navigation/Navigator.backStacks.<get-backStacks>|<get-backStacks>(){}[0]
     final val entries // app.oreshkov.ledger.core.navigation/Navigator.entries|{}entries[0]
         final fun <get-entries>(): kotlin.collections/List<androidx.navigation3.runtime/NavKey> // app.oreshkov.ledger.core.navigation/Navigator.entries.<get-entries>|<get-entries>(){}[0]
+    final val reselections // app.oreshkov.ledger.core.navigation/Navigator.reselections|{}reselections[0]
+        final fun <get-reselections>(): kotlinx.coroutines.flow/SharedFlow<androidx.navigation3.runtime/NavKey> // app.oreshkov.ledger.core.navigation/Navigator.reselections.<get-reselections>|<get-reselections>(){}[0]
     final val startRoute // app.oreshkov.ledger.core.navigation/Navigator.startRoute|{}startRoute[0]
         final fun <get-startRoute>(): androidx.navigation3.runtime/NavKey // app.oreshkov.ledger.core.navigation/Navigator.startRoute.<get-startRoute>|<get-startRoute>(){}[0]
 
