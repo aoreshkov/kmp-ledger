@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgraded Compose Multiplatform to 1.12.2 (from 1.12.1), together with the coordinates the 1.12.2 release declares itself aligned to. Material3 Adaptive moves to 1.3.0 stable (from 1.3.0-rc01, source-identical), JetBrains `navigation3-ui` to 1.2.0-rc01 (from 1.1.2), and Jetpack `navigation3-runtime` to 1.2.0 (from 1.1.7), which `navigation3-ui` 1.2.0-rc01 requires. Material3 stays on 1.12.0-alpha03, which that table also names. Every `org.jetbrains.compose` core artifact resolves to a single 1.12.2. Compose 1.12.2 fixes flicker when an animated shadow is non-rectangular (as on a pressed floating action button) and an iOS crash when a dialog takes focus from a text field. Navigation 3 1.2.0 fixes a crash on rapid multi-entry back, makes predictive back started during a forward transition follow the gesture, and makes the iOS push/pop slide mirror under right-to-left layouts. No code change was needed. Navigation 3's new `NavEntry.contentKey` format cannot collide for this app's routes, and `NavDisplay` still calls `onBack` once per popped entry. `NavKeySerializer` is still absent from `navigation3-runtime` 1.2.0, so the `PolymorphicSerializer(NavKey::class)` stand-in stays.
+
 ## [1.9.1] - 2026-10-05
 
 ### Changed
