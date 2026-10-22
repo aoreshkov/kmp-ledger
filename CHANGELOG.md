@@ -7,8 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-10-22
+
+### Added
+- `Navigator.reselections` (`core:navigation`), a `SharedFlow<NavKey>` of section roots re-selected in the navigation bar. The posting list collects it through a new required `scrollToTopRequests: Flow<Unit>` parameter on `PostingListScreen` and scrolls to its top. The signal is meant only for the screen composed at that moment, so it is dropped when nothing collects it. `core:navigation` now exposes `kotlinx-coroutines-core` as `api`.
+- `Navigator.goBack(from: NavKey)`, which pops only while `from` is the top entry. Every screen now passes its own route, so a second back request finds another entry on top and does nothing. System back (`NavDisplay.onBack`) keeps the unkeyed `goBack()`.
+- `FakePostingRepository.writeGate` (`core:test`), an opt-in `CompletableDeferred<Unit>` that every write suspends on, so a test can hold a write in flight. `core:test` now exposes `kotlinx-coroutines-core` as `api`.
+- `PostingEditUiState.Editing` gains `isSaving` and `isSaved`, and `PostingDetailsUiState.Success` gains `deleteError` and `isDeleted`. Acknowledgement calls `PostingEditViewModel.onSaveErrorShown()`, `PostingDetailsViewModel.onDeleteErrorShown()` and `SettingsViewModel.onSaveErrorShown()` consume an error once its snackbar has shown.
+
 ### Changed
+- Re-selecting the current section in the navigation bar no longer resets its back stack to the root. It emits on `Navigator.reselections` instead, as in the Navigation 3 multiple-back-stacks recipe. Before this, a double tap on another section switched to it and then discarded the stack the switch had just restored, unsaved edits included.
+- `Navigator.goTo` is single-top: it does nothing while the destination is already the top entry.
+- ViewModel one-off outcomes are UI state rather than `Channel` events. Save and delete results that complete while the screen is not composed (rotation, section switch) are no longer lost, and the screen acts on them when it returns.
 - Upgraded Compose Multiplatform to 1.12.2 (from 1.12.1), together with the coordinates the 1.12.2 release declares itself aligned to. Material3 Adaptive moves to 1.3.0 stable (from 1.3.0-rc01, source-identical), JetBrains `navigation3-ui` to 1.2.0-rc01 (from 1.1.2), and Jetpack `navigation3-runtime` to 1.2.0 (from 1.1.7), which `navigation3-ui` 1.2.0-rc01 requires. Material3 stays on 1.12.0-alpha03, which that table also names. Every `org.jetbrains.compose` core artifact resolves to a single 1.12.2. Compose 1.12.2 fixes flicker when an animated shadow is non-rectangular (as on a pressed floating action button) and an iOS crash when a dialog takes focus from a text field. Navigation 3 1.2.0 fixes a crash on rapid multi-entry back, makes predictive back started during a forward transition follow the gesture, and makes the iOS push/pop slide mirror under right-to-left layouts. No code change was needed. Navigation 3's new `NavEntry.contentKey` format cannot collide for this app's routes, and `NavDisplay` still calls `onBack` once per popped entry. `NavKeySerializer` is still absent from `navigation3-runtime` 1.2.0, so the `PolymorphicSerializer(NavKey::class)` stand-in stays.
+- The binary-compatibility validator ignores the Compose compiler's `ComposableSingletons$<File>Kt` holders through an explicit `ignoredClasses` list in the root `build.gradle.kts`. Their lambda keys re-hash whenever a nearby call changes, so they failed `jvmApiCheck` with no real API change. A new holder shows up in the next JVM dump diff and goes on that list.
+- CI: upgraded `ossf/scorecard-action` to 2.5.0 and `github/codeql-action/upload-sarif` to 4.38.3, and re-pinned `actions/upload-artifact` v7, `actions/download-artifact` v8 and `mikepenz/action-junit-report` v6 to their latest commits.
+
+### Fixed
+- Tapping Save twice in the posting editor could start a second write. In create mode that inserted a duplicate posting and navigated back twice. A save already in flight now ignores further taps, Save stays disabled until the save fails or the screen leaves, and the narrative field is read-only during the save so no edit is silently dropped.
+- Repeat taps on a posting card or on the add or edit button could stack duplicate entries, and the user then had to press back twice. Those handlers now use `dropUnlessResumed`, and `goTo` is single-top. The two-pane list-detail layout never transitions, so only the single-top `goTo` catches it there.
+- A double tap on a screen's back button, or a tap racing a save or delete that navigates away by itself, could pop the screen underneath as well.
+- Deleting a posting no longer briefly shows "not found" while the details screen leaves, and a second delete request after a successful delete no longer issues another write.
+- The delete confirmation dialog on the posting details screen now survives activity recreation (rotation).
+- Save and delete error snackbars no longer reappear when their screen is composed again.
+
+### Removed
+- `PostingEditViewModel.navigationEvent` and `PostingDetailsViewModel.deletedEvent` / `deleteFailedEvent`. The new UI-state fields above replace them.
+- `getPlatformLogWriters()` (`core:common`) is now `internal`. It was only ever used inside the module.
 
 ## [1.9.1] - 2026-10-05
 
@@ -278,7 +303,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean Architecture implementation.
 - Modular feature structure.
 
-[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.9.1...HEAD
+[Unreleased]: https://github.com/aoreshkov/kmp-ledger/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/aoreshkov/kmp-ledger/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/aoreshkov/kmp-ledger/compare/v1.7.0...v1.8.0
