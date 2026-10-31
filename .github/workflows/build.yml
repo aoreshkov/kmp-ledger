@@ -67,7 +67,7 @@ jobs:
       # exempts gradle-wrapper.jar when it sees a wrapper-validation step
       # directly in a workflow file.
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6
+        uses: gradle/actions/wrapper-validation@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
 
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
