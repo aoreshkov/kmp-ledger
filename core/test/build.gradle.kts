@@ -48,5 +48,9 @@ dependencies {
         // Robolectric 4.17 let these tests actually run on SDK 37.
         // api scope so the constraint propagates to every consumer's unit-test classpath.
         "androidMainApi"(libs.androidx.test.espresso.core)
+        // Robolectric 4.17 resolves guava 33.6.0-jre, affected by GHSA-xxph-c9ww-hj94
+        // (unbounded allocation on deserializing Compact* collections, <= 33.7.1).
+        // Same api scope, so every androidHostTest classpath picks up the fixed version.
+        "androidMainApi"(libs.guava)
     }
 }
