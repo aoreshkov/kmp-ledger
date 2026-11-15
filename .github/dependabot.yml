@@ -20,10 +20,12 @@ updates:
         patterns:
           - "*"
     # Supply-chain hardening: wait out the window where a freshly published
-    # (potentially compromised) release is live before proposing it.
+    # (potentially compromised) release is live before proposing it. Only
+    # `default-days` is valid here: the github-actions ecosystem does not support
+    # the `semver-*-days` options, and one unsupported key makes GitHub reject
+    # the whole file.
     cooldown:
       default-days: 3
-      semver-major-days: 7
 
   # Keep Gradle dependencies (including the version catalog) current.
   - package-ecosystem: "gradle"
