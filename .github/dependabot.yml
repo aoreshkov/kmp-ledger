@@ -44,11 +44,17 @@ updates:
       default-days: 3
       semver-major-days: 7
     ignore:
-      # material3 artifacts must stay aligned with the Compose Multiplatform
-      # release (androidx-material3 pin in gradle/libs.versions.toml); drop this
-      # when deliberately upgrading compose-multiplatform. Note: ignore also
-      # suppresses security updates for these artifacts.
+      # Material3, Material3 Adaptive and Navigation 3 must stay on the exact
+      # coordinates the Compose Multiplatform release declares itself aligned to
+      # (the androidx-material3, androidx-adaptive and androidx-navigation3-*
+      # pins in gradle/libs.versions.toml). They move by hand, together with
+      # compose-multiplatform, after re-reading the alignment table in its
+      # release notes. Note: ignore also suppresses security updates for these
+      # artifacts.
       - dependency-name: "org.jetbrains.compose.material3:*"
+      - dependency-name: "org.jetbrains.compose.material3.adaptive:*"
+      - dependency-name: "org.jetbrains.androidx.navigation3:*"
+      - dependency-name: "androidx.navigation3:*"
       # AGP is pinned to what the bundled IntelliJ IDEA plugin supports, and
       # Kotlin moves only after a manual sync check in both IDEA and Android
       # Studio (see the pins in gradle/libs.versions.toml, where the matching

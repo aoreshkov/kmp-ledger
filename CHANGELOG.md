@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgraded AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.12.0 (from 1.11.0), Logback to 1.6.6 (from 1.6.5), KSP to 2.3.13 (from 2.3.12) and the Gradle wrapper to 9.8.2 (from 9.8.0). Kotlin, AGP and the Compose-aligned pins are unchanged.
+- Dependabot now also leaves Material3 Adaptive (`org.jetbrains.compose.material3.adaptive`) and Navigation 3 (`org.jetbrains.androidx.navigation3`, `androidx.navigation3`) alone. Like Material3, they are pinned to the coordinates the Compose Multiplatform release declares itself aligned to and move by hand with it.
+
+### Fixed
+- The README contradicted the code in several places and now matches it:
+  - Both repository interfaces are declared in `core:domain`. The README placed `PostingRepository` in `core:data`.
+  - The `Navigator` and navigation-module samples show the 1.10.0 behaviour: screens call `goBack(from = route)`, `goTo` is single-top, and re-selecting a section emits on `reselections` instead of resetting its stack.
+  - The Koin samples match the source (`DomainModule` includes nothing, use cases take `@Provided` parameters), and the text no longer claims Koin annotations lack multibinding. The DSL there is a deliberate choice.
+  - The coverage floors are the enforced ones (95% line / 70% branch / 95% instruction aggregate), and every module with its own floor is listed.
+  - The migration warning describes what the build does: a schema version bump drops and recreates the database.
+  - The tech-stack table lists DataStore 1.3.0 and Logback 1.6.6, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
+  - The prerequisites name the IDE versions that can open the project: Android Studio Panda 3 (2025.3.3 Patch 1) or IntelliJ IDEA 2026.2.
+
+### Security
+- Constrained Robolectric's transitive Guava to 33.8.0-jre, outside GHSA-xxph-c9ww-hj94. It is a test-only dependency.
+
 ## [1.10.0] - 2026-10-22
 
 ### Added
