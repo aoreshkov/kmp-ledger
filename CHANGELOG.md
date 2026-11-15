@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The migration warning describes what the build does: a schema version bump drops and recreates the database.
   - The tech-stack table lists DataStore 1.3.0 and Logback 1.6.6, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
   - The prerequisites name the IDE versions that can open the project: Android Studio Panda 3 (2025.3.3 Patch 1) or IntelliJ IDEA 2026.2.
+- `.github/dependabot.yml` set `cooldown.semver-major-days` on the `github-actions` entry. Dependabot supports the `semver-*-days` cooldown options for Gradle but not for GitHub Actions, so GitHub reported the whole file as invalid. That entry now sets `default-days` alone, and action major updates wait 3 days instead of 7.
 
 ### Security
 - Constrained Robolectric's transitive Guava to 33.8.0-jre, outside GHSA-xxph-c9ww-hj94. It is a test-only dependency.
