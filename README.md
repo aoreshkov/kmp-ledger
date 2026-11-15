@@ -17,11 +17,11 @@
 
 ---
 
-**Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including several that are still in alpha or beta. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
+**Ledger** is a Kotlin Multiplatform reference project for Android, iOS, and Desktop. Its primary goal is to demonstrate production-grade architecture and design patterns using the latest Jetpack and Compose Multiplatform libraries — including a few that are still pre-release. It is intentionally simple in domain (basic financial postings) so that the architecture, not the business logic, is the focus.
 
-> **Important:** This is a **showcase project — use it as a template and a reference for new projects, not as an app to keep data in.** It ships no database migrations: the local schema may change between releases, and when it does, an existing install fails to open its database until the app's data is cleared or the app is reinstalled. Treat anything you enter here as disposable.
+> **Important:** This is a **showcase project — use it as a template and a reference for new projects, not as an app to keep data in.** It ships no database migrations: the database is built with Room's destructive fallback, so a release that bumps the schema version drops and recreates every table on first launch. Treat anything you enter here as disposable.
 
-> **Note:** Kotlin, Compose Multiplatform, Navigation 3, Room 3 / AndroidX SQLite, Koin, Coroutines, and AndroidX DataStore are all on stable releases. The exceptions are libraries the wider Kotlin ecosystem hasn't stabilized yet: AndroidX Lifecycle and Material3 Adaptive (Beta), and Material3 components — including the Adaptive Navigation Suite — (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+> **Note:** Kotlin, Compose Multiplatform, Room 3 / AndroidX SQLite, Koin, Coroutines, AndroidX DataStore, Lifecycle, and Material3 Adaptive are all on stable releases. The two exceptions are pinned to the exact coordinates the Compose Multiplatform release declares itself aligned to: the JetBrains Navigation 3 UI artifact (RC, on a stable Jetpack runtime) and the Material3 components, including the Adaptive Navigation Suite (Alpha). Pinned versions are recorded in [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
 ---
 
@@ -63,14 +63,14 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 | Kotlin Gradle Plugin | 2.4.20 | Build tooling |
 | Compose Multiplatform | 1.12.2 | Shared UI (Android, iOS, Desktop) |
 | Room 3 / SQLite | 3.0.3 / 2.7.1 | Local database with KMP support |
-| AndroidX DataStore (Preferences) | 1.2.1 | Multiplatform key-value persistence (theme preference) |
+| AndroidX DataStore (Preferences) | 1.3.0 | Multiplatform key-value persistence (theme preference) |
 | Navigation 3 | 1.2.0 (runtime) / 1.2.0-rc01 (ui) | Type-safe declarative navigation |
 | Material3 Adaptive Navigation Suite | 1.12.0-alpha03 | Adaptive top-level nav (bottom bar / rail / drawer) |
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.2.0 | Kotlin Multiplatform logging |
 | Kover | 0.9.11 | Kotlin Multiplatform code coverage |
-| SLF4J / Logback | 2.0.20 / 1.6.5 | Desktop logging implementation |
-| Swift Export | Experimental | Direct Kotlin-to-Swift bridge (No Obj-C) |
+| SLF4J / Logback | 2.0.20 / 1.6.6 | Desktop logging implementation |
+| Swift Export | Alpha | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
 | Lifecycle / ViewModel | 2.11.0 | State management and lifecycle-aware components |
 | Material3 Adaptive | 1.3.0 | List/detail adaptive layouts |
@@ -105,15 +105,15 @@ Ledger follows a strict unidirectional layered architecture. Each layer depends 
                  │
 ┌────────────────▼────────────────────┐
 │           core:domain               │  Use cases (SavePosting, GetPosting, GetThemeMode, …)
-│                                     │  + SettingsRepository interface
+│                                     │  + PostingRepository / SettingsRepository interfaces
 │           core:common               │  DataResult, shared utilities
 │           core:compose              │  Shared Compose components
 └──────────┬───────────────────┬──────┘
            │                   │
 ┌──────────▼─────────┐ ┌───────▼─────────────────┐
 │      core:data     │ │      core:datastore     │  DataStore-backed SettingsRepository impl
-│ PostingRepository, │ │ DataStoreSettings-      │
-│      mappers       │ │ Repository, platform    │
+│ PostingRepository  │ │ DataStoreSettings-      │
+│   impl, mappers    │ │ Repository, platform    │
 └──────────┬─────────┘ │ DataStore builders      │
            │           └─────────────────────────┘
 ┌──────────▼──────────────────────────┐
@@ -126,10 +126,12 @@ Supporting modules (no layer dependency):
   build-logic  — Gradle convention plugins
 ```
 
-> **Repository placement:** `PostingRepository` is declared in `core:data` and implemented there.
-> `SettingsRepository` is instead declared in `core:domain` (`repository/`) and implemented in the
-> separate `core:datastore` module — so `core:datastore` depends on `core:domain` and supplies the
-> binding, rather than the domain depending on it. Both expose only domain models upward.
+> **Repository placement:** both repository interfaces are declared in `core:domain`
+> (`repository/`). `PostingRepository` is implemented in `core:data`
+> (`OfflineFirstPostingRepository`) and `SettingsRepository` in `core:datastore`
+> (`DataStoreSettingsRepository`). The diagram shows call flow: at compile time `core:data` and
+> `core:datastore` depend on `core:domain` and supply the bindings, rather than the domain
+> depending on them. Both expose only domain models upward.
 
 ### Module responsibilities
 
@@ -137,9 +139,9 @@ Supporting modules (no layer dependency):
 |---|---|
 | `core:model` | Pure Kotlin data classes with no framework dependency. The single source of truth for domain types (`Posting`, `NewPosting`, `ThemeMode`). |
 | `core:database` | Room 3 entities, DAOs, TypeConverters, and platform-specific database builders. `PostingEntity` carries data-layer sync metadata (`updatedAt`, `isDeleted`, `pendingSync`) that never reaches the domain model; deletes are soft, so a tombstoned row is hidden from reads but retained. |
-| `core:data` | `PostingRepository` interface and its `OfflineFirstPostingRepository` implementation. Contains entity↔model mappers, and stamps `updatedAt`/`pendingSync` on every local write from an injected `kotlin.time.Clock`. |
+| `core:data` | `OfflineFirstPostingRepository`, the implementation of `PostingRepository` (declared in `core:domain`). Contains entity↔model mappers, and stamps `updatedAt`/`pendingSync` on every local write from an injected `kotlin.time.Clock`. |
 | `core:datastore` | `DataStoreSettingsRepository` — the AndroidX DataStore Preferences implementation of `SettingsRepository` (declared in `core:domain`). Provides `PlatformDataStoreModule` (`expect`/`actual`) with OS-aware preference-file paths and corruption/IO-error recovery. |
-| `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`, `GetThemeModeUseCase`, `SetThemeModeUseCase`). Also declares the `SettingsRepository` interface. Each use case wraps a repository call with a single responsibility. |
+| `core:domain` | One use case per operation (`GetPostingUseCase`, `SavePostingUseCase`, `DeletePostingUseCase`, `GetPostingsUseCase`, `GetThemeModeUseCase`, `SetThemeModeUseCase`). Also declares the `PostingRepository` and `SettingsRepository` interfaces (`repository/`). Each use case wraps a repository call with a single responsibility. |
 | `core:common` | `DataResult<T>` sealed interface and the `Flow<T>.asResult()` extension, the `runCatchingCancellable` cancellation-safe result helper, plus `AppDispatchers` interface and `DispatcherModule` Koin binding. |
 | `core:compose` | Shared Compose components used across feature modules (e.g. `LabeledField`). |
 | `core:navigation` | `Navigator` (per-section back-stack manager), `StartDestination` value class, `TopLevelDestination` (a section surfaced in the top-level nav chrome), and `LocalAccountAction` — an app-bar slot for an account action that renders nothing unless the app root provides one. Framework-agnostic. |
@@ -289,12 +291,12 @@ The JVM implementation resolves the correct data directory for macOS (`~/Library
 All modules and bindings are declared with Koin annotations rather than DSL, enabling compile-time validation of the dependency graph:
 
 ```kotlin
-@Module(includes = [DataModule::class])
+@Module
 @ComponentScan("app.oreshkov.ledger.core.domain")
 class DomainModule
 
 @Factory
-class GetPostingUseCase(private val repository: PostingRepository) { ... }
+class GetPostingUseCase(@Provided private val repository: PostingRepository) { ... }
 
 @KoinViewModel
 class PostingDetailsViewModel(
@@ -306,7 +308,7 @@ class PostingDetailsViewModel(
 
 ### 6. Navigation 3 with `koinEntryProvider`
 
-Screens are registered as Koin navigation entries in each feature's `*NavigationModule` (`postingNavigationModule`, `settingsNavigationModule`), keeping navigation and DI fully integrated without manual ViewModel factories. The same DSL module is the **only** place Koin DSL is allowed, and it does exactly two things: register `navigation<NavKey>` screen entries, and contribute the feature's top-level nav item. Because Koin annotations have no multibinding, each `TopLevelDestination` is published under a distinct `named(...)` qualifier and the app shell aggregates them with `getAll<TopLevelDestination>()`:
+Screens are registered as Koin navigation entries in each feature's `*NavigationModule` (`postingNavigationModule`, `settingsNavigationModule`), keeping navigation and DI fully integrated without manual ViewModel factories. The same DSL module is the **only** place Koin DSL is allowed, and it does exactly two things: register `navigation<NavKey>` screen entries, and contribute the feature's top-level nav item. Each `TopLevelDestination` is published under a distinct `named(...)` qualifier, so the definitions do not override one another and the app shell aggregates them with `getAll<TopLevelDestination>()`. Koin annotations could express the same multibinding (`@Single @Named(...)`); the DSL is a deliberate choice that keeps each nav item beside the `navigation<NavKey>` entries it ships with, which have no annotation equivalent:
 
 ```kotlin
 val settingsNavigationModule = module {
@@ -319,12 +321,17 @@ val settingsNavigationModule = module {
             order = 1,
         )
     }
-    navigation<SettingsHome> {
+    navigation<SettingsHome> { route ->
         val navigator = LocalNavigator.current
-        SettingsScreen(onNavigateBack = { navigator.goBack() }, viewModel = koinViewModel())
+        SettingsScreen(
+            onNavigateBack = { navigator.goBack(from = route) },
+            viewModel = koinViewModel()
+        )
     }
 }
 ```
+
+A screen passes its own route to `goBack(from = route)`, which pops only while that entry is on top, so a double tap cannot pop the screen beneath it.
 
 ### 7. Adaptive top-level navigation
 
@@ -338,10 +345,16 @@ class Navigator(
     val backStacks: Map<NavKey, NavBackStack<NavKey>>,
     private val currentTopLevelState: MutableState<NavKey>,
 ) {
-    fun switchTopLevel(destination: NavKey) { /* preserve each section's stack; re-select resets to root */ }
-    fun goBack() { /* pop within section, else fall back to the start section (exit-through-home) */ }
+    val reselections: SharedFlow<NavKey>   // section roots re-selected in the nav bar
+
+    fun switchTopLevel(destination: NavKey) { /* preserve each section's stack; a re-select emits on reselections */ }
+    fun goTo(destination: NavKey) { /* single-top: no-op while destination is already on top */ }
+    fun goBack() { /* system back: pop within section, else fall back to the start section (exit-through-home) */ }
+    fun goBack(from: NavKey) { /* screens: goBack() only while `from` is the top entry */ }
 }
 ```
+
+Re-selecting the current section leaves its stack alone, as in the Navigation 3 multiple-back-stacks recipe: the screen on show collects `reselections` and scrolls to its top (the posting list does).
 
 Each section's stack survives configuration change and process death (`rememberNavBackStack`), and every section is decorated each frame with its **own** `SaveableStateHolder`/`ViewModelStore` decorators so inactive sections keep their ViewModels and scroll/UI state alive instead of being disposed.
 
@@ -394,7 +407,7 @@ All tests use pure Kotlin — no mocking framework.
 **Code Coverage:**
 The project uses **JetBrains Kover** for multiplatform coverage tracking. Coverage is automatically collected for all `commonMain` logic across JVM and Android targets. Reports are aggregated at the root project level and filtered to exclude generated code (Koin factories, Compose singletons, etc.).
 
-Coverage is **enforced**, not just reported: CI runs `koverVerify`, which fails the build if coverage drops below the configured floors. The root project sets aggregate floors (88% line / 60% branch / 84% instruction), and individual modules add stricter per-module floors: the pure-logic modules `core:data`, `core:domain`, and `feature:posting:api` each require 90% line / 85% branch; `core:datastore` requires 90% line; and `feature:settings:impl` requires 90% line / 60% branch (its branch floor is tuned lower because the `@Composable` screen emits synthetic branches via Compose codegen).
+Coverage is **enforced**, not just reported: CI runs `koverVerify`, which fails the build if coverage drops below the configured floors. The root project sets aggregate floors (95% line / 70% branch / 95% instruction), and individual modules add their own: the pure-logic modules `core:data`, `core:domain`, `feature:posting:api`, and `feature:settings:api` each require 90% line / 85% branch; `core:database` and `core:datastore` require 90% line; and `feature:posting:impl` and `feature:settings:impl` require 90% line / 60% branch (their branch floors are tuned lower because `@Composable` screens emit synthetic branches via Compose codegen, which is also why the aggregate branch floor sits below the other two).
 
 In CI, the `check` job runs `koverXmlReport koverVerify` and posts a coverage summary as a comment on each pull request, alongside a test-results summary with inline annotations for any failures. The aggregated HTML report is also uploaded as a build artifact. Docs-only changes skip the build and test jobs entirely (a `changes` path filter gates them, with a single `ci-success` status check as the required gate).
 
@@ -421,7 +434,7 @@ A separate `instrumented-tests` job runs the Android smoke suite on two **Gradle
 
 ### Prerequisites
 
-- Android Studio Meerkat or newer
+- Android Studio Panda 3 (2025.3.3 Patch 1) or newer — the first release that supports API 37 with AGP 9.1.1 — or IntelliJ IDEA 2026.2 or newer
 - JDK 21+
 
 ### Run on Android
@@ -452,7 +465,7 @@ local JBR install is required.
 2.  Select a simulator or real device.
 3.  Click **Run**.
 
-> **Note:** The iOS app uses the experimental **Swift Export** for direct Kotlin-to-Swift interoperability. For ProMotion (120Hz) support, ensure `CADisableMinimumFrameDurationOnPhone` is set to `YES` in the **Target > Info** tab of the Xcode project (Xcode 13+ manages this via a generated plist).
+> **Note:** The iOS app uses **Swift Export** (Alpha) for direct Kotlin-to-Swift interoperability. For ProMotion (120Hz) support, ensure `CADisableMinimumFrameDurationOnPhone` is set to `YES` in the **Target > Info** tab of the Xcode project (Xcode 13+ manages this via a generated plist).
 
 ### Run all tests
 
@@ -491,7 +504,7 @@ kmp-ledger/
 │   ├── data/                     # PostingRepository impl and mappers
 │   ├── database/                 # Room 3 database, DAOs, TypeConverters
 │   ├── datastore/                # DataStore-backed SettingsRepository impl
-│   ├── domain/                   # Use cases, SettingsRepository interface
+│   ├── domain/                   # Use cases, repository interfaces
 │   ├── model/                    # Pure domain models (Posting, ThemeMode)
 │   ├── navigation/               # Navigator, StartDestination, TopLevelDestination
 │   ├── test/                     # Shared test utilities
