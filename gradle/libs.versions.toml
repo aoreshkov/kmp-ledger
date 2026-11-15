@@ -4,7 +4,7 @@
 # the latest stable breaks project import in the IDE. Suppressed on this line
 # only, so every other dependency is still checked for currency.
 #noinspection AndroidGradlePluginVersion
-android-gradle-plugin = "9.1.1"
+android-gradle-plugin = "9.5.1"
 android-sdk-compile = "37"
 android-sdk-min = "24"
 android-sdk-target = "37"
@@ -12,7 +12,7 @@ android-sdk-target = "37"
 # IDEA and Android Studio first (2.4.20 was checked against IDEA 2026.2 with
 # AGP 9.1.1 and Gradle 9.8.0). Suppressed on this line only.
 #noinspection GradleDependency,NewerVersionAvailable
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 ksp = "2.3.13"
 kover = "0.9.11"
 # Bundled with Compose Multiplatform 1.12.x; drives :desktopApp:hotRun and the
@@ -36,9 +36,9 @@ androidx-material3 = "1.12.0-alpha03"
 
 # Third-party
 koin = "4.2.2"
-koin-compiler = "1.2.1"
+koin-compiler = "1.2.3"
 kotlinx-coroutines = "1.11.0"
-kotlinx-serialization = "1.12.0"
+kotlinx-serialization = "1.13.0"
 kotlinx-binary-compatibility-validator = "0.18.2"
 kermit = "2.2.0"
 slf4j = "2.0.20"
