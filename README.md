@@ -440,6 +440,18 @@ interface AppDispatchers {
 
 Production code receives `DefaultAppDispatchers` (backed by `Dispatchers.IO` / `Dispatchers.Default`) via Koin. Tests supply a `TestAppDispatchers` backed by a `TestDispatcher`, so `withContext` and `flowOn` calls run on the test scheduler without any platform-specific thread semantics. `DispatcherModule` in `core:common` wires the production binding; `core:data` consumes it via `DataModule`.
 
+### 12. Localization that cannot drift
+
+The UI ships in English and Bulgarian. Every string is a Compose Multiplatform resource: `composeResources/values/strings.xml` holds the default and `values-bg/strings.xml` the translation, in each of the three modules that own strings (`core:compose`, `feature:posting:impl`, `feature:settings:impl`). The app follows the system language, and on Android 13+ also the per-app language setting, which `res/xml/locales_config.xml` advertises.
+
+Three things keep a second language honest:
+
+- **Key parity is a build check.** Compose resources fall back to the default language without a word when a locale lacks a key, so a half-translated screen builds and passes every test written in English. `checkStringResourceParity`, a task the `ledger.kotlin.multiplatform` convention plugin adds to every module's `check`, fails when a locale is missing a key or declares one the default does not. Android lint's `MissingTranslation` cannot do this: it reads Android `res/`, not `composeResources/`.
+- **The translation is rendered in a test.** `PostingListScreenBulgarianTest` and `SettingsScreenBulgarianTest` render a screen under the Bulgarian locale, which proves the resources are packaged and picked, including the string `feature:*:impl` borrows from `core:compose`.
+- **Right-to-left is tested without an RTL translation.** `PostingScreensRtlTest` and `SettingsScreenRtlTest` lay each screen out under `LayoutDirection.Rtl` and assert positions: back arrow at the right, actions and the floating button at the left, each radio button to the right of its label. Each has a left-to-right control asserting the mirror image, so a layout that ignored the direction could not pass by accident.
+
+There is no in-app language picker. On Android it would need `AppCompatActivity`, and on the other targets Compose Multiplatform documents only a workaround until a common API exists.
+
 ---
 
 ## Testing Strategy
@@ -468,10 +480,14 @@ A separate `instrumented-tests` job runs the Android smoke suite on two **Gradle
 | `core:datastore` | `DataStoreSettingsRepositoryTest` against a real temp-file DataStore (read/write + write-failure path) |
 | `core:domain` | Use case tests with `FakePostingRepository` / `FakeSettingsRepository` |
 | `core:common` | `DataResultTest` for the `asResult()` extension |
-| `core:navigation` | `NavigatorTest` for per-section back stacks, `switchTopLevel`, and exit-through-home `goBack` |
-| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level) |
-| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle and save-error surfacing) |
-| `core:ui` | App-level Compose UI test |
+| `core:navigation` | `NavigatorTest` for per-section back stacks, `switchTopLevel`, exit-through-home `goBack`, and deep links onto the stacks; `DeepLinkResolverTest` for matching, including malformed links |
+| `feature:*:api` | NavKey serialization round-trips, and each feature's deep-link table |
+| `core:bootstrap` | The combined serializer configuration and the shipped `ledger://` link table, on every target |
+| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level), a right-to-left pass and a Bulgarian render |
+| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle and save-error surfacing), a right-to-left pass and a Bulgarian render |
+| `core:ui` | App-level Compose UI tests, including applying and acknowledging a deep link |
+| `desktopApp` | `DesktopUiTest`: the real app over a real in-memory database, including deep links from cold start and while editing |
+| `androidApp` | Instrumented smoke test, plus deep links through the real intent filter (`DeepLinkTest`) |
 | DI modules | Compile-time validation (Koin Compiler Plugin) + runtime `verify()` (`KoinModuleTest`) + App-level integration tests |
 
 ---

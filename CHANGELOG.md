@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `App()` takes `deepLink` and `onDeepLinkConsumed`. The platform holds the pending link as state and `App()` acknowledges it once handled, whether or not anything claimed it.
   - Android: a `VIEW` intent filter for the `ledger` scheme. `MainActivity` is now `singleTop`, so a link opened while the app is running reaches `onNewIntent` instead of stacking a second copy of the app. The launch intent is not re-applied after rotation, process-death restore, or a relaunch from Recents.
   - Desktop: `main` reads the link from its first argument. iOS: `CFBundleURLTypes` plus `.onOpenURL`, calling the new exported `openDeepLink(url:)`. The iOS path compiles but has not been run on a device or simulator.
+- A Bulgarian translation of every UI string (`composeResources/values-bg` in `core:compose`, `feature:posting:impl` and `feature:settings:impl`). On Android 13 and later the app also appears under the system's per-app language setting (`res/xml/locales_config.xml`).
+- `checkStringResourceParity`, a task the `ledger.kotlin.multiplatform` convention plugin adds to every module's `check`. It fails when a locale's Compose string resources are missing a key the default `values/` declares, or declare one it does not. Compose resources otherwise fall back to the default language silently.
+- Right-to-left layout tests for all four screens, each with a left-to-right control, and a render of the list and settings screens under the Bulgarian locale.
 
 ### Changed
 - Upgraded AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.12.0 (from 1.11.0), Logback to 1.6.6 (from 1.6.5), KSP to 2.3.13 (from 2.3.12) and the Gradle wrapper to 9.8.2 (from 9.8.0). Kotlin, AGP and the Compose-aligned pins are unchanged.

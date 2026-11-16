@@ -1,0 +1,10 @@
+<resources>
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_nav_label">Настройки</string>
+    <string name="settings_theme_section">Тема</string>
+    <string name="settings_theme_light">Светла</string>
+    <string name="settings_theme_dark">Тъмна</string>
+    <string name="settings_theme_system">Стандартна за системата</string>
+    <string name="settings_save_failed">Запазването не бе успешно. Опитайте отново.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The languages the app is translated into, for the per-app language setting Android 13+
+     shows under Settings > Apps > Ledger > Language. Written by hand: AGP's generateLocaleConfig
+     derives this list from Android res/values-* directories, and the app's strings are Compose
+     resources (composeResources/values-*), which it does not see. Add a locale here when a
+     values-<locale> directory is added there. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="bg" />
+</locale-config>
