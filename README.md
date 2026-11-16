@@ -149,7 +149,7 @@ Supporting modules (no layer dependency):
 | `core:bootstrap` | Root Koin module that wires all sub-modules together (including `SettingsModule`) and provides `StartDestination` and a `SavedStateConfiguration` that combines every feature's NavKey serializers. |
 | `core:test` | `FakePostingRepository`, `FakeSettingsRepository`, `PlatformComposeUiTest` expect/actual, and shared posting fixture builders (`posting()`, `newPosting()`, `postings()`). Consumed by all test source sets. |
 | `iosExport` | Bridge module for Swift Export. Contains the `MainViewController` and Koin initialization for iOS. |
-| `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`) and their serializers module. Consumed by both the feature impl and the bootstrap/navigation modules. |
+| `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`), their serializers module, and the deep links that open them (`postingDeepLinks`). Consumed by both the feature impl and the bootstrap/navigation modules. |
 | `feature:posting:impl` | `PostingListScreen`, `PostingDetailsScreen`, `PostingEditScreen`, their ViewModels, and the Koin navigation module (`postingNavigationModule`). |
 | `feature:settings:api` | `SettingsRoute`/`SettingsHome` `NavKey` types and the `serializerSettings` module. Consumed by the feature impl and the bootstrap/navigation modules. |
 | `feature:settings:impl` | `SettingsScreen`, `SettingsViewModel` (theme toggle + write-failure surfacing), and the Koin navigation module (`settingsNavigationModule`), which also contributes the Settings `TopLevelDestination`. |
@@ -224,7 +224,7 @@ Note that the stability configuration file is not a tracked task input, so editi
 
 Each feature is split into two modules:
 
-- **`feature:posting:api`** — contains only the `NavKey` sealed types that other modules reference for navigation. Has no dependency on Compose or domain logic.
+- **`feature:posting:api`** — contains only the feature's navigation contract: the `NavKey` sealed types that other modules reference, and the deep links that resolve to them. Has no dependency on Compose or domain logic.
 - **`feature:posting:impl`** — contains the screens, ViewModels, and DI. Depends on `api` but is never depended on by any other feature or core module.
 
 This means modules that need to navigate *to* a feature only depend on `api`, keeping compile-time coupling minimal.
@@ -351,6 +351,7 @@ class Navigator(
     fun goTo(destination: NavKey) { /* single-top: no-op while destination is already on top */ }
     fun goBack() { /* system back: pop within section, else fall back to the start section (exit-through-home) */ }
     fun goBack(from: NavKey) { /* screens: goBack() only while `from` is the top entry */ }
+    fun goToDeepLink(backStack: List<NavKey>): Boolean { /* select the link's section and show its back stack (pattern 8) */ }
 }
 ```
 
@@ -358,7 +359,52 @@ Re-selecting the current section leaves its stack alone, as in the Navigation 3 
 
 Each section's stack survives configuration change and process death (`rememberNavBackStack`), and every section is decorated each frame with its **own** `SaveableStateHolder`/`ViewModelStore` decorators so inactive sections keep their ViewModels and scroll/UI state alive instead of being disposed.
 
-### 8. Theme preference persisted with DataStore
+### 8. Deep links onto per-section back stacks
+
+The app opens links on its own scheme, using the deep-link API that Navigation 3 added in 1.2.0. The matching is shared code; only receiving the link is per platform.
+
+| Link | Opens | Back stack |
+|---|---|---|
+| `ledger://postings` | Posting list | `PostingList` |
+| `ledger://postings/new` | Add screen | `PostingList`, `PostingEdit(null)` |
+| `ledger://postings/{id}` | Details | `PostingList`, `PostingDetail(id)` |
+| `ledger://postings/{id}/edit` | Editor | `PostingList`, `PostingDetail(id)`, `PostingEdit(id)` |
+| `ledger://settings` | Settings | `SettingsHome` |
+
+Each feature declares its links in its `api` module, next to the NavKeys they produce. A matcher pairs a URI pattern with the synthetic back stack the link opens on:
+
+```kotlin
+fun postingDeepLinks(baseUri: String) = listOf(
+    UriDeepLinkMatcher(DeepLinkUri("${baseUri}postings/{id}"), PostingDetail.serializer())
+        .withBackStack<PostingDetail, NavKey> { match -> listOf(PostingList, match.key) },
+    // ...
+)
+```
+
+`BootstrapModule` combines the features' matchers into one `DeepLinkResolver`, the same way it combines their NavKey serializers. When several patterns claim a link, the most specific wins, so `postings/new` opens the add screen rather than the details of a posting called "new".
+
+**Mapping a link onto several back stacks.** Navigation 3's guide ends at "build a list of keys". With one back stack per section, the app needs a rule for where that list goes, and the rule is: *the first key of a link's back stack is the root of its section.* `Navigator.goToDeepLink` selects that section and makes the list its stack:
+
+- Every other section keeps its stack, so an edit in progress elsewhere survives the link.
+- Entries the section already shares with the link, counted from the root, stay in place with their ViewModels and saved state. Only what differs above them is replaced, as Android's navigation principles describe for a link into a running app. Opening the same link twice changes nothing.
+- A back stack whose first key no section owns is refused.
+- Back then walks the link's own hierarchy and finally exits through the start section, exactly as it does after navigating by hand.
+
+**Receiving the link** follows the project's rule that one-off outcomes are state with an acknowledgement. Each platform holds the pending link and passes it down, and `App()` calls back once it has handled it, whether or not anything claimed it:
+
+```kotlin
+App(deepLink = pendingDeepLink, onDeepLinkConsumed = { pendingDeepLink = null })
+```
+
+| Platform | How the link arrives |
+|---|---|
+| Android | A `VIEW` intent filter for the `ledger` scheme. `MainActivity` is `singleTop`, so a link opened while the app is running reaches `onNewIntent` instead of stacking a second copy of the app. The launch intent is read only on a fresh start, so rotation and process-death restore do not re-apply an old link over the restored stacks. Try it with `adb shell am start -a android.intent.action.VIEW -d "ledger://postings/new" app.oreshkov.ledger` |
+| Desktop | The first launch argument: `./gradlew :desktopApp:run --args="ledger://settings"`. Registering the scheme with the operating system is a packaging step and is not done here |
+| iOS | `CFBundleURLTypes` in `Info.plist`, and SwiftUI's `.onOpenURL` calling the exported `openDeepLink(url:)` |
+
+Links are input from outside the app, so they only navigate: no link saves or deletes, and an unknown id lands on the screen's own "not found" state. Verified `https` links (Android App Links, iOS universal links) need a domain that serves the association files, which this project does not have. The matchers already take the base URI as a parameter for that reason.
+
+### 9. Theme preference persisted with DataStore
 
 The theme preference is stored with **AndroidX DataStore Preferences** in `core:datastore`. Like the Room database, each platform supplies its file path through an `expect`/`actual` Koin module:
 
@@ -377,11 +423,11 @@ expect class PlatformDataStoreModule
 
 The store is resilient: the factory installs a `ReplaceFileCorruptionHandler`, reads recover from `IOException` by emitting `emptyPreferences()`, and an unrecognised stored value falls back to `ThemeMode.SYSTEM`. `ThemeMode` is a three-value enum (`LIGHT`/`DARK`/`SYSTEM`) because a plain boolean can't express "follow the OS". `App()` collects the preference with `collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)` and applies `LedgerTheme(themeMode)`, which resolves `SYSTEM` via `isSystemInDarkTheme()`; because DataStore reads are async, a cold start may briefly show the system theme before the stored value loads. Writes go through `SetThemeModeUseCase`, which wraps the suspend call in `runCatchingCancellable` so the `SettingsViewModel` can surface a save failure without swallowing cancellation.
 
-### 9. Multiplatform Logging with Kermit
+### 10. Multiplatform Logging with Kermit
 
 Ledger uses **Kermit** for unified logging. Platform-specific writers are provided via `expect`/`actual` functions in `core:common`, ensuring that logs are routed to the appropriate system (Logcat on Android, OSLog on iOS, and SLF4J/Logback on Desktop).
 
-### 10. Injectable dispatcher seam (`AppDispatchers`)
+### 11. Injectable dispatcher seam (`AppDispatchers`)
 
 `AppDispatchers` is an injectable interface over the coroutine dispatchers used by the data layer:
 

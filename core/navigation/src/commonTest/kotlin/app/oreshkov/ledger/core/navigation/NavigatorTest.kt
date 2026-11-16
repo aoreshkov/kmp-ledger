@@ -243,6 +243,100 @@ class NavigatorTest {
         assertTrue(reselections.isEmpty())
     }
 
+    @Test
+    fun goToDeepLink_inStartSection_showsItsBackStack() {
+        val detail = TestKey("detail")
+        assertTrue(nav.goToDeepLink(listOf(home, detail)))
+        assertEquals(home, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, detail), nav.entries)
+    }
+
+    @Test
+    fun goToDeepLink_inAnotherSection_selectsItAndBackExitsThroughHome() {
+        val settingsDetail = TestKey("settings-detail")
+        assertTrue(nav.goToDeepLink(listOf(settings, settingsDetail)))
+        assertEquals(settings, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, settings, settingsDetail), nav.entries)
+
+        // Back walks the link's own hierarchy, then falls back to the start section.
+        nav.goBack()
+        assertEquals<List<NavKey>>(listOf(home, settings), nav.entries)
+        nav.goBack()
+        assertEquals(home, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home), nav.entries)
+    }
+
+    @Test
+    fun goToDeepLink_replacesWhatTheSectionShowedAboveTheSharedEntries() {
+        // The section was showing home > a > edit; the link asks for home > a > b.
+        val a = TestKey("a")
+        nav.goTo(a)
+        nav.goTo(TestKey("edit"))
+        assertTrue(nav.goToDeepLink(listOf(home, a, TestKey("b"))))
+        assertEquals<List<NavKey>>(listOf(home, a, TestKey("b")), homeStack.toList())
+    }
+
+    @Test
+    fun goToDeepLink_toAShorterStack_dropsTheEntriesAboveIt() {
+        nav.goTo(TestKey("a"))
+        nav.goTo(TestKey("b"))
+        assertTrue(nav.goToDeepLink(listOf(home)))
+        assertEquals<List<NavKey>>(listOf(home), homeStack.toList())
+    }
+
+    @Test
+    fun goToDeepLink_toTheStackOnShow_changesNothing() {
+        // The same link opened twice must not stack a duplicate entry.
+        val detail = TestKey("detail")
+        val link = listOf<NavKey>(home, detail)
+        assertTrue(nav.goToDeepLink(link))
+        assertTrue(nav.goToDeepLink(link))
+        assertEquals<List<NavKey>>(link, homeStack.toList())
+    }
+
+    @Test
+    fun goToDeepLink_leavesEveryOtherSectionAlone() {
+        // An edit in progress in the start section survives a link into settings.
+        val edit = TestKey("edit")
+        nav.goTo(edit)
+        assertTrue(nav.goToDeepLink(listOf(settings, TestKey("settings-detail"))))
+        assertEquals<List<NavKey>>(listOf(home, edit), homeStack.toList())
+
+        nav.switchTopLevel(home)
+        assertEquals<List<NavKey>>(listOf(home, edit), nav.entries)
+    }
+
+    @Test
+    fun goToDeepLink_fromAnotherSection_switchesToTheLinkedOne() {
+        nav.switchTopLevel(settings)
+        nav.goTo(TestKey("settings-detail"))
+        assertTrue(nav.goToDeepLink(listOf(home, TestKey("detail"))))
+        assertEquals(home, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, TestKey("detail")), nav.entries)
+        assertEquals<List<NavKey>>(listOf(settings, TestKey("settings-detail")), settingsStack.toList())
+    }
+
+    @Test
+    fun goToDeepLink_whoseRootIsNotASection_isRefused() {
+        nav.goTo(TestKey("detail"))
+        assertFalse(nav.goToDeepLink(listOf(TestKey("orphan"), TestKey("child"))))
+        assertEquals(home, nav.currentTopLevel)
+        assertEquals<List<NavKey>>(listOf(home, TestKey("detail")), nav.entries)
+    }
+
+    @Test
+    fun goToDeepLink_emptyBackStack_isRefused() {
+        assertFalse(nav.goToDeepLink(emptyList()))
+        assertEquals<List<NavKey>>(listOf(home), nav.entries)
+    }
+
+    @Test
+    fun goToDeepLink_doesNotSignalReselect() = runTest {
+        val reselections = collectReselections()
+        assertTrue(nav.goToDeepLink(listOf(home, TestKey("detail"))))
+        assertTrue(reselections.isEmpty())
+    }
+
     /** Collects [Navigator.reselections] eagerly, so each signal is recorded as it is emitted. */
     private fun TestScope.collectReselections(): List<NavKey> {
         val received = mutableListOf<NavKey>()

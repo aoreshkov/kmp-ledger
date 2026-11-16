@@ -1,3 +1,9 @@
+public final class app/oreshkov/ledger/core/navigation/DeepLinkResolver {
+	public static final field $stable I
+	public fun <init> (Ljava/util/List;)V
+	public final fun resolve (Ljava/lang/String;)Ljava/util/List;
+}
+
 public final class app/oreshkov/ledger/core/navigation/LocalAccountActionKt {
 	public static final fun getLocalAccountAction ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
@@ -18,6 +24,7 @@ public final class app/oreshkov/ledger/core/navigation/Navigator {
 	public final fun goBack ()V
 	public final fun goBack (Landroidx/navigation3/runtime/NavKey;)V
 	public final fun goTo (Landroidx/navigation3/runtime/NavKey;)V
+	public final fun goToDeepLink (Ljava/util/List;)Z
 	public final fun switchTopLevel (Landroidx/navigation3/runtime/NavKey;)V
 }
 

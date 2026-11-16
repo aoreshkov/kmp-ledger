@@ -1,5 +1,8 @@
 package app.oreshkov.ledger
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -21,6 +24,7 @@ import java.io.File
 import java.nio.file.Files
 import kotlin.test.AfterTest
 import kotlin.test.Test
+import kotlin.test.assertNull
 import org.koin.plugin.module.dsl.koinApplication
 
 @OptIn(ExperimentalTestApi::class)
@@ -142,5 +146,113 @@ class DesktopUiTest {
 
         onNodeWithText("Add Posting").assertExists()
         onNodeWithText("Unsaved draft").assertExists()
+    }
+
+    // The deep-link tests below go through the real graph: BootstrapModule's resolver with the
+    // shipped `ledger://` table, the real Navigator and the real screens.
+
+    @Test
+    fun deepLinkToSettings_opensThatSection_andBackExitsThroughHome() = runDesktopComposeUiTest {
+        var pending by mutableStateOf<String?>("ledger://settings")
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(
+                        postingNavigationModule,
+                        settingsNavigationModule,
+                        inMemoryDatabaseModule,
+                        testDataStoreModule,
+                    )
+                }
+            ) {
+                App(deepLink = pending, onDeepLinkConsumed = { pending = null })
+            }
+        }
+
+        // "System default" exists only on the settings screen ("Settings" is also the nav label).
+        onNodeWithText("System default").assertExists()
+        assertNull(pending)
+
+        onNodeWithContentDescription("Back").performClick()
+        onNodeWithText("My Postings").assertExists()
+    }
+
+    @Test
+    fun deepLinkToNewPosting_opensTheAddScreenAboveTheList() = runDesktopComposeUiTest {
+        var pending by mutableStateOf<String?>("ledger://postings/new")
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(postingNavigationModule, inMemoryDatabaseModule, testDataStoreModule)
+                }
+            ) {
+                App(deepLink = pending, onDeepLinkConsumed = { pending = null })
+            }
+        }
+
+        onNodeWithText("Narrative").assertExists()
+
+        onNodeWithContentDescription("Back").performClick()
+        onNodeWithText("Narrative").assertDoesNotExist()
+        onNodeWithText("My Postings").assertExists()
+    }
+
+    @Test
+    fun deepLinkToAnUnknownPosting_showsNotFound_andGoBackReachesTheList() = runDesktopComposeUiTest {
+        // A link is outside input: an id that does not exist must land on the screen's own
+        // not-found state, with a way out, rather than an error.
+        var pending by mutableStateOf<String?>("ledger://postings/no-such-posting")
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(postingNavigationModule, inMemoryDatabaseModule, testDataStoreModule)
+                }
+            ) {
+                App(deepLink = pending, onDeepLinkConsumed = { pending = null })
+            }
+        }
+
+        onNodeWithText("Posting has been already deleted.").assertExists()
+
+        onNodeWithText("Go back").performClick()
+        onNodeWithText("Posting has been already deleted.").assertDoesNotExist()
+        onNodeWithText("My Postings").assertExists()
+    }
+
+    @Test
+    fun deepLinkWhileEditing_replacesThatSectionsStack() = runDesktopComposeUiTest {
+        var pending by mutableStateOf<String?>(null)
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(
+                        postingNavigationModule,
+                        settingsNavigationModule,
+                        inMemoryDatabaseModule,
+                        testDataStoreModule,
+                    )
+                }
+            ) {
+                App(deepLink = pending, onDeepLinkConsumed = { pending = null })
+            }
+        }
+
+        onNodeWithContentDescription("Add Posting").performClick()
+        onNodeWithText("Narrative").performTextInput("Unsaved draft")
+
+        // A link into another section leaves the draft where it was...
+        pending = "ledger://settings"
+        onNodeWithText("System default").assertExists()
+        onNodeWithText("Postings").performClick()
+        onNodeWithText("Unsaved draft").assertExists()
+
+        // ...while a link into the section being edited replaces what that section showed.
+        pending = "ledger://postings"
+        onNodeWithText("Unsaved draft").assertDoesNotExist()
+        onNodeWithText("My Postings").assertExists()
     }
 }

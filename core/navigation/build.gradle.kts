@@ -1,5 +1,7 @@
 plugins {
     id("ledger.kotlin.multiplatform.koin.compose")
+    // For the tests only: DeepLinkResolverTest decodes links into its own @Serializable keys.
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {

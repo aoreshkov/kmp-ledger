@@ -23,3 +23,5 @@ final object app.oreshkov.ledger.feature.settings.api.navigation/SettingsHome : 
 
 final val app.oreshkov.ledger.feature.settings.api.navigation/serializerSettings // app.oreshkov.ledger.feature.settings.api.navigation/serializerSettings|{}serializerSettings[0]
     final fun <get-serializerSettings>(): kotlinx.serialization.modules/SerializersModule // app.oreshkov.ledger.feature.settings.api.navigation/serializerSettings.<get-serializerSettings>|<get-serializerSettings>(){}[0]
+
+final fun app.oreshkov.ledger.feature.settings.api.navigation/settingsDeepLinks(kotlin/String): kotlin.collections/List<androidx.navigation3.runtime.deeplink/DeepLinkMatcher<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime.deeplink/BackStackMatchResult<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavKey>>> // app.oreshkov.ledger.feature.settings.api.navigation/settingsDeepLinks|settingsDeepLinks(kotlin.String){}[0]

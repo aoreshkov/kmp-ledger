@@ -1,3 +1,7 @@
+public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingDeepLinksKt {
+	public static final fun postingDeepLinks (Ljava/lang/String;)Ljava/util/List;
+}
+
 public final class app/oreshkov/ledger/feature/posting/api/navigation/PostingDetail : app/oreshkov/ledger/feature/posting/api/navigation/PostingRoute {
 	public static final field Companion Lapp/oreshkov/ledger/feature/posting/api/navigation/PostingDetail$Companion;
 	public fun <init> (Ljava/lang/String;)V

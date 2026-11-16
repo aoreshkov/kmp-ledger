@@ -1,5 +1,5 @@
 public final class app/oreshkov/ledger/core/ui/AppKt {
-	public static final fun App (Landroidx/compose/runtime/Composer;I)V
+	public static final fun App (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class app/oreshkov/ledger/core/ui/di/AppModule {

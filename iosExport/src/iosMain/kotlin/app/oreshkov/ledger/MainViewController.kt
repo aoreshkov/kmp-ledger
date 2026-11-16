@@ -1,5 +1,8 @@
 package app.oreshkov.ledger
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.ComposeUIViewController
 import app.oreshkov.ledger.core.bootstrap.di.BootstrapModule
 import app.oreshkov.ledger.core.ui.App
@@ -12,12 +15,26 @@ import platform.UIKit.UIViewController
 @KoinApplication(modules = [BootstrapModule::class])
 internal class LedgerApp
 
+/** A link SwiftUI handed over through [openDeepLink] and `App()` has not yet acknowledged. */
+private var pendingDeepLink by mutableStateOf<String?>(null)
+
 fun MainViewController(): UIViewController = ComposeUIViewController {
-    App()
+    App(
+        deepLink = pendingDeepLink,
+        onDeepLinkConsumed = { pendingDeepLink = null },
+    )
 }
 
 fun initializeKoin() {
     startKoin<LedgerApp> {
         modules(postingNavigationModule, settingsNavigationModule)
     }
+}
+
+/**
+ * Entry point for SwiftUI's `.onOpenURL`. Safe to call before [MainViewController] exists: the
+ * link is held as state until the first composition picks it up.
+ */
+fun openDeepLink(url: String) {
+    pendingDeepLink = url
 }

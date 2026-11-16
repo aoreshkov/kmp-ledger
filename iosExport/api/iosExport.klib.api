@@ -19,3 +19,4 @@ final fun app.oreshkov.ledger.iosexport.resources/app_oreshkov_ledger_iosexport_
 final fun app.oreshkov.ledger.iosexport.resources/app_oreshkov_ledger_iosexport_resources_Res_string$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.iosexport.resources/app_oreshkov_ledger_iosexport_resources_Res_string$stableprop_getter|app_oreshkov_ledger_iosexport_resources_Res_string$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger/MainViewController(): platform.UIKit/UIViewController // app.oreshkov.ledger/MainViewController|MainViewController(){}[0]
 final fun app.oreshkov.ledger/initializeKoin() // app.oreshkov.ledger/initializeKoin|initializeKoin(){}[0]
+final fun app.oreshkov.ledger/openDeepLink(kotlin/String) // app.oreshkov.ledger/openDeepLink|openDeepLink(kotlin.String){}[0]
