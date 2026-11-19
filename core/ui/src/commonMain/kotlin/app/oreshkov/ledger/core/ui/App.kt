@@ -1,8 +1,10 @@
 package app.oreshkov.ledger.core.ui
 
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.PolymorphicSerializer
 import app.oreshkov.ledger.core.domain.GetThemeModeUseCase
 import app.oreshkov.ledger.core.model.settings.ThemeMode
+import app.oreshkov.ledger.core.navigation.DeepLinkResolver
 import app.oreshkov.ledger.core.navigation.LocalNavigator
 import app.oreshkov.ledger.core.navigation.Navigator
 import app.oreshkov.ledger.core.navigation.StartDestination
@@ -40,8 +43,19 @@ import app.oreshkov.ledger.core.ui.theme.LedgerTheme
     KoinExperimentalAPI::class,
     ExperimentalMaterial3AdaptiveApi::class,
 )
+/**
+ * @param deepLink a link the platform received and has not yet seen applied, or `null`. Like
+ *   every other one-off outcome in this app it is state plus an acknowledgement rather than an
+ *   event: the platform keeps it until [onDeepLinkConsumed] is called, so a link that arrives
+ *   before the first composition is not lost.
+ * @param onDeepLinkConsumed called once [deepLink] has been handled, whether or not anything
+ *   claimed it; the platform then clears its copy so the same link can be opened again later.
+ */
 @Composable
-fun App() {
+fun App(
+    deepLink: String? = null,
+    onDeepLinkConsumed: () -> Unit = {},
+) {
     // Until the stored preference loads, fall back to the OS setting (ThemeMode.SYSTEM).
     // DataStore reads are async, so a cold start may briefly show the system theme.
     val getThemeMode = koinInject<GetThemeModeUseCase>()
@@ -98,6 +112,18 @@ fun App() {
                     backStacks = backStacks,
                     currentTopLevelState = currentTopLevel,
                 )
+            }
+
+            // An unclaimed link is acknowledged too: it came from outside the app, so "nothing
+            // matches" is an ordinary outcome, and keeping it pending would re-try it forever.
+            val deepLinkResolver = koinInject<DeepLinkResolver>()
+            val currentNavigator by rememberUpdatedState(navigator)
+            val currentOnDeepLinkConsumed by rememberUpdatedState(onDeepLinkConsumed)
+            LaunchedEffect(deepLink) {
+                if (deepLink != null) {
+                    deepLinkResolver.resolve(deepLink)?.let { currentNavigator.goToDeepLink(it) }
+                    currentOnDeepLinkConsumed()
+                }
             }
 
             val entryProvider = koinEntryProvider<NavKey>()

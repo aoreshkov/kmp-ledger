@@ -1,0 +1,37 @@
+<resources>
+    <!-- Navigation -->
+    <string name="posting_nav_label">Записи</string>
+
+    <!-- Posting List -->
+    <string name="posting_list_title">Моите записи</string>
+    <string name="posting_list_empty">Все още няма добавени записи.</string>
+    <string name="posting_list_error">Записите не можаха да се заредят.</string>
+    <string name="posting_list_add_content_description">Добавяне на запис</string>
+    <string name="posting_list_retry">Нов опит</string>
+
+    <!-- Posting Details -->
+    <string name="posting_details_title">Детайли за записа</string>
+    <string name="posting_details_delete_content_description">Изтриване на записа</string>
+    <string name="posting_details_edit_content_description">Редактиране на записа</string>
+    <string name="posting_details_failed_to_load">Детайлите за записа не можаха да се заредят.</string>
+    <string name="posting_details_not_found">Записът вече е изтрит.</string>
+    <string name="posting_details_retry">Нов опит</string>
+    <string name="posting_details_delete_dialog_title">Изтриване на записа?</string>
+    <string name="posting_details_delete_dialog_body">Това действие не може да бъде отменено.</string>
+    <string name="posting_details_delete_confirm">Изтриване</string>
+    <string name="posting_details_delete_cancel">Отказ</string>
+    <string name="posting_details_field_narrative">Описание</string>
+    <string name="posting_details_go_back">Назад</string>
+    <string name="posting_details_delete_failed">Изтриването не бе успешно. Опитайте отново.</string>
+
+    <!-- Posting Edit -->
+    <string name="posting_edit_title_add">Добавяне на запис</string>
+    <string name="posting_edit_title_edit">Редактиране на запис</string>
+    <string name="posting_edit_save">Запазване</string>
+    <string name="posting_edit_field_narrative">Описание</string>
+    <string name="posting_edit_error_narrative_required">Описанието е задължително</string>
+    <string name="posting_edit_error_load_failed">Детайлите за записа не можаха да се заредят.</string>
+    <string name="posting_edit_error_not_found">Записът не е намерен.</string>
+    <string name="posting_edit_go_back">Назад</string>
+    <string name="posting_edit_error_save_failed">Запазването не бе успешно. Опитайте отново.</string>
+</resources>

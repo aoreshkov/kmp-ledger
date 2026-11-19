@@ -6,6 +6,12 @@
 // - Show declarations: true
 
 // Library unique name: <Ledger.core:navigation>
+final class app.oreshkov.ledger.core.navigation/DeepLinkResolver { // app.oreshkov.ledger.core.navigation/DeepLinkResolver|null[0]
+    constructor <init>(kotlin.collections/List<androidx.navigation3.runtime.deeplink/DeepLinkMatcher<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime.deeplink/BackStackMatchResult<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavKey>>>) // app.oreshkov.ledger.core.navigation/DeepLinkResolver.<init>|<init>(kotlin.collections.List<androidx.navigation3.runtime.deeplink.DeepLinkMatcher<androidx.navigation3.runtime.NavKey,androidx.navigation3.runtime.deeplink.BackStackMatchResult<androidx.navigation3.runtime.NavKey,androidx.navigation3.runtime.NavKey>>>){}[0]
+
+    final fun resolve(kotlin/String): kotlin.collections/List<androidx.navigation3.runtime/NavKey>? // app.oreshkov.ledger.core.navigation/DeepLinkResolver.resolve|resolve(kotlin.String){}[0]
+}
+
 final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledger.core.navigation/Navigator|null[0]
     constructor <init>(androidx.navigation3.runtime/NavKey, kotlin.collections/Map<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavBackStack<androidx.navigation3.runtime/NavKey>>, androidx.compose.runtime/MutableState<androidx.navigation3.runtime/NavKey>) // app.oreshkov.ledger.core.navigation/Navigator.<init>|<init>(androidx.navigation3.runtime.NavKey;kotlin.collections.Map<androidx.navigation3.runtime.NavKey,androidx.navigation3.runtime.NavBackStack<androidx.navigation3.runtime.NavKey>>;androidx.compose.runtime.MutableState<androidx.navigation3.runtime.NavKey>){}[0]
 
@@ -25,6 +31,7 @@ final class app.oreshkov.ledger.core.navigation/Navigator { // app.oreshkov.ledg
     final fun goBack() // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(){}[0]
     final fun goBack(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.goBack|goBack(androidx.navigation3.runtime.NavKey){}[0]
     final fun goTo(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.goTo|goTo(androidx.navigation3.runtime.NavKey){}[0]
+    final fun goToDeepLink(kotlin.collections/List<androidx.navigation3.runtime/NavKey>): kotlin/Boolean // app.oreshkov.ledger.core.navigation/Navigator.goToDeepLink|goToDeepLink(kotlin.collections.List<androidx.navigation3.runtime.NavKey>){}[0]
     final fun switchTopLevel(androidx.navigation3.runtime/NavKey) // app.oreshkov.ledger.core.navigation/Navigator.switchTopLevel|switchTopLevel(androidx.navigation3.runtime.NavKey){}[0]
 }
 
@@ -70,6 +77,7 @@ final val app.oreshkov.ledger.core.navigation/LocalAccountAction // app.oreshkov
     final fun <get-LocalAccountAction>(): androidx.compose.runtime/ProvidableCompositionLocal<kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>> // app.oreshkov.ledger.core.navigation/LocalAccountAction.<get-LocalAccountAction>|<get-LocalAccountAction>(){}[0]
 final val app.oreshkov.ledger.core.navigation/LocalNavigator // app.oreshkov.ledger.core.navigation/LocalNavigator|{}LocalNavigator[0]
     final fun <get-LocalNavigator>(): androidx.compose.runtime/ProvidableCompositionLocal<app.oreshkov.ledger.core.navigation/Navigator> // app.oreshkov.ledger.core.navigation/LocalNavigator.<get-LocalNavigator>|<get-LocalNavigator>(){}[0]
+final val app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_DeepLinkResolver$stableprop // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_DeepLinkResolver$stableprop|#static{}app_oreshkov_ledger_core_navigation_DeepLinkResolver$stableprop[0]
 final val app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop|#static{}app_oreshkov_ledger_core_navigation_Navigator$stableprop[0]
 final val app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop|#static{}app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop[0]
 
@@ -78,5 +86,6 @@ final fun app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core
 final fun app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core_navigation_resources_Res_font$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core_navigation_resources_Res_font$stableprop_getter|app_oreshkov_ledger_core_navigation_resources_Res_font$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core_navigation_resources_Res_plurals$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core_navigation_resources_Res_plurals$stableprop_getter|app_oreshkov_ledger_core_navigation_resources_Res_plurals$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core_navigation_resources_Res_string$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation.resources/app_oreshkov_ledger_core_navigation_resources_Res_string$stableprop_getter|app_oreshkov_ledger_core_navigation_resources_Res_string$stableprop_getter(){}[0]
+final fun app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_DeepLinkResolver$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_DeepLinkResolver$stableprop_getter|app_oreshkov_ledger_core_navigation_DeepLinkResolver$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter|app_oreshkov_ledger_core_navigation_Navigator$stableprop_getter(){}[0]
 final fun app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop_getter(): kotlin/Int // app.oreshkov.ledger.core.navigation/app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop_getter|app_oreshkov_ledger_core_navigation_TopLevelDestination$stableprop_getter(){}[0]

@@ -1,5 +1,9 @@
 package app.oreshkov.ledger
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -25,12 +29,18 @@ class LedgerApp
 // to AWT (`window.minimumSize = Dimension(350, 600)`), whose device pixels do not scale with
 // display density, so the floor was half the intended physical size at 200% while the Dp-typed
 // initial size scaled correctly.
+//
+// A deep link can be passed as the first argument (`Ledger ledger://postings/42`). It applies to
+// this launch only: registering the scheme with the OS, so that a link opens the app, is a
+// packaging step per platform and is not done here.
 @OptIn(ExperimentalComposeUiApi::class)
-fun main() {
+fun main(args: Array<String>) {
     startKoin<LedgerApp> {
         modules(postingNavigationModule, settingsNavigationModule)
     }
     application {
+        var pendingDeepLink by remember { mutableStateOf(args.firstOrNull()) }
+
         Window(
             onCloseRequest = ::exitApplication,
             title = "Ledger",
@@ -44,7 +54,10 @@ fun main() {
             ),
             minSize = DpSize(350.dp, 600.dp),
         ) {
-            App()
+            App(
+                deepLink = pendingDeepLink,
+                onDeepLinkConsumed = { pendingDeepLink = null },
+            )
         }
     }
 }

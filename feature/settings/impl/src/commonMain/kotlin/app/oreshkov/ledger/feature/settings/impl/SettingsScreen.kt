@@ -26,6 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
@@ -84,7 +86,12 @@ internal fun SettingsContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(Res.string.settings_title)) },
+                title = {
+                    Text(
+                        text = stringResource(Res.string.settings_title),
+                        modifier = Modifier.semantics { heading() },
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -105,7 +112,9 @@ internal fun SettingsContent(
             Text(
                 text = stringResource(Res.string.settings_theme_section),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .semantics { heading() }
             )
             Column(Modifier.selectableGroup()) {
                 themeModeLabels.forEach { (mode, label) ->

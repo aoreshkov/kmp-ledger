@@ -82,6 +82,31 @@ class Navigator(
         }
     }
 
+    /**
+     * Shows a deep link's synthetic [backStack] and reports whether it was applied. The first key
+     * names the section: that section is selected and its stack becomes [backStack], so Back
+     * walks the link's own hierarchy. Every other section keeps its stack.
+     *
+     * Entries the section's stack already shares with [backStack], counted from the root, stay in
+     * place with their ViewModels and saved state; only what differs above them is dropped and
+     * replaced. A link to what is already on show therefore changes nothing, and a second copy
+     * of the same link cannot stack a duplicate entry.
+     *
+     * A stack whose first key is not a section root is refused: a link is input from outside the
+     * app, and an entry no section owns could never be displayed.
+     */
+    fun goToDeepLink(backStack: List<NavKey>): Boolean {
+        val stack = backStacks[backStack.firstOrNull()] ?: return false
+        var shared = 0
+        while (shared < stack.size && shared < backStack.size && stack[shared] == backStack[shared]) {
+            shared++
+        }
+        while (stack.size > shared) stack.removeAt(stack.lastIndex)
+        stack.addAll(backStack.subList(shared, backStack.size))
+        currentTopLevel = backStack.first()
+        return true
+    }
+
     /** Active concatenation used for back handling / assertions: start section then current section. */
     val entries: List<NavKey>
         get() = if (currentTopLevel == startRoute) {

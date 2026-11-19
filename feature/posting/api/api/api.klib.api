@@ -75,3 +75,5 @@ final object app.oreshkov.ledger.feature.posting.api.navigation/PostingList : ap
 
 final val app.oreshkov.ledger.feature.posting.api.navigation/serializerPostings // app.oreshkov.ledger.feature.posting.api.navigation/serializerPostings|{}serializerPostings[0]
     final fun <get-serializerPostings>(): kotlinx.serialization.modules/SerializersModule // app.oreshkov.ledger.feature.posting.api.navigation/serializerPostings.<get-serializerPostings>|<get-serializerPostings>(){}[0]
+
+final fun app.oreshkov.ledger.feature.posting.api.navigation/postingDeepLinks(kotlin/String): kotlin.collections/List<androidx.navigation3.runtime.deeplink/DeepLinkMatcher<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime.deeplink/BackStackMatchResult<androidx.navigation3.runtime/NavKey, androidx.navigation3.runtime/NavKey>>> // app.oreshkov.ledger.feature.posting.api.navigation/postingDeepLinks|postingDeepLinks(kotlin.String){}[0]

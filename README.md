@@ -149,7 +149,7 @@ Supporting modules (no layer dependency):
 | `core:bootstrap` | Root Koin module that wires all sub-modules together (including `SettingsModule`) and provides `StartDestination` and a `SavedStateConfiguration` that combines every feature's NavKey serializers. |
 | `core:test` | `FakePostingRepository`, `FakeSettingsRepository`, `PlatformComposeUiTest` expect/actual, and shared posting fixture builders (`posting()`, `newPosting()`, `postings()`). Consumed by all test source sets. |
 | `iosExport` | Bridge module for Swift Export. Contains the `MainViewController` and Koin initialization for iOS. |
-| `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`) and their serializers module. Consumed by both the feature impl and the bootstrap/navigation modules. |
+| `feature:posting:api` | `NavKey` data classes (`PostingList`, `PostingDetail`, `PostingEdit`), their serializers module, and the deep links that open them (`postingDeepLinks`). Consumed by both the feature impl and the bootstrap/navigation modules. |
 | `feature:posting:impl` | `PostingListScreen`, `PostingDetailsScreen`, `PostingEditScreen`, their ViewModels, and the Koin navigation module (`postingNavigationModule`). |
 | `feature:settings:api` | `SettingsRoute`/`SettingsHome` `NavKey` types and the `serializerSettings` module. Consumed by the feature impl and the bootstrap/navigation modules. |
 | `feature:settings:impl` | `SettingsScreen`, `SettingsViewModel` (theme toggle + write-failure surfacing), and the Koin navigation module (`settingsNavigationModule`), which also contributes the Settings `TopLevelDestination`. |
@@ -224,7 +224,7 @@ Note that the stability configuration file is not a tracked task input, so editi
 
 Each feature is split into two modules:
 
-- **`feature:posting:api`** — contains only the `NavKey` sealed types that other modules reference for navigation. Has no dependency on Compose or domain logic.
+- **`feature:posting:api`** — contains only the feature's navigation contract: the `NavKey` sealed types that other modules reference, and the deep links that resolve to them. Has no dependency on Compose or domain logic.
 - **`feature:posting:impl`** — contains the screens, ViewModels, and DI. Depends on `api` but is never depended on by any other feature or core module.
 
 This means modules that need to navigate *to* a feature only depend on `api`, keeping compile-time coupling minimal.
@@ -351,6 +351,7 @@ class Navigator(
     fun goTo(destination: NavKey) { /* single-top: no-op while destination is already on top */ }
     fun goBack() { /* system back: pop within section, else fall back to the start section (exit-through-home) */ }
     fun goBack(from: NavKey) { /* screens: goBack() only while `from` is the top entry */ }
+    fun goToDeepLink(backStack: List<NavKey>): Boolean { /* select the link's section and show its back stack (pattern 8) */ }
 }
 ```
 
@@ -358,7 +359,52 @@ Re-selecting the current section leaves its stack alone, as in the Navigation 3 
 
 Each section's stack survives configuration change and process death (`rememberNavBackStack`), and every section is decorated each frame with its **own** `SaveableStateHolder`/`ViewModelStore` decorators so inactive sections keep their ViewModels and scroll/UI state alive instead of being disposed.
 
-### 8. Theme preference persisted with DataStore
+### 8. Deep links onto per-section back stacks
+
+The app opens links on its own scheme, using the deep-link API that Navigation 3 added in 1.2.0. The matching is shared code; only receiving the link is per platform.
+
+| Link | Opens | Back stack |
+|---|---|---|
+| `ledger://postings` | Posting list | `PostingList` |
+| `ledger://postings/new` | Add screen | `PostingList`, `PostingEdit(null)` |
+| `ledger://postings/{id}` | Details | `PostingList`, `PostingDetail(id)` |
+| `ledger://postings/{id}/edit` | Editor | `PostingList`, `PostingDetail(id)`, `PostingEdit(id)` |
+| `ledger://settings` | Settings | `SettingsHome` |
+
+Each feature declares its links in its `api` module, next to the NavKeys they produce. A matcher pairs a URI pattern with the synthetic back stack the link opens on:
+
+```kotlin
+fun postingDeepLinks(baseUri: String) = listOf(
+    UriDeepLinkMatcher(DeepLinkUri("${baseUri}postings/{id}"), PostingDetail.serializer())
+        .withBackStack<PostingDetail, NavKey> { match -> listOf(PostingList, match.key) },
+    // ...
+)
+```
+
+`BootstrapModule` combines the features' matchers into one `DeepLinkResolver`, the same way it combines their NavKey serializers. When several patterns claim a link, the most specific wins, so `postings/new` opens the add screen rather than the details of a posting called "new".
+
+**Mapping a link onto several back stacks.** Navigation 3's guide ends at "build a list of keys". With one back stack per section, the app needs a rule for where that list goes, and the rule is: *the first key of a link's back stack is the root of its section.* `Navigator.goToDeepLink` selects that section and makes the list its stack:
+
+- Every other section keeps its stack, so an edit in progress elsewhere survives the link.
+- Entries the section already shares with the link, counted from the root, stay in place with their ViewModels and saved state. Only what differs above them is replaced, as Android's navigation principles describe for a link into a running app. Opening the same link twice changes nothing.
+- A back stack whose first key no section owns is refused.
+- Back then walks the link's own hierarchy and finally exits through the start section, exactly as it does after navigating by hand.
+
+**Receiving the link** follows the project's rule that one-off outcomes are state with an acknowledgement. Each platform holds the pending link and passes it down, and `App()` calls back once it has handled it, whether or not anything claimed it:
+
+```kotlin
+App(deepLink = pendingDeepLink, onDeepLinkConsumed = { pendingDeepLink = null })
+```
+
+| Platform | How the link arrives |
+|---|---|
+| Android | A `VIEW` intent filter for the `ledger` scheme. `MainActivity` is `singleTop`, so a link opened while the app is running reaches `onNewIntent` instead of stacking a second copy of the app. The launch intent is read only on a fresh start, so rotation and process-death restore do not re-apply an old link over the restored stacks. Try it with `adb shell am start -a android.intent.action.VIEW -d "ledger://postings/new" app.oreshkov.ledger` |
+| Desktop | The first launch argument: `./gradlew :desktopApp:run --args="ledger://settings"`. Registering the scheme with the operating system is a packaging step and is not done here |
+| iOS | `CFBundleURLTypes` in `Info.plist`, and SwiftUI's `.onOpenURL` calling the exported `openDeepLink(url:)` |
+
+Links are input from outside the app, so they only navigate: no link saves or deletes, and an unknown id lands on the screen's own "not found" state. Verified `https` links (Android App Links, iOS universal links) need a domain that serves the association files, which this project does not have. The matchers already take the base URI as a parameter for that reason.
+
+### 9. Theme preference persisted with DataStore
 
 The theme preference is stored with **AndroidX DataStore Preferences** in `core:datastore`. Like the Room database, each platform supplies its file path through an `expect`/`actual` Koin module:
 
@@ -377,11 +423,11 @@ expect class PlatformDataStoreModule
 
 The store is resilient: the factory installs a `ReplaceFileCorruptionHandler`, reads recover from `IOException` by emitting `emptyPreferences()`, and an unrecognised stored value falls back to `ThemeMode.SYSTEM`. `ThemeMode` is a three-value enum (`LIGHT`/`DARK`/`SYSTEM`) because a plain boolean can't express "follow the OS". `App()` collects the preference with `collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)` and applies `LedgerTheme(themeMode)`, which resolves `SYSTEM` via `isSystemInDarkTheme()`; because DataStore reads are async, a cold start may briefly show the system theme before the stored value loads. Writes go through `SetThemeModeUseCase`, which wraps the suspend call in `runCatchingCancellable` so the `SettingsViewModel` can surface a save failure without swallowing cancellation.
 
-### 9. Multiplatform Logging with Kermit
+### 10. Multiplatform Logging with Kermit
 
 Ledger uses **Kermit** for unified logging. Platform-specific writers are provided via `expect`/`actual` functions in `core:common`, ensuring that logs are routed to the appropriate system (Logcat on Android, OSLog on iOS, and SLF4J/Logback on Desktop).
 
-### 10. Injectable dispatcher seam (`AppDispatchers`)
+### 11. Injectable dispatcher seam (`AppDispatchers`)
 
 `AppDispatchers` is an injectable interface over the coroutine dispatchers used by the data layer:
 
@@ -393,6 +439,28 @@ interface AppDispatchers {
 ```
 
 Production code receives `DefaultAppDispatchers` (backed by `Dispatchers.IO` / `Dispatchers.Default`) via Koin. Tests supply a `TestAppDispatchers` backed by a `TestDispatcher`, so `withContext` and `flowOn` calls run on the test scheduler without any platform-specific thread semantics. `DispatcherModule` in `core:common` wires the production binding; `core:data` consumes it via `DataModule`.
+
+### 12. Localization that cannot drift
+
+The UI ships in English and Bulgarian. Every string is a Compose Multiplatform resource: `composeResources/values/strings.xml` holds the default and `values-bg/strings.xml` the translation, in each of the three modules that own strings (`core:compose`, `feature:posting:impl`, `feature:settings:impl`). The app follows the system language, and on Android 13+ also the per-app language setting, which `res/xml/locales_config.xml` advertises.
+
+Three things keep a second language honest:
+
+- **Key parity is a build check.** Compose resources fall back to the default language without a word when a locale lacks a key, so a half-translated screen builds and passes every test written in English. `checkStringResourceParity`, a task the `ledger.kotlin.multiplatform` convention plugin adds to every module's `check`, fails when a locale is missing a key or declares one the default does not. Android lint's `MissingTranslation` cannot do this: it reads Android `res/`, not `composeResources/`.
+- **The translation is rendered in a test.** `PostingListScreenBulgarianTest` and `SettingsScreenBulgarianTest` render a screen under the Bulgarian locale, which proves the resources are packaged and picked, including the string `feature:*:impl` borrows from `core:compose`.
+- **Right-to-left is tested without an RTL translation.** `PostingScreensRtlTest` and `SettingsScreenRtlTest` lay each screen out under `LayoutDirection.Rtl` and assert positions: back arrow at the right, actions and the floating button at the left, each radio button to the right of its label. Each has a left-to-right control asserting the mirror image, so a layout that ignored the direction could not pass by accident.
+
+There is no in-app language picker. On Android it would need `AppCompatActivity`, and on the other targets Compose Multiplatform documents only a workaround until a common API exists.
+
+### 13. Accessibility in the semantics tree
+
+Screen readers and keyboards both work from the semantics tree, so that is where the fixes go and what the tests assert:
+
+- **Headings.** Every screen title and the settings "Theme" section header carry `semantics { heading() }`, so a screen-reader user can jump between them instead of reading every node in between.
+- **One item per labelled value.** `LabeledField` merges its label and value (`semantics(mergeDescendants = true)`), so the details screen announces "Narrative, Groceries" as one item rather than a value with nothing saying what it is.
+- **No keyboard trap.** A multi-line `OutlinedTextField` types a tab character on Tab, so with a hardware keyboard the focus could enter the narrative field and never leave it, and the stray whitespace failed validation. The field moves the focus on Tab and Shift+Tab instead.
+
+`DesktopUiTest` drives the real app with key events: Tab leaves the narrative field without typing into it, Enter activates the focused Add button and Space selects the focused theme row. The common screen tests assert the headings and the merged node on both targets.
 
 ---
 
@@ -422,10 +490,15 @@ A separate `instrumented-tests` job runs the Android smoke suite on two **Gradle
 | `core:datastore` | `DataStoreSettingsRepositoryTest` against a real temp-file DataStore (read/write + write-failure path) |
 | `core:domain` | Use case tests with `FakePostingRepository` / `FakeSettingsRepository` |
 | `core:common` | `DataResultTest` for the `asResult()` extension |
-| `core:navigation` | `NavigatorTest` for per-section back stacks, `switchTopLevel`, and exit-through-home `goBack` |
-| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level) |
-| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle and save-error surfacing) |
-| `core:ui` | App-level Compose UI test |
+| `core:navigation` | `NavigatorTest` for per-section back stacks, `switchTopLevel`, exit-through-home `goBack`, and deep links onto the stacks; `DeepLinkResolverTest` for matching, including malformed links |
+| `feature:*:api` | NavKey serialization round-trips, and each feature's deep-link table |
+| `core:bootstrap` | The combined serializer configuration and the shipped `ledger://` link table, on every target |
+| `core:compose` | `LabeledFieldTest`, including the merged accessibility node |
+| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level), headings and merged rows, a right-to-left pass and a Bulgarian render |
+| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle, save-error surfacing, headings), a right-to-left pass and a Bulgarian render |
+| `core:ui` | App-level Compose UI tests, including applying and acknowledging a deep link |
+| `desktopApp` | `DesktopUiTest`: the real app over a real in-memory database, including deep links from cold start and while editing, and keyboard-only use |
+| `androidApp` | Instrumented smoke test, plus deep links through the real intent filter (`DeepLinkTest`) |
 | DI modules | Compile-time validation (Koin Compiler Plugin) + runtime `verify()` (`KoinModuleTest`) + App-level integration tests |
 
 ---

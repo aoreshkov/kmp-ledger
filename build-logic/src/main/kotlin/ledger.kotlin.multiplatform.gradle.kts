@@ -36,6 +36,19 @@ kotlin {
     }
 }
 
+// Every locale must translate exactly the default locale's string keys; see the task's KDoc.
+// Registered for every module so a module that gains resources is covered without opting in;
+// with no composeResources directory the file set is empty and the task has nothing to do.
+val checkStringResourceParity by tasks.registering(CheckStringResourceParity::class) {
+    group = "verification"
+    description = "Checks that every locale declares the same Compose string keys as values/."
+    stringFiles.from(
+        fileTree("src/commonMain/composeResources") { include("values*/*.xml") },
+    )
+    report.set(layout.buildDirectory.file("reports/stringResourceParity/report.txt"))
+}
+tasks.named("check") { dependsOn(checkStringResourceParity) }
+
 // Shared Kover report excludes (keep in sync with the root aggregate excludes).
 kover {
     reports {

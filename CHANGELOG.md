@@ -7,11 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Deep links on the app's own scheme, built on the Navigation 3 1.2.0 deep-link API: `ledger://postings`, `ledger://postings/new`, `ledger://postings/{id}`, `ledger://postings/{id}/edit` and `ledger://settings`.
+  - Each feature declares its links in its `api` module (`postingDeepLinks`, `settingsDeepLinks`), each with the synthetic back stack it opens on. `BootstrapModule` combines them into a `DeepLinkResolver` (`core:navigation`).
+  - `Navigator.goToDeepLink(backStack)` maps a link onto the per-section back stacks. The first key names the section, that section's stack becomes the link's stack, and every other section keeps its own. Entries the section already shares with the link keep their state, and a link to what is already on show changes nothing.
+  - `App()` takes `deepLink` and `onDeepLinkConsumed`. The platform holds the pending link as state and `App()` acknowledges it once handled, whether or not anything claimed it.
+  - Android: a `VIEW` intent filter for the `ledger` scheme. `MainActivity` is now `singleTop`, so a link opened while the app is running reaches `onNewIntent` instead of stacking a second copy of the app. The launch intent is not re-applied after rotation, process-death restore, or a relaunch from Recents.
+  - Desktop: `main` reads the link from its first argument. iOS: `CFBundleURLTypes` plus `.onOpenURL`, calling the new exported `openDeepLink(url:)`. The iOS path compiles but has not been run on a device or simulator.
+- A Bulgarian translation of every UI string (`composeResources/values-bg` in `core:compose`, `feature:posting:impl` and `feature:settings:impl`). On Android 13 and later the app also appears under the system's per-app language setting (`res/xml/locales_config.xml`).
+- `checkStringResourceParity`, a task the `ledger.kotlin.multiplatform` convention plugin adds to every module's `check`. It fails when a locale's Compose string resources are missing a key the default `values/` declares, or declare one it does not. Compose resources otherwise fall back to the default language silently.
+- Right-to-left layout tests for all four screens, each with a left-to-right control, and a render of the list and settings screens under the Bulgarian locale.
+- Accessibility semantics: every screen title and the settings "Theme" header is a heading, so screen readers can jump between them, and `LabeledField` merges its label and value into one node, announced as one item.
+- Keyboard tests on desktop (`DesktopUiTest`): Tab and Shift+Tab move out of the narrative field, Enter activates a focused button, Space selects a focused theme row.
+
 ### Changed
 - Upgraded AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.12.0 (from 1.11.0), Logback to 1.6.6 (from 1.6.5), KSP to 2.3.13 (from 2.3.12) and the Gradle wrapper to 9.8.2 (from 9.8.0). Kotlin, AGP and the Compose-aligned pins are unchanged.
 - Dependabot now also leaves Material3 Adaptive (`org.jetbrains.compose.material3.adaptive`) and Navigation 3 (`org.jetbrains.androidx.navigation3`, `androidx.navigation3`) alone. Like Material3, they are pinned to the coordinates the Compose Multiplatform release declares itself aligned to and move by hand with it.
 
 ### Fixed
+- With a hardware keyboard, Tab inside the posting editor's narrative field typed a tab character and kept the focus there, so nothing else on the screen could be reached by keyboard and the whitespace failed validation. Tab and Shift+Tab now move the focus.
 - The README contradicted the code in several places and now matches it:
   - Both repository interfaces are declared in `core:domain`. The README placed `PostingRepository` in `core:data`.
   - The `Navigator` and navigation-module samples show the 1.10.0 behaviour: screens call `goBack(from = route)`, `goTo` is single-top, and re-selecting a section emits on `reselections` instead of resetting its stack.

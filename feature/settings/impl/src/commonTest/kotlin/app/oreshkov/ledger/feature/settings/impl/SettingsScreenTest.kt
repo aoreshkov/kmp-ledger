@@ -5,7 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -49,6 +52,24 @@ class SettingsScreenTest : PlatformComposeUiTest() {
         onNodeWithText("Light").assertIsDisplayed()
         onNodeWithText("Dark").assertIsDisplayed()
         onNodeWithText("System default").assertIsDisplayed()
+    }
+
+    @Test
+    fun titleAndSectionHeader_areHeadings() = runComposeUiTest {
+        // Headings are what a screen reader's "next heading" navigation lands on.
+        val isHeading = SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading)
+        setContent {
+            SettingsContent(
+                uiState = SettingsUiState(ThemeMode.SYSTEM),
+                snackbarHostState = remember { SnackbarHostState() },
+                onNavigateBack = {},
+                onThemeModeChange = {},
+            )
+        }
+        onNodeWithText("Settings").assert(isHeading)
+        onNodeWithText("Theme").assert(isHeading)
+        // The control: an option's label is not a heading.
+        onNodeWithText("Light", useUnmergedTree = true).assert(!isHeading)
     }
 
     @Test

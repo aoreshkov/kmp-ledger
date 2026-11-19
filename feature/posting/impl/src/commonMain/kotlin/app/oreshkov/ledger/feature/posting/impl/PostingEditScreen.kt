@@ -28,7 +28,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.oreshkov.ledger.core.compose.resources.Res as CoreRes
@@ -83,6 +93,24 @@ fun PostingEditScreen(
     )
 }
 
+/**
+ * Makes Tab and Shift+Tab leave a multi-line text field. Left alone, such a field types the
+ * tab character instead, so with a hardware keyboard the focus can never move on to the rest
+ * of the screen, and here the stray whitespace also trips the "narrative is required" error.
+ */
+@Composable
+private fun Modifier.moveFocusOnTab(): Modifier {
+    val focusManager = LocalFocusManager.current
+    return onPreviewKeyEvent { event ->
+        if (event.key != Key.Tab) return@onPreviewKeyEvent false
+        if (event.type == KeyEventType.KeyDown) {
+            focusManager.moveFocus(if (event.isShiftPressed) FocusDirection.Previous else FocusDirection.Next)
+        }
+        // Key up is swallowed as well, so the field never sees half of the key press.
+        true
+    }
+}
+
 @Composable
 internal fun PostingEditContent(
     uiState: PostingEditUiState,
@@ -99,8 +127,9 @@ internal fun PostingEditContent(
             TopAppBar(
                 title = {
                     Text(
-                        if (isEditMode) stringResource(Res.string.posting_edit_title_edit)
-                        else stringResource(Res.string.posting_edit_title_add)
+                        text = if (isEditMode) stringResource(Res.string.posting_edit_title_edit)
+                        else stringResource(Res.string.posting_edit_title_add),
+                        modifier = Modifier.semantics { heading() },
                     )
                 },
                 navigationIcon = {
@@ -179,7 +208,9 @@ internal fun PostingEditContent(
                     supportingText = if (uiState.narrativeError) {
                         { Text(stringResource(Res.string.posting_edit_error_narrative_required)) }
                     } else null,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .moveFocusOnTab()
                 )
             }
         }

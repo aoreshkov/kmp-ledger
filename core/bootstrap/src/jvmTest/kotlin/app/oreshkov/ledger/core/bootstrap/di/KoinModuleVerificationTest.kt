@@ -1,6 +1,7 @@
 package app.oreshkov.ledger.core.bootstrap.di
 
 import androidx.navigation3.runtime.NavKey
+import app.oreshkov.ledger.core.navigation.DeepLinkResolver
 import app.oreshkov.ledger.feature.posting.impl.PostingDetailsViewModel
 import app.oreshkov.ledger.feature.posting.impl.PostingEditViewModel
 import co.touchlab.kermit.Logger
@@ -21,6 +22,9 @@ class KoinModuleVerificationTest {
                 definition<PostingDetailsViewModel>(String::class),
                 definition<PostingEditViewModel>(String::class),
                 definition<Logger>(LoggerConfig::class),
+                // Built by BootstrapModule.deepLinkResolver() from the features' matcher lists,
+                // not resolved from the graph.
+                definition<DeepLinkResolver>(List::class),
             )
         )
     }
