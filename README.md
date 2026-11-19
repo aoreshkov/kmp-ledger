@@ -452,6 +452,16 @@ Three things keep a second language honest:
 
 There is no in-app language picker. On Android it would need `AppCompatActivity`, and on the other targets Compose Multiplatform documents only a workaround until a common API exists.
 
+### 13. Accessibility in the semantics tree
+
+Screen readers and keyboards both work from the semantics tree, so that is where the fixes go and what the tests assert:
+
+- **Headings.** Every screen title and the settings "Theme" section header carry `semantics { heading() }`, so a screen-reader user can jump between them instead of reading every node in between.
+- **One item per labelled value.** `LabeledField` merges its label and value (`semantics(mergeDescendants = true)`), so the details screen announces "Narrative, Groceries" as one item rather than a value with nothing saying what it is.
+- **No keyboard trap.** A multi-line `OutlinedTextField` types a tab character on Tab, so with a hardware keyboard the focus could enter the narrative field and never leave it, and the stray whitespace failed validation. The field moves the focus on Tab and Shift+Tab instead.
+
+`DesktopUiTest` drives the real app with key events: Tab leaves the narrative field without typing into it, Enter activates the focused Add button and Space selects the focused theme row. The common screen tests assert the headings and the merged node on both targets.
+
 ---
 
 ## Testing Strategy
@@ -483,10 +493,11 @@ A separate `instrumented-tests` job runs the Android smoke suite on two **Gradle
 | `core:navigation` | `NavigatorTest` for per-section back stacks, `switchTopLevel`, exit-through-home `goBack`, and deep links onto the stacks; `DeepLinkResolverTest` for matching, including malformed links |
 | `feature:*:api` | NavKey serialization round-trips, and each feature's deep-link table |
 | `core:bootstrap` | The combined serializer configuration and the shipped `ledger://` link table, on every target |
-| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level), a right-to-left pass and a Bulgarian render |
-| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle and save-error surfacing), a right-to-left pass and a Bulgarian render |
+| `core:compose` | `LabeledFieldTest`, including the merged accessibility node |
+| `feature:posting:impl` | ViewModel unit tests + Compose UI tests (screen-level), headings and merged rows, a right-to-left pass and a Bulgarian render |
+| `feature:settings:impl` | `SettingsViewModelTest` + `SettingsScreenTest` (theme toggle, save-error surfacing, headings), a right-to-left pass and a Bulgarian render |
 | `core:ui` | App-level Compose UI tests, including applying and acknowledging a deep link |
-| `desktopApp` | `DesktopUiTest`: the real app over a real in-memory database, including deep links from cold start and while editing |
+| `desktopApp` | `DesktopUiTest`: the real app over a real in-memory database, including deep links from cold start and while editing, and keyboard-only use |
 | `androidApp` | Instrumented smoke test, plus deep links through the real intent filter (`DeepLinkTest`) |
 | DI modules | Compile-time validation (Koin Compiler Plugin) + runtime `verify()` (`KoinModuleTest`) + App-level integration tests |
 

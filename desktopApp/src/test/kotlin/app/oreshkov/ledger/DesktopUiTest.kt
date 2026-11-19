@@ -3,11 +3,24 @@ package app.oreshkov.ledger
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertIsNotFocused
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.requestFocus
+import androidx.compose.ui.test.withKeyDown
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -254,5 +267,84 @@ class DesktopUiTest {
         pending = "ledger://postings"
         onNodeWithText("Unsaved draft").assertDoesNotExist()
         onNodeWithText("My Postings").assertExists()
+    }
+
+    // Keyboard reachability: a desktop user with no pointer must be able to get into, out of
+    // and through every screen.
+
+    @Test
+    fun tabLeavesTheNarrativeField_withoutTypingIntoIt() = runDesktopComposeUiTest {
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(postingNavigationModule, inMemoryDatabaseModule, testDataStoreModule)
+                }
+            ) {
+                App()
+            }
+        }
+
+        onNodeWithContentDescription("Add Posting").performClick()
+        val narrative = onNodeWithText("Narrative")
+        narrative.performTextInput("Draft")
+        narrative.requestFocus()
+
+        // A multi-line field would type the tab character and keep the focus: a trap.
+        onRoot().performKeyInput { pressKey(Key.Tab) }
+        narrative.assertIsNotFocused()
+        onNodeWithText("Draft").assertExists()
+
+        onRoot().performKeyInput { withKeyDown(Key.ShiftLeft) { pressKey(Key.Tab) } }
+        narrative.assertIsFocused()
+        onNodeWithText("Draft").assertExists()
+    }
+
+    @Test
+    fun enterOnTheFocusedAddButton_opensTheAddScreen() = runDesktopComposeUiTest {
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(postingNavigationModule, inMemoryDatabaseModule, testDataStoreModule)
+                }
+            ) {
+                App()
+            }
+        }
+
+        onNodeWithContentDescription("Add Posting").requestFocus()
+        onRoot().performKeyInput { pressKey(Key.Enter) }
+
+        onNodeWithText("Narrative").assertExists()
+    }
+
+    @Test
+    fun spaceOnAFocusedThemeRow_selectsIt() = runDesktopComposeUiTest {
+        var pending by mutableStateOf<String?>("ledger://settings")
+        setContent {
+            KoinIsolatedContext(
+                context = koinApplication<LedgerApp> {
+                    allowOverride(override = true)
+                    modules(
+                        postingNavigationModule,
+                        settingsNavigationModule,
+                        inMemoryDatabaseModule,
+                        testDataStoreModule,
+                    )
+                }
+            ) {
+                App(deepLink = pending, onDeepLinkConsumed = { pending = null })
+            }
+        }
+
+        val dark = onNodeWithTag("theme_dark")
+        dark.assertIsNotSelected()
+        dark.requestFocus()
+        onRoot().performKeyInput { pressKey(Key.Spacebar) }
+
+        // The choice round-trips through the real DataStore, off the test's idling clock.
+        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("theme_dark") and isSelected()).fetchSemanticsNodes().isNotEmpty() }
+        dark.assertIsSelected()
     }
 }
