@@ -59,8 +59,8 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 
 | Library | Version | Role |
 |---|---|---|
-| Kotlin | 2.4.20 | Language and compiler |
-| Kotlin Gradle Plugin | 2.4.20 | Build tooling |
+| Kotlin | 2.4.21 | Language and compiler |
+| Kotlin Gradle Plugin | 2.4.21 | Build tooling |
 | Compose Multiplatform | 1.12.2 | Shared UI (Android, iOS, Desktop) |
 | Room 3 / SQLite | 3.0.3 / 2.7.1 | Local database with KMP support |
 | AndroidX DataStore (Preferences) | 1.3.0 | Multiplatform key-value persistence (theme preference) |
@@ -69,7 +69,7 @@ study in this repo (`.claude/`, `.github/workflows/`) — pre-wired to your proj
 | Koin | 4.2.2 | Dependency injection with annotation processing |
 | Kermit | 2.2.0 | Kotlin Multiplatform logging |
 | Kover | 0.9.11 | Kotlin Multiplatform code coverage |
-| SLF4J / Logback | 2.0.20 / 1.6.6 | Desktop logging implementation |
+| SLF4J / Logback | 2.0.20 / 1.6.8 | Desktop logging implementation |
 | Swift Export | Alpha | Direct Kotlin-to-Swift bridge (No Obj-C) |
 | Kotlinx Coroutines | 1.11.0 | Async and Flow-based data streams |
 | Lifecycle / ViewModel | 2.11.0 | State management and lifecycle-aware components |
@@ -507,7 +507,7 @@ A separate `instrumented-tests` job runs the Android smoke suite on two **Gradle
 
 ### Prerequisites
 
-- Android Studio Panda 3 (2025.3.3 Patch 1) or newer — the first release that supports API 37 with AGP 9.1.1 — or IntelliJ IDEA 2026.2 or newer
+- Android Studio Quail 2 (2026.1.2) or newer — the first release that supports AGP 9.3 — or IntelliJ IDEA 2026.3 or newer
 - JDK 21+
 
 ### Run on Android

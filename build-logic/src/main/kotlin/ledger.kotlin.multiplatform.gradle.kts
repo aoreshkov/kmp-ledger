@@ -39,7 +39,7 @@ kotlin {
 // Every locale must translate exactly the default locale's string keys; see the task's KDoc.
 // Registered for every module so a module that gains resources is covered without opting in;
 // with no composeResources directory the file set is empty and the task has nothing to do.
-val checkStringResourceParity by tasks.registering(CheckStringResourceParity::class) {
+val checkStringResourceParity = tasks.register<CheckStringResourceParity>("checkStringResourceParity") {
     group = "verification"
     description = "Checks that every locale declares the same Compose string keys as values/."
     stringFiles.from(
