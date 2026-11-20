@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-11-20
+
 ### Added
 - Deep links on the app's own scheme, built on the Navigation 3 1.2.0 deep-link API: `ledger://postings`, `ledger://postings/new`, `ledger://postings/{id}`, `ledger://postings/{id}/edit` and `ledger://settings`.
   - Each feature declares its links in its `api` module (`postingDeepLinks`, `settingsDeepLinks`), each with the synthetic back stack it opens on. `BootstrapModule` combines them into a `DeepLinkResolver` (`core:navigation`).
@@ -24,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded Kotlin to 2.4.21 (from 2.4.20), AGP to 9.3.3 (from 9.1.1), AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.13.0 (from 1.11.0), the Koin compiler plugin to 1.2.3 (from 1.2.1), Logback to 1.6.8 (from 1.6.5), KSP to 2.3.14 (from 2.3.12), Robolectric to 4.18.1 (from 4.17) and the Gradle wrapper to 9.9.2 (from 9.8.0). The Compose-aligned pins are unchanged.
 - AGP 9.3 needs a newer IDE: Android Studio Quail 2 (2026.1.2) or IntelliJ IDEA 2026.3, up from Panda 3 and IDEA 2026.2. IDEA 2026.3 imports AGP up to 9.3, so the pin stays below the latest AGP (9.5.1).
 - The `checkStringResourceParity` registration uses `tasks.register<T>(name)` instead of the `by tasks.registering(...)` delegate, which Gradle 9.6 deprecated.
+- CI: bumped `actions/setup-java` to v6.3.0 and `gradle/actions/setup-gradle` to v6.4.1.
 - Dependabot now also leaves Material3 Adaptive (`org.jetbrains.compose.material3.adaptive`) and Navigation 3 (`org.jetbrains.androidx.navigation3`, `androidx.navigation3`) alone. Like Material3, they are pinned to the coordinates the Compose Multiplatform release declares itself aligned to and move by hand with it.
 
 ### Fixed
@@ -35,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The coverage floors are the enforced ones (95% line / 70% branch / 95% instruction aggregate), and every module with its own floor is listed.
   - The migration warning describes what the build does: a schema version bump drops and recreates the database.
   - The tech-stack table lists the current DataStore and Logback versions, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
-  - The prerequisites name the IDE versions that can open the project: Android Studio Panda 3 (2025.3.3 Patch 1) or IntelliJ IDEA 2026.2.
+  - The prerequisites name the IDE versions that can open the project: Android Studio Quail 2 (2026.1.2) or IntelliJ IDEA 2026.3, as AGP 9.3 requires (see Changed).
 - `.github/dependabot.yml` set `cooldown.semver-major-days` on the `github-actions` entry. Dependabot supports the `semver-*-days` cooldown options for Gradle but not for GitHub Actions, so GitHub reported the whole file as invalid. That entry now sets `default-days` alone, and action major updates wait 3 days instead of 7.
 - Dependabot's ignore list did not hold AGP and Kotlin. It names Gradle plugins by bare plugin ID (`com.android.application`, `org.jetbrains.kotlin.multiplatform`), which the `<group>:*` entries did not match, so a group update raised AGP to 9.5.1, past what IntelliJ IDEA imports. Each plugin is now listed in both forms.
 
