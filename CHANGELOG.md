@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keyboard tests on desktop (`DesktopUiTest`): Tab and Shift+Tab move out of the narrative field, Enter activates a focused button, Space selects a focused theme row.
 
 ### Changed
-- Upgraded Kotlin to 2.4.21 (from 2.4.20), AGP to 9.5.1 (from 9.1.1), AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.13.0 (from 1.11.0), the Koin compiler plugin to 1.2.3 (from 1.2.1), Logback to 1.6.8 (from 1.6.5), KSP to 2.3.14 (from 2.3.12), Robolectric to 4.18.1 (from 4.17) and the Gradle wrapper to 9.9.2 (from 9.8.0). The Compose-aligned pins are unchanged.
+- Upgraded Kotlin to 2.4.21 (from 2.4.20), AGP to 9.3.3 (from 9.1.1), AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.13.0 (from 1.11.0), the Koin compiler plugin to 1.2.3 (from 1.2.1), Logback to 1.6.8 (from 1.6.5), KSP to 2.3.14 (from 2.3.12), Robolectric to 4.18.1 (from 4.17) and the Gradle wrapper to 9.9.2 (from 9.8.0). The Compose-aligned pins are unchanged.
+- AGP 9.3 needs a newer IDE: Android Studio Quail 2 (2026.1.2) or IntelliJ IDEA 2026.3, up from Panda 3 and IDEA 2026.2. IDEA 2026.3 imports AGP up to 9.3, so the pin stays below the latest AGP (9.5.1).
 - The `checkStringResourceParity` registration uses `tasks.register<T>(name)` instead of the `by tasks.registering(...)` delegate, which Gradle 9.6 deprecated.
 - Dependabot now also leaves Material3 Adaptive (`org.jetbrains.compose.material3.adaptive`) and Navigation 3 (`org.jetbrains.androidx.navigation3`, `androidx.navigation3`) alone. Like Material3, they are pinned to the coordinates the Compose Multiplatform release declares itself aligned to and move by hand with it.
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The tech-stack table lists the current DataStore and Logback versions, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
   - The prerequisites name the IDE versions that can open the project: Android Studio Panda 3 (2025.3.3 Patch 1) or IntelliJ IDEA 2026.2.
 - `.github/dependabot.yml` set `cooldown.semver-major-days` on the `github-actions` entry. Dependabot supports the `semver-*-days` cooldown options for Gradle but not for GitHub Actions, so GitHub reported the whole file as invalid. That entry now sets `default-days` alone, and action major updates wait 3 days instead of 7.
+- Dependabot's ignore list did not hold AGP and Kotlin. It names Gradle plugins by bare plugin ID (`com.android.application`, `org.jetbrains.kotlin.multiplatform`), which the `<group>:*` entries did not match, so a group update raised AGP to 9.5.1, past what IntelliJ IDEA imports. Each plugin is now listed in both forms.
 
 ### Security
 - Robolectric's transitive Guava is outside GHSA-xxph-c9ww-hj94: Robolectric 4.18.1 requests 33.7.2-jre, the first fixed release, so the explicit Guava constraint in `core:test` is gone. It is a test-only dependency.

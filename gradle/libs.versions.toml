@@ -1,10 +1,11 @@
 [versions]
 # Build tools
 # Pinned to the AGP version the bundled IntelliJ IDEA plugin supports; bumping to
-# the latest stable breaks project import in the IDE. Suppressed on this line
-# only, so every other dependency is still checked for currency.
+# the latest stable breaks project import in the IDE. IDEA 2026.3 supports up to
+# AGP 9.3 (it rejects 9.5.1), so this takes the newest 9.3.x patch. Suppressed on
+# this line only, so every other dependency is still checked for currency.
 #noinspection AndroidGradlePluginVersion
-android-gradle-plugin = "9.5.1"
+android-gradle-plugin = "9.3.3"
 android-sdk-compile = "37"
 android-sdk-min = "24"
 android-sdk-target = "37"

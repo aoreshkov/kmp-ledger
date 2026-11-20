@@ -63,8 +63,15 @@ updates:
       # lint currency checks are suppressed too). Drop these once IDE support
       # stops gating either line. Note: ignore also suppresses security updates
       # for these artifacts.
+      # Dependabot names a Gradle plugin by its bare plugin ID
+      # ("com.android.application", "org.jetbrains.kotlin.multiplatform"), which
+      # the "<group>:*" forms do not match, so each plugin is listed in both
+      # forms. "org.jetbrains.kotlin.*" does not match "org.jetbrains.kotlinx.*".
       - dependency-name: "com.android.tools.build:gradle"
+      - dependency-name: "com.android.application"
       - dependency-name: "com.android.application:*"
+      - dependency-name: "com.android.kotlin.multiplatform.library"
       - dependency-name: "com.android.kotlin.multiplatform.library:*"
       - dependency-name: "org.jetbrains.kotlin:*"
+      - dependency-name: "org.jetbrains.kotlin.*"
       - dependency-name: "org.jetbrains.kotlin.*:*"

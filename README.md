@@ -507,7 +507,7 @@ A separate `instrumented-tests` job runs the Android smoke suite on two **Gradle
 
 ### Prerequisites
 
-- Android Studio Panda 3 (2025.3.3 Patch 1) or newer — the first release that supports API 37 with AGP 9.1.1 — or IntelliJ IDEA 2026.2 or newer
+- Android Studio Quail 2 (2026.1.2) or newer — the first release that supports AGP 9.3 — or IntelliJ IDEA 2026.3 or newer
 - JDK 21+
 
 ### Run on Android
