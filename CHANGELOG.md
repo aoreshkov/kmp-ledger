@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The coverage floors are the enforced ones (95% line / 70% branch / 95% instruction aggregate), and every module with its own floor is listed.
   - The migration warning describes what the build does: a schema version bump drops and recreates the database.
   - The tech-stack table lists the current DataStore and Logback versions, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
-  - The prerequisites name the IDE versions that can open the project: Android Studio Panda 3 (2025.3.3 Patch 1) or IntelliJ IDEA 2026.2.
+  - The prerequisites name the IDE versions that can open the project: Android Studio Quail 2 (2026.1.2) or IntelliJ IDEA 2026.3, as AGP 9.3 requires (see Changed).
 - `.github/dependabot.yml` set `cooldown.semver-major-days` on the `github-actions` entry. Dependabot supports the `semver-*-days` cooldown options for Gradle but not for GitHub Actions, so GitHub reported the whole file as invalid. That entry now sets `default-days` alone, and action major updates wait 3 days instead of 7.
 - Dependabot's ignore list did not hold AGP and Kotlin. It names Gradle plugins by bare plugin ID (`com.android.application`, `org.jetbrains.kotlin.multiplatform`), which the `<group>:*` entries did not match, so a group update raised AGP to 9.5.1, past what IntelliJ IDEA imports. Each plugin is now listed in both forms.
 
