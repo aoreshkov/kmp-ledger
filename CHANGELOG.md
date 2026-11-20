@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keyboard tests on desktop (`DesktopUiTest`): Tab and Shift+Tab move out of the narrative field, Enter activates a focused button, Space selects a focused theme row.
 
 ### Changed
-- Upgraded AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.12.0 (from 1.11.0), Logback to 1.6.6 (from 1.6.5), KSP to 2.3.13 (from 2.3.12) and the Gradle wrapper to 9.8.2 (from 9.8.0). Kotlin, AGP and the Compose-aligned pins are unchanged.
+- Upgraded Kotlin to 2.4.21 (from 2.4.20), AGP to 9.5.1 (from 9.1.1), AndroidX DataStore to 1.3.0 (from 1.2.1), kotlinx.serialization to 1.13.0 (from 1.11.0), the Koin compiler plugin to 1.2.3 (from 1.2.1), Logback to 1.6.8 (from 1.6.5), KSP to 2.3.14 (from 2.3.12), Robolectric to 4.18.1 (from 4.17) and the Gradle wrapper to 9.9.2 (from 9.8.0). The Compose-aligned pins are unchanged.
+- The `checkStringResourceParity` registration uses `tasks.register<T>(name)` instead of the `by tasks.registering(...)` delegate, which Gradle 9.6 deprecated.
 - Dependabot now also leaves Material3 Adaptive (`org.jetbrains.compose.material3.adaptive`) and Navigation 3 (`org.jetbrains.androidx.navigation3`, `androidx.navigation3`) alone. Like Material3, they are pinned to the coordinates the Compose Multiplatform release declares itself aligned to and move by hand with it.
 
 ### Fixed
@@ -32,12 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The Koin samples match the source (`DomainModule` includes nothing, use cases take `@Provided` parameters), and the text no longer claims Koin annotations lack multibinding. The DSL there is a deliberate choice.
   - The coverage floors are the enforced ones (95% line / 70% branch / 95% instruction aggregate), and every module with its own floor is listed.
   - The migration warning describes what the build does: a schema version bump drops and recreates the database.
-  - The tech-stack table lists DataStore 1.3.0 and Logback 1.6.6, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
+  - The tech-stack table lists the current DataStore and Logback versions, and Swift Export as Alpha. The stability note names the two pre-release pins that remain (Navigation 3 UI and Material3).
   - The prerequisites name the IDE versions that can open the project: Android Studio Panda 3 (2025.3.3 Patch 1) or IntelliJ IDEA 2026.2.
 - `.github/dependabot.yml` set `cooldown.semver-major-days` on the `github-actions` entry. Dependabot supports the `semver-*-days` cooldown options for Gradle but not for GitHub Actions, so GitHub reported the whole file as invalid. That entry now sets `default-days` alone, and action major updates wait 3 days instead of 7.
 
 ### Security
-- Constrained Robolectric's transitive Guava to 33.8.0-jre, outside GHSA-xxph-c9ww-hj94. It is a test-only dependency.
+- Robolectric's transitive Guava is outside GHSA-xxph-c9ww-hj94: Robolectric 4.18.1 requests 33.7.2-jre, the first fixed release, so the explicit Guava constraint in `core:test` is gone. It is a test-only dependency.
 
 ## [1.10.0] - 2026-10-22
 
