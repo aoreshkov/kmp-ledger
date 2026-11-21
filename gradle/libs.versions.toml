@@ -10,8 +10,8 @@ android-sdk-compile = "37"
 android-sdk-min = "24"
 android-sdk-target = "37"
 # Moved by hand, never by Dependabot: confirm each bump syncs in both IntelliJ
-# IDEA and Android Studio first (2.4.20 was checked against IDEA 2026.2 with
-# AGP 9.1.1 and Gradle 9.8.0). Suppressed on this line only.
+# IDEA and Android Studio first (2.4.21 was checked against IDEA 2026.3 with
+# AGP 9.3.3 and Gradle 9.9.2). Suppressed on this line only.
 #noinspection GradleDependency,NewerVersionAvailable
 kotlin = "2.4.21"
 ksp = "2.3.14"
