@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- CI: bumped `actions/dependency-review-action` to v5.0.1.
+
+### Fixed
+- `DeepLinkTest.linkWhileRunning_isDeliveredToTheSameActivity` waits for the settings screen instead of asserting at once. `startActivity` only queues the intent, so the assertion could run before `onNewIntent` delivered the link and fail on the emulator.
+
 ## [1.11.0] - 2026-11-20
 
 ### Added

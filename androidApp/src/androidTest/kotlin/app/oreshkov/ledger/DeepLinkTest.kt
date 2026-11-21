@@ -3,6 +3,7 @@ package app.oreshkov.ledger
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -56,7 +57,13 @@ class DeepLinkTest {
                 running = activity
                 activity.startActivity(viewIntent("ledger://settings"))
             }
-            composeTestRule.onNodeWithText("System default").assertExists()
+            // startActivity only queues the intent: Compose can report idle before
+            // onNewIntent runs, or while the settings screen is still being shown, so a bare
+            // assertExists races the delivery. Wait for the screen instead.
+            composeTestRule.waitUntil(timeoutMillis = 5_000) {
+                composeTestRule.onAllNodesWithText("System default")
+                    .fetchSemanticsNodes().isNotEmpty()
+            }
 
             // singleTop: the link reached onNewIntent on the running activity. A second
             // instance stacked above it would show the settings screen as well, so the
